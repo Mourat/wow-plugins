@@ -112,8 +112,11 @@ const SPAN = 0.15;
 /** How much the picture must stray just outside a bar for it to be one. */
 const RESTLESS = 12;
 
-/** How far a fill's colour may drift from the colour at the picture's edge. */
+/** How far a colour may drift and still be the same colour. */
 const TONE = 6;
+
+/** How near a bar a lone line has to be to be part of it. */
+const ASIDE = APART * 3;
 
 /**
  * How flat a fill has to be, averaged over it.
@@ -317,29 +320,66 @@ function seams( image ) {
 		flat[ x ] = strays / height;
 	}
 
+	/**
+	 * The bar a column belongs to.
+	 *
+	 * Spreading out while the picture stays flat is not enough on its own.
+	 * A bar is often flat against something else flat — a blue divider with
+	 * a strip of pale wall beyond it, the first ten pixels of the next
+	 * photograph — and a run that swallows both puts the frame ten pixels
+	 * inside the picture, past the border the eye is aiming at. So the
+	 * colour has to hold as well: the wall is a different colour from the
+	 * divider, however flat each of them is.
+	 *
+	 * One column beyond that on each side, whatever colour it is, as long as
+	 * it is flat. Shrinking a picture for the editor smears the bar's edge
+	 * across a pixel, and a pixel of divider left along the edge of a crop
+	 * is the thing all of this is for.
+	 *
+	 * @param {number} seed A column known to be flat.
+	 * @return {{from: number, to: number}} The bar's first and last column.
+	 */
+	const grow = ( seed ) => {
+		const same = ( x ) =>
+			flat[ x ] < FLAT &&
+			Math.abs( reds[ x ] - reds[ seed ] ) <= TONE &&
+			Math.abs( greens[ x ] - greens[ seed ] ) <= TONE &&
+			Math.abs( blues[ x ] - blues[ seed ] ) <= TONE;
+
+		let from = seed;
+		let to = seed;
+
+		while ( 0 < from && same( from - 1 ) ) {
+			from--;
+		}
+
+		while ( to < width - 1 && same( to + 1 ) ) {
+			to++;
+		}
+
+		if ( 0 < from && flat[ from - 1 ] < FLAT ) {
+			from--;
+		}
+
+		if ( to < width - 1 && flat[ to + 1 ] < FLAT ) {
+			to++;
+		}
+
+		return { from, to };
+	};
+
 	const bounded = Math.max( 2, Math.round( width * BAND ) );
 
 	for ( const top of tops ) {
 		/*
 		 * The found column is the step onto the bar, which puts it at one
 		 * side of it or just outside: start from whichever of the three is
-		 * flattest and spread out from there while the picture stays flat.
+		 * flattest.
 		 */
 		const beside = flat[ top + 1 ] <= flat[ top - 1 ] ? top + 1 : top - 1;
 		const first = flat[ top ] < FLAT ? top : beside;
-
-		let from = first;
-		let to = first;
-
-		if ( flat[ first ] < FLAT ) {
-			while ( from > 0 && flat[ from - 1 ] < FLAT ) {
-				from--;
-			}
-
-			while ( to < width - 1 && flat[ to + 1 ] < FLAT ) {
-				to++;
-			}
-		}
+		const { from, to } =
+			flat[ first ] < FLAT ? grow( first ) : { from: first, to: first };
 
 		if ( flat[ first ] >= FLAT || to - from >= bounded ) {
 			// No bar here, or something too wide to be one — a sky, a wall
@@ -397,15 +437,27 @@ function seams( image ) {
 			continue;
 		}
 
-		if (
-			span < 2 ||
-			span > widest ||
-			Math.min( before, after ) < RESTLESS
-		) {
+		if ( span < 2 || Math.min( before, after ) < RESTLESS ) {
 			continue;
 		}
 
-		keep( found, { left: from, right: to + 1 } );
+		// The flattest column in the run is the bar's own; the rest of the
+		// run may be the wall it is against.
+		let seed = from;
+
+		for ( let at = from + 1; at <= to; at++ ) {
+			if ( flat[ at ] < flat[ seed ] ) {
+				seed = at;
+			}
+		}
+
+		const bar = grow( seed );
+
+		if ( bar.to - bar.from >= widest ) {
+			continue;
+		}
+
+		keep( found, { left: bar.from, right: bar.to + 1 } );
 	}
 
 	/*
@@ -474,6 +526,34 @@ function seams( image ) {
 		if ( far.left <= near.right + APART ) {
 			near.right = Math.max( near.right, far.right );
 
+			found.splice( i, 1 );
+		}
+	}
+
+	/*
+	 * A lone line beside a bar is thrown away. It is not a join of its own
+	 * but the far side of whatever the bar is standing against — where the
+	 * pale wall at the edge of a photograph gives way to the photograph
+	 * proper, say. Left in, it is a second thing to snap to a few pixels
+	 * past the bar, and the frame goes to it instead: the magnet steps over
+	 * the border it was aiming at and lands inside the picture.
+	 */
+	for ( let i = found.length - 1; 0 <= i; i-- ) {
+		const one = found[ i ];
+
+		if ( one.left !== one.right ) {
+			continue;
+		}
+
+		const leaning = found.some(
+			( other, at ) =>
+				at !== i &&
+				other.left !== other.right &&
+				one.left >= other.left - ASIDE &&
+				one.left <= other.right + ASIDE
+		);
+
+		if ( leaning ) {
 			found.splice( i, 1 );
 		}
 	}
