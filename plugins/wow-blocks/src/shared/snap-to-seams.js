@@ -205,6 +205,14 @@ export default function snapToSeams( id ) {
 			return;
 		}
 
+		/*
+		 * Not in the next free millisecond but a little after, because the
+		 * frame belongs to whoever touched it last. imgAreaSelect answers
+		 * the same release of the mouse, and a selection set while it is
+		 * still answering would be written over by the position the cursor
+		 * was let go at. Waiting until it has finished means the frame is
+		 * nobody's but ours for the moment it takes to move it.
+		 */
 		window.setTimeout( () => {
 			const image = document.getElementById( `image-preview-${ id }` );
 
@@ -246,7 +254,7 @@ export default function snapToSeams( id ) {
 			// Through core's own bookkeeping, so the numbers beside the
 			// picture and the selection it saves agree with what is drawn.
 			api.setCropSelection( id, ias.getSelection() );
-		}, 0 );
+		}, 40 );
 	};
 
 	document.addEventListener( 'mouseup', onLetGo );
