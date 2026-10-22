@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-10-22T23:41:26+00:00\n"
+"POT-Creation-Date: 2026-10-22T23:45:13+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: wow-images\n"
@@ -325,40 +325,62 @@ msgstr ""
 msgid "Pictures and weight"
 msgstr ""
 
-#: includes/widget.php:143
+#. translators: 1: free space, 2: size of the whole disk.
+#: includes/widget.php:162
+#, php-format
+msgid "%1$s free of %2$s"
+msgstr ""
+
+#: includes/widget.php:175
+msgid "used"
+msgstr ""
+
+#. translators: %s: weight of this site's media.
+#: includes/widget.php:184
+#, php-format
+msgid "This site: %s"
+msgstr ""
+
+#. translators: %s: everything else on the disk.
+#: includes/widget.php:194
+#, php-format
+msgid "Everything else: %s"
+msgstr ""
+
+#. translators: %s: free space.
+#: includes/widget.php:204
+#, php-format
+msgid "Free: %s"
+msgstr ""
+
+#: includes/widget.php:227
 msgid "pictures"
 msgstr ""
 
 #. translators: %s: number of files.
-#: includes/widget.php:151
+#: includes/widget.php:235
 #, php-format
 msgid "in %s files"
 msgstr ""
 
-#: includes/widget.php:159
+#: includes/widget.php:243
 msgid "saved by WebP and AVIF"
 msgstr ""
 
 #. translators: %s: percentage.
-#: includes/widget.php:168
+#: includes/widget.php:252
 #, php-format
 msgid "%s per cent lighter"
 msgstr ""
 
 #. translators: 1: percentage, 2: weight of the originals.
-#: includes/widget.php:180
+#: includes/widget.php:264
 #, php-format
 msgid "The copies are %1$s%% lighter than the %2$s of originals they were made from."
 msgstr ""
 
-#. translators: 1: free space, 2: size of the whole disk.
-#: includes/widget.php:192
-#, php-format
-msgid "%1$s free of %2$s on the server's disk."
-msgstr ""
-
 #. translators: 1: number of pictures, 2: opening link tag, 3: closing link tag.
-#: includes/widget.php:205
+#: includes/widget.php:280
 #, php-format
 msgid "%1$s picture is still to convert. %2$sConvert it%3$s."
 msgid_plural "%1$s pictures are still to convert. %2$sConvert them%3$s."
