@@ -1,1 +1,81 @@
-{"translation-revision-date":"2026-09-21 01:29+0000","generator":"WP-CLI\/2.12.0","source":"src\/media-row\/edit.js","domain":"messages","locale_data":{"messages":{"":{"domain":"messages","lang":"fr_FR","plural-forms":"nplurals=2; plural=(n > 1);"},"Grid":["Grille"],"Image":["Image"],"Replace image":["Remplacer l\u2019image"],"Choose image":["Choisir une image"],"Remove image":["Retirer l\u2019image"],"Framing":["Cadrage"],"1 column":["1 colonne"],"2 columns, narrow on the left":["2 colonnes, \u00e9troite \u00e0 gauche"],"2 columns, narrow on the right":["2 colonnes, \u00e9troite \u00e0 droite"],"3 columns":["3 colonnes"],"wide":["large"],"narrow":["\u00e9troite"],"Fill":["Aplat"],"The point guaranteed to stay in frame when the image is cropped.":["Le point qui restera toujours dans le cadre lors du recadrage."],"%d px (default)":["%d px (par d\u00e9faut)"],"Layout":["Disposition"],"Gap":["\u00c9cart"],"The same gap between columns and between rows.":["Le m\u00eame \u00e9cart entre les colonnes et entre les rang\u00e9es."],"Stack on mobile":["Empiler sur mobile"],"Column %1$d (%2$s)":["Colonne %1$d (%2$s)"],"This image is no longer in the media library. Choose another one.":["Cette image n\u2019est plus dans la m\u00e9diath\u00e8que. Choisissez-en une autre."]}}}
+{
+    "translation-revision-date": "2026-09-21 01:29+0000",
+    "generator": "WP-CLI\/2.12.0",
+    "source": "src\/media-row\/edit.js",
+    "domain": "messages",
+    "locale_data": {
+        "messages": {
+            "": {
+                "domain": "messages",
+                "lang": "fr_FR",
+                "plural-forms": "nplurals=2; plural=(n > 1);"
+            },
+            "Grid": [
+                "Grille"
+            ],
+            "Image": [
+                "Image"
+            ],
+            "Replace image": [
+                "Remplacer l\u2019image"
+            ],
+            "Choose image": [
+                "Choisir une image"
+            ],
+            "Remove image": [
+                "Retirer l\u2019image"
+            ],
+            "Framing": [
+                "Cadrage"
+            ],
+            "1 column": [
+                "1 colonne"
+            ],
+            "2 columns, narrow on the left": [
+                "2 colonnes, \u00e9troite \u00e0 gauche"
+            ],
+            "2 columns, narrow on the right": [
+                "2 colonnes, \u00e9troite \u00e0 droite"
+            ],
+            "3 columns": [
+                "3 colonnes"
+            ],
+            "wide": [
+                "large"
+            ],
+            "narrow": [
+                "\u00e9troite"
+            ],
+            "Fill": [
+                "Aplat"
+            ],
+            "The point guaranteed to stay in frame when the image is cropped.": [
+                "Le point qui restera toujours dans le cadre lors du recadrage."
+            ],
+            "%d px (default)": [
+                "%d px (par d\u00e9faut)"
+            ],
+            "Layout": [
+                "Disposition"
+            ],
+            "Gap": [
+                "\u00c9cart"
+            ],
+            "The same gap between columns and between rows.": [
+                "Le m\u00eame \u00e9cart entre les colonnes et entre les rang\u00e9es."
+            ],
+            "Stack on mobile": [
+                "Empiler sur mobile"
+            ],
+            "Column %1$d (%2$s)": [
+                "Colonne %1$d (%2$s)"
+            ],
+            "This image is no longer in the media library. Choose another one.": [
+                "Cette image n\u2019est plus dans la m\u00e9diath\u00e8que. Choisissez-en une autre."
+            ],
+            "Add a row above": [
+                "Ajouter une rang\u00e9e au-dessus"
+            ]
+        }
+    }
+}

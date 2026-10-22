@@ -19,7 +19,8 @@ import {
 	ToolbarButton,
 	ToolbarGroup,
 } from '@wordpress/components';
-import { useSelect } from '@wordpress/data';
+import { createBlock } from '@wordpress/blocks';
+import { useDispatch, useSelect } from '@wordpress/data';
 import { useEffect, useState } from '@wordpress/element';
 
 import { GAP_CHOICES, columnsFor, config } from '../shared/config';
@@ -76,6 +77,30 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 		( select ) => select( blockEditorStore ).getSettings().colors || [],
 		[]
 	);
+
+	/*
+	 * Where this row sits, so that another can be put in front of it.
+	 *
+	 * The editor draws its own "add a block" button in the gap between two
+	 * blocks, and before the first block there is no gap — so a row at the
+	 * top of an album could only be made at the bottom and dragged up,
+	 * past twenty others. This asks for the place instead.
+	 */
+	const { place, parent } = useSelect(
+		( select ) => {
+			const store = select( blockEditorStore );
+
+			return {
+				place: store.getBlockIndex( clientId ),
+				parent: store.getBlockRootClientId( clientId ),
+			};
+		},
+		[ clientId ]
+	);
+	const { insertBlock } = useDispatch( blockEditorStore );
+
+	const addRowAbove = () =>
+		insertBlock( createBlock( 'wow/media-row' ), place, parent );
 
 	// The cells array is always exactly as long as the layout has columns.
 	// Read afresh: an upload may have rewritten the cells since this render,
@@ -190,6 +215,14 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 	return (
 		<>
 			<BlockControls>
+				<ToolbarGroup>
+					<ToolbarButton
+						icon="insert-before"
+						label={ __( 'Add a row above', 'wow-blocks' ) }
+						onClick={ addRowAbove }
+					/>
+				</ToolbarGroup>
+
 				<ToolbarGroup>
 					{ LAYOUT_OPTIONS.map( ( option ) => (
 						<ToolbarButton
