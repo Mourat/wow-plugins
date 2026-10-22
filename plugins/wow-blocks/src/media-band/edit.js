@@ -164,14 +164,14 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 	// The strip holds one image. A drop of several keeps the first and says
 	// where the others went. Telling core to take only one file is not an
 	// option: it then refuses the whole drop, first file included.
-	const dropImage = ( patch, offset ) => {
+	const dropImage = ( media, offset ) => {
 		if ( 0 < offset ) {
 			notifyLibraryOnly();
 
 			return;
 		}
 
-		selectImage( patch );
+		selectImage( media );
 	};
 
 	const blockProps = useBlockProps( {

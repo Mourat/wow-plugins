@@ -24,7 +24,6 @@ import { useSelect } from '@wordpress/data';
 import { useRef, useState } from '@wordpress/element';
 import { __ } from '@wordpress/i18n';
 
-import { mediaToCell } from './cells';
 import { createBatch, isSettled, takeFinished } from './upload-batch';
 import './media-drop.scss';
 
@@ -108,14 +107,21 @@ function firstURI( uriList ) {
  * outcome is the same either way: a finished attachment in the media library.
  *
  * @param {Object}   props
- * @param {Function} props.onMedia Called once per finished image, with the
- *                                 cell fields and the image's place within
- *                                 the drop.
- * @param {Function} props.onStart Called when a drop is accepted, before
- *                                 anything has been uploaded.
+ * @param {Function} props.onMedia    Called once per finished image, with the
+ *                                    cell fields and the image's place within
+ *                                    the drop.
+ * @param {Function} props.onStart    Called when a drop is accepted, before
+ *                                    anything has been uploaded.
+ * @param {boolean}  props.allowVideo Whether a film may be dropped here.
  * @return {Element} The drop target.
  */
-export default function MediaDropZone( { onMedia, onStart } ) {
+export default function MediaDropZone( { onMedia, onStart, allowVideo } ) {
+	/*
+	 * What may be dropped here. A film is only ever offered where one can
+	 * go — a row of a single column — and anywhere else a dropped film is
+	 * refused by core with a message, which is the honest answer.
+	 */
+	const takes = allowVideo ? [ 'image', 'video' ] : [ 'image' ];
 	// null when idle, 'busy' while uploading, a string for an error message.
 	const [ status, setStatus ] = useState( null );
 
@@ -168,7 +174,7 @@ export default function MediaDropZone( { onMedia, onStart } ) {
 
 		begin();
 		mediaUpload( {
-			allowedTypes: [ 'image' ],
+			allowedTypes: takes,
 			filesList: files,
 			// The first reports carry temporary blob URLs; an entry gains an
 			// id once its own upload is over. Every image is passed on once,
@@ -176,7 +182,7 @@ export default function MediaDropZone( { onMedia, onStart } ) {
 			// cells instead of only the first one being kept.
 			onFileChange: ( report ) => {
 				takeFinished( batch, report ).forEach( ( { media, offset } ) =>
-					onMedia( mediaToCell( media ), offset )
+					onMedia( media, offset )
 				);
 
 				if ( isSettled( batch ) ) {
@@ -233,11 +239,12 @@ export default function MediaDropZone( { onMedia, onStart } ) {
 
 			// A link carries one image, so it is always first of its drop.
 			onMedia(
-				mediaToCell( {
+				{
 					id: attachment.id,
 					url: attachment.source_url,
 					alt: attachment.alt_text,
-				} ),
+					type: 'image',
+				},
 				0
 			);
 		} catch ( error ) {

@@ -57,6 +57,21 @@ export function replaceCell( cells, index, patch ) {
 }
 
 /**
+ * Whether what the media library handed over is a film.
+ *
+ * An upload answers with `mime_type`, a choice from the library with
+ * `type`, and a drop can be either, so both are asked.
+ *
+ * @param {Object} media Media object.
+ * @return {boolean} True for a film.
+ */
+export function isVideo( media ) {
+	const mime = media?.mime_type || media?.mime || '';
+
+	return 'video' === media?.type || 0 === mime.indexOf( 'video/' );
+}
+
+/**
  * A cell holding a short film.
  *
  * The film and its poster are two attachments, and both ids are kept: the

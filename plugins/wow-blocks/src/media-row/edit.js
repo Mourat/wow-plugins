@@ -28,6 +28,7 @@ import {
 	dropTarget,
 	emptyCell,
 	isFilled,
+	isVideo,
 	mediaToCell,
 	replaceCell,
 	resizeCells,
@@ -224,7 +225,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 	// A drop can carry several files. The first takes the cell it landed on,
 	// the rest take the empty cells to its right, and whatever does not fit
 	// stays in the media library rather than pushing something else out.
-	const placeMedia = ( index, patch, offset ) => {
+	const placeMedia = ( index, media, offset ) => {
 		const current = read();
 
 		if ( ! current ) {
@@ -240,7 +241,21 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 			return;
 		}
 
-		write( { cells: replaceCell( next, target, patch ) } );
+		/*
+		 * A film dropped in is a film chosen: the same two steps, the same
+		 * poster. Core has already refused one where films are not taken.
+		 *
+		 * What arrives from an upload and what arrives from the media
+		 * library do not describe themselves the same way — one says
+		 * `mime_type`, the other `type` — so both are asked.
+		 */
+		if ( isVideo( media ) ) {
+			chooseVideo( target, media );
+
+			return;
+		}
+
+		write( { cells: replaceCell( next, target, mediaToCell( media ) ) } );
 	};
 
 	const blockProps = useBlockProps( {
@@ -375,8 +390,8 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 							canVideo={ 'single' === layout }
 							onFill={ () => fillCell( index ) }
 							onVideo={ ( media ) => chooseVideo( index, media ) }
-							onMedia={ ( patch, offset ) =>
-								placeMedia( index, patch, offset )
+							onMedia={ ( media, offset ) =>
+								placeMedia( index, media, offset )
 							}
 						/>
 					) ) }
@@ -541,7 +556,11 @@ function Cell( {
 			{ /* Selected on the drop, not when the upload ends: moving the
 			     inspector to a cell seconds later, possibly twice over for
 			     two drops, is what made this feel out of control. */ }
-			<MediaDropZone onMedia={ onMedia } onStart={ onSelect } />
+			<MediaDropZone
+				onMedia={ onMedia }
+				onStart={ onSelect }
+				allowVideo={ canVideo }
+			/>
 		</div>
 	);
 }
