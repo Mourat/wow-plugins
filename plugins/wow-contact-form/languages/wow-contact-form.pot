@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-09-22T02:47:04+00:00\n"
+"POT-Creation-Date: 2026-10-22T23:41:22+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: wow-contact-form\n"
@@ -193,6 +193,36 @@ msgstr ""
 
 #: includes/submission.php:176
 msgid "Something went wrong on our side and the message was not saved. Please try again in a moment."
+msgstr ""
+
+#: includes/widget.php:104
+msgid "Messages"
+msgstr ""
+
+#: includes/widget.php:142
+msgid "in the last seven days"
+msgstr ""
+
+#: includes/widget.php:146
+msgid "in the last thirty"
+msgstr ""
+
+#: includes/widget.php:150
+msgid "in all"
+msgstr ""
+
+#. translators: %s: how long ago, such as "2 days".
+#: includes/widget.php:178
+#, php-format
+msgid "%s ago"
+msgstr ""
+
+#: includes/widget.php:189
+msgid "All messages"
+msgstr ""
+
+#: includes/widget.php:193
+msgid "Nobody has written yet."
 msgstr ""
 
 #: patterns/contact-page.php:16

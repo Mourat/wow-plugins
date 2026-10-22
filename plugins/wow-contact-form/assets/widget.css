@@ -1,0 +1,83 @@
+/**
+ * The dashboard widget: three figures, twelve months, the last few letters.
+ */
+.wow-messages-figures {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 18px 28px;
+	margin: 0 0 16px;
+}
+
+.wow-messages-figures li {
+	margin: 0;
+}
+
+.wow-messages-figures strong {
+	display: block;
+	font-size: 22px;
+	line-height: 1.2;
+}
+
+.wow-messages-figures span {
+	color: #50575e;
+	font-size: 12px;
+}
+
+.wow-messages-months {
+	display: flex;
+	align-items: flex-end;
+	gap: 4px;
+	height: 72px;
+	margin: 0 0 14px;
+}
+
+.wow-messages-months li {
+	display: flex;
+	flex: 1;
+	flex-direction: column;
+	align-items: center;
+	gap: 4px;
+	height: 100%;
+	margin: 0;
+}
+
+.wow-messages-column {
+	display: flex;
+	flex: 1;
+	align-items: flex-end;
+	width: 100%;
+}
+
+.wow-messages-column span {
+	width: 100%;
+	border-radius: 3px 3px 0 0;
+	background: var(--wp-admin-theme-color, #2271b1);
+}
+
+.wow-messages-month {
+	color: #8c8f94;
+	font-size: 10px;
+	text-transform: uppercase;
+}
+
+.wow-messages-latest {
+	margin: 0;
+}
+
+.wow-messages-latest li {
+	display: flex;
+	justify-content: space-between;
+	gap: 12px;
+	margin: 0 0 4px;
+	font-size: 13px;
+}
+
+.wow-messages-latest span {
+	color: #8c8f94;
+	white-space: nowrap;
+}
+
+.wow-messages-note {
+	margin: 10px 0 0;
+	font-size: 12px;
+}

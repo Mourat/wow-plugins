@@ -29,171 +29,173 @@ msgstr "Un bloc de formulaire de contact : le message du visiteur est conservé 
 msgid "Wow-arts"
 msgstr ""
 
-#: blocks/contact-form/render.php
+#: blocks/contact-form/render.php:52
 msgid "Thank you — your message has reached us. We will get back to you shortly."
 msgstr "Merci — votre message nous est bien parvenu. Nous vous répondrons rapidement."
 
-#: blocks/contact-form/render.php
+#: blocks/contact-form/render.php:116
 msgid "Leave this field empty"
 msgstr "Laissez ce champ vide"
 
-#: blocks/contact-form/render.php
+#: blocks/contact-form/render.php:141
 msgid "Send"
 msgstr "Envoyer"
 
-#: includes/admin.php
+#: includes/admin.php:27
 msgid "From"
 msgstr "Expéditeur"
 
-#: includes/admin.php
+#: includes/admin.php:28
 msgid "Email"
 msgstr "E-mail"
 
-#: includes/admin.php
-#: includes/storage.php
+#: includes/admin.php:29
+#: includes/admin.php:104
+#: includes/storage.php:65
+#: includes/storage.php:152
 msgid "Message"
 msgstr "Message"
 
-#: includes/admin.php
+#: includes/admin.php:30
 msgid "Notification"
 msgstr "Notification"
 
-#: includes/admin.php
+#: includes/admin.php:31
 msgid "Received"
 msgstr "Reçu le"
 
-#: includes/admin.php
+#: includes/admin.php:80
 msgid "Sent"
 msgstr "Envoyée"
 
-#: includes/admin.php
+#: includes/admin.php:93
 msgid "Not sent"
 msgstr "Non envoyée"
 
-#: includes/block.php
+#: includes/block.php:72
 msgid "WOW"
 msgstr ""
 
-#: includes/fields.php
+#: includes/fields.php:32
 msgctxt "form field"
 msgid "First name"
 msgstr "Votre Prénom"
 
-#: includes/fields.php
+#: includes/fields.php:39
 msgctxt "form field"
 msgid "Last name"
 msgstr "Votre Nom"
 
-#: includes/fields.php
+#: includes/fields.php:46
 msgctxt "form field"
 msgid "Company"
 msgstr "Votre Entreprise"
 
-#: includes/fields.php
+#: includes/fields.php:53
 msgctxt "form field"
 msgid "Email"
 msgstr "Votre Email"
 
-#: includes/fields.php
+#: includes/fields.php:60
 msgctxt "form field"
 msgid "Message"
 msgstr "Votre Message"
 
 #. translators: %s: field label.
-#: includes/fields.php
+#: includes/fields.php:148
 #, php-format
 msgid "%s is required."
 msgstr "Le champ « %s » est obligatoire."
 
-#: includes/fields.php
+#: includes/fields.php:156
 msgid "That does not look like an email address."
 msgstr "Cela ne ressemble pas à une adresse e-mail."
 
 #. translators: 1: site name, 2: sender's name.
-#: includes/mail.php
+#: includes/mail.php:46
 #, php-format
 msgid "[%1$s] Message from %2$s"
 msgstr "[%1$s] Message de %2$s"
 
-#: includes/mail.php
+#: includes/mail.php:92
 msgid "Read it in the site admin:"
 msgstr "Le lire dans l’administration du site :"
 
-#: includes/mail.php
+#: includes/mail.php:138
 msgid "No valid recipient address is configured."
 msgstr "Aucune adresse de destinataire valide n’est configurée."
 
-#: includes/mail.php
+#: includes/mail.php:181
 msgid "Sending was stopped before it began."
 msgstr "L’envoi a été interrompu avant même de commencer."
 
-#: includes/patterns.php
+#: includes/patterns.php:32
 msgid "Contact page"
 msgstr "Page de contact"
 
-#: includes/patterns.php
+#: includes/patterns.php:33
 msgid "A short introduction and the contact form beneath it."
 msgstr "Une courte introduction et le formulaire de contact en dessous."
 
-#: includes/storage.php
+#: includes/storage.php:61
 msgctxt "post type general name"
 msgid "Messages"
 msgstr "Messages"
 
-#: includes/storage.php
+#: includes/storage.php:62
 msgctxt "post type singular name"
 msgid "Message"
 msgstr "Message"
 
-#: includes/storage.php
+#: includes/storage.php:63
 msgctxt "admin menu"
 msgid "Messages"
 msgstr "Messages"
 
-#: includes/storage.php
+#: includes/storage.php:64
 msgid "All Messages"
 msgstr "Tous les messages"
 
-#: includes/storage.php
+#: includes/storage.php:66
 msgid "View Message"
 msgstr "Voir le message"
 
-#: includes/storage.php
+#: includes/storage.php:67
 msgid "Search Messages"
 msgstr "Rechercher des messages"
 
-#: includes/storage.php
+#: includes/storage.php:68
 msgid "No messages yet"
 msgstr "Aucun message pour l’instant"
 
-#: includes/storage.php
+#: includes/storage.php:69
 msgid "No messages in the bin"
 msgstr "Aucun message dans la corbeille"
 
 #. translators: 1: sender's name, 2: company name.
-#: includes/storage.php
+#: includes/storage.php:158
 #, php-format
 msgctxt "message title"
 msgid "%1$s (%2$s)"
 msgstr "%1$s (%2$s)"
 
-#: includes/submission.php
+#: includes/submission.php:119
 msgid "You have just sent a message. Please give it a moment before sending another."
 msgstr "Vous venez d’envoyer un message. Patientez un instant avant d’en envoyer un autre."
 
-#: includes/submission.php
+#: includes/submission.php:139
 msgid "This page had been open for a while and the form expired. Nothing was lost — please send it again."
 msgstr "Cette page est restée ouverte trop longtemps et le formulaire a expiré. Rien n’est perdu — merci de l’envoyer à nouveau."
 
-#: includes/submission.php
+#: includes/submission.php:154
 msgid "The message was not sent. Please look at the fields marked below."
 msgstr "Le message n’a pas été envoyé. Merci de vérifier les champs signalés ci-dessous."
 
-#: includes/submission.php
+#: includes/submission.php:176
 msgid "Something went wrong on our side and the message was not saved. Please try again in a moment."
 msgstr "Un problème est survenu de notre côté et le message n’a pas été enregistré. Merci de réessayer dans un instant."
 
-#: patterns/contact-page.php
+#: patterns/contact-page.php:16
 msgid "Write to us using the form below and we will answer as soon as we can."
 msgstr "Écrivez-nous via le formulaire ci-dessous, nous vous répondrons dès que possible."
 
@@ -206,3 +208,33 @@ msgstr "Formulaire de contact"
 msgctxt "block description"
 msgid "A form the visitor writes to you with. Messages are kept on the site and sent on by email."
 msgstr "Un formulaire par lequel le visiteur vous écrit. Les messages sont conservés sur le site et transmis par e-mail."
+
+#: includes/widget.php:104
+msgid "Messages"
+msgstr "Messages"
+
+#: includes/widget.php:142
+msgid "in the last seven days"
+msgstr "ces sept derniers jours"
+
+#: includes/widget.php:146
+msgid "in the last thirty"
+msgstr "ces trente derniers jours"
+
+#: includes/widget.php:150
+msgid "in all"
+msgstr "au total"
+
+#. translators: %s: how long ago, such as "2 days".
+#: includes/widget.php:178
+#, php-format
+msgid "%s ago"
+msgstr "il y a %s"
+
+#: includes/widget.php:189
+msgid "All messages"
+msgstr "Tous les messages"
+
+#: includes/widget.php:193
+msgid "Nobody has written yet."
+msgstr "Personne n’a encore écrit."

@@ -31,7 +31,7 @@ const KEEPS = 6 * HOUR_IN_SECONDS;
 /**
  * The numbers, read afresh.
  *
- * @return array{pictures:int,waiting:int,saved:int,source:int,files:int,weight:int}
+ * @return array{pictures:int,waiting:int,saved:int,source:int,files:int,weight:int,free:int,whole:int}
  */
 function read(): array {
 	$summary = Queue\summary();
@@ -52,7 +52,28 @@ function read(): array {
 		}
 	}
 
+	/*
+	 * What the disk says, when it is willing to say anything.
+	 *
+	 * disk_free_space is switched off on a good many shared hosts, and
+	 * where it answers it answers for the whole partition rather than for
+	 * this account's share of it — so it is reported as the server's disk,
+	 * which is what it is, and the quota the host sells stays a matter for
+	 * the host's own control panel.
+	 */
+	$free  = 0;
+	$whole = 0;
+
+	if ( function_exists( 'disk_free_space' ) && empty( $uploads['error'] ) ) {
+		$free  = (int) @disk_free_space( $uploads['basedir'] );
+		$whole = function_exists( 'disk_total_space' )
+			? (int) @disk_total_space( $uploads['basedir'] )
+			: 0;
+	}
+
 	return array(
+		'free'     => $free,
+		'whole'    => $whole,
 		'pictures' => (int) $summary['total'],
 		'waiting'  => (int) $summary['waiting'],
 		'saved'    => (int) $summary['saved'],
@@ -162,6 +183,19 @@ function draw(): void {
 		);
 		?>
 	</p>
+
+	<?php if ( ! empty( $tally['free'] ) ) : ?>
+		<p class="wow-images-note">
+			<?php
+			printf(
+				/* translators: 1: free space, 2: size of the whole disk. */
+				esc_html__( '%1$s free of %2$s on the server\'s disk.', 'wow-images' ),
+				esc_html( size_format( $tally['free'] ) ),
+				esc_html( size_format( $tally['whole'] ) )
+			);
+			?>
+		</p>
+	<?php endif; ?>
 
 	<?php if ( $tally['waiting'] > 0 ) : ?>
 		<p class="wow-images-note">
