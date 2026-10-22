@@ -119,14 +119,57 @@ function addQuickSave( id, nonce, frame ) {
 		button.type = 'button';
 		button.className = 'button button-primary wow-quick-save';
 		button.textContent = __( 'Quick save', 'wow-blocks' );
+		button.disabled = true;
 		button.addEventListener( 'click', () =>
 			quickSave( id, nonce, frame, button )
 		);
 
 		bar.appendChild( button );
+		follow( id, button );
 	};
 
 	look();
+}
+
+/**
+ * Keeps the button dim until there is something for it to do.
+ *
+ * Core already works out when a crop can be applied and when there are
+ * edits worth saving, and dims its own two buttons accordingly. Rather than
+ * work it out a second time and risk disagreeing with it, this reads those
+ * two: whenever either of them would do something, so would this.
+ *
+ * Read rather than listened to, because the state changes inside core's
+ * own drag handling, which announces nothing. Four times a second is far
+ * below noticing and costs two lookups.
+ *
+ * @param {number} id     Attachment id.
+ * @param {Object} button The button to dim.
+ */
+function follow( id, button ) {
+	const panel = document.getElementById( `imgedit-panel-${ id }` );
+
+	if ( ! panel ) {
+		return;
+	}
+
+	const watch = window.setInterval( () => {
+		// Gone from the page: the editor was closed, and so is this.
+		if ( ! button.isConnected || ! panel.isConnected ) {
+			window.clearInterval( watch );
+
+			return;
+		}
+
+		const can = ( selector ) => {
+			const one = panel.querySelector( selector );
+
+			return !! one && ! one.disabled;
+		};
+
+		button.disabled =
+			! can( '.imgedit-crop-apply' ) && ! can( '.imgedit-submit-btn' );
+	}, 250 );
 }
 
 /**
