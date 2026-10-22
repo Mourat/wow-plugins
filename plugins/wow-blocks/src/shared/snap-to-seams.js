@@ -166,12 +166,13 @@ function seams( image ) {
 /**
  * The nearest join worth moving to, or the edge unchanged.
  *
- * @param {number}   edge  Where the frame's edge is.
- * @param {number[]} lines Where the joins are.
- * @param {number}   reach How near is near enough.
+ * @param {number}   edge   Where the frame's edge is.
+ * @param {number[]} lines  Where the joins are.
+ * @param {number}   reach  How near is near enough.
+ * @param {number}   inward Which way to step off the join, in px.
  * @return {number} Where the edge should be.
  */
-function pull( edge, lines, reach ) {
+function pull( edge, lines, reach, inward ) {
 	let best = edge;
 	let near = reach + 1;
 
@@ -184,7 +185,7 @@ function pull( edge, lines, reach ) {
 		}
 	}
 
-	return near <= reach ? best : edge;
+	return near <= reach ? best + inward : edge;
 }
 
 /**
@@ -256,8 +257,16 @@ export default function snapToSeams( id ) {
 				REACH_LEAST,
 				Math.round( image.clientWidth * REACH_SHARE )
 			);
-			const x1 = pull( was.x1, lines, reach );
-			const x2 = pull( was.x2, lines, reach );
+			/*
+			 * A pixel inside the join rather than on it. Shrinking the
+			 * picture for the editor smears a hard edge across a pixel or
+			 * two, so the column that stands out most can sit just inside
+			 * the divider rather than just outside it. Giving up one pixel
+			 * of a photograph is nothing; leaving a red line along its edge
+			 * is the thing being fixed.
+			 */
+			const x1 = pull( was.x1, lines, reach, 1 );
+			const x2 = pull( was.x2, lines, reach, -1 );
 
 			if ( ( x1 === was.x1 && x2 === was.x2 ) || x2 - x1 < 3 ) {
 				return;
@@ -266,8 +275,51 @@ export default function snapToSeams( id ) {
 			ias.setSelection( x1, was.y1, x2, was.y2, true );
 			ias.update();
 
-			// Through core's own bookkeeping, so the numbers beside the
-			// picture and the selection it saves agree with what is drawn.
+			/*
+			 * The width and height fields have to be written too, and this
+			 * is not bookkeeping — it is the whole crop.
+			 *
+			 * What core saves is built from two places at once: the left
+			 * edge comes from the selection, the width from the field
+			 * beside the picture. The field is filled by the handler that
+			 * answers a dragged selection, and a selection set in code
+			 * answers nothing. So the drawn rectangle moved and the width
+			 * stayed as the hand had left it — the saved crop started at
+			 * the join and ran on past it, and a sliver of the divider came
+			 * through on both halves while the editor looked perfect.
+			 *
+			 * At full scale, as core keeps them, and clamped to the picture
+			 * the way core clamps them.
+			 */
+			const sizer = api?.hold?.sizer || 1;
+			const whole = api?.hold || {};
+
+			const put = ( which, value ) => {
+				const field = document.getElementById(
+					`imgedit-${ which }-${ id }`
+				);
+
+				if ( field ) {
+					field.value = String( value );
+				}
+			};
+
+			put(
+				'sel-width',
+				Math.min(
+					whole.w || Infinity,
+					Math.round( ( x2 - x1 ) / sizer )
+				)
+			);
+			put(
+				'sel-height',
+				Math.min(
+					whole.h || Infinity,
+					Math.round( ( was.y2 - was.y1 ) / sizer )
+				)
+			);
+
+			// Now core can read both halves and agree with what is drawn.
 			api.setCropSelection( id, ias.getSelection() );
 		}, 40 );
 	};
