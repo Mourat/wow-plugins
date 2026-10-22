@@ -29,8 +29,18 @@
  * what is stored — which is where the bodies are buried in this editor.
  */
 
-/** How near the frame has to be to a join before it is pulled, in px. */
-const REACH = 12;
+/**
+ * How near the frame has to be to a join before it is pulled, in px.
+ *
+ * Measured against a real attempt: the joins in a picture 600 wide sat at
+ * 243 and 263, and the frame was let go at 218 and at 299 — twenty-five and
+ * thirty-six pixels out, which is what "roughly there" looks like when
+ * somebody drags to a seam. Twelve pixels never reached. Thirty-two is
+ * about a twentieth of the picture's width, and there is little to lose by
+ * being generous: a picture has one or two joins in it, not a field of
+ * candidates, and Shift or Alt turns the whole thing off.
+ */
+const REACH = 32;
 
 /** How far apart two joins must be to count as two, in px. */
 const APART = 8;
