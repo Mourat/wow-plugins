@@ -99,8 +99,32 @@ const FLAT = 4;
 /** The widest a bar may be, as a share of the picture. */
 const BAND = 0.06;
 
+/**
+ * The widest a bar found by its flatness may be, as a share of the picture.
+ *
+ * Wider than a bar grown from a step is allowed to be, because this one has
+ * had to prove there is a photograph on either side of it, and the widest in
+ * this library — a pale grey band between two pictures of a cupboard — is
+ * fifty-two pixels where a six-hundredth of the width would allow forty-five.
+ */
+const SPAN = 0.15;
+
 /** How much the picture must stray just outside a bar for it to be one. */
 const RESTLESS = 12;
+
+/** How far a fill's colour may drift from the colour at the picture's edge. */
+const TONE = 6;
+
+/**
+ * How flat a fill has to be, averaged over it.
+ *
+ * Flat enough to be a colour somebody filled with, rather than a blurred
+ * corner of a photograph or a wall in even light, both of which pass for
+ * flat column by column. Over this library the gap is not close: a fill
+ * averages between 0.01 and 0.12, while a white wall beside a door averages
+ * 1.25, deep blue sea 1.35 and an out-of-focus foreground 2.57.
+ */
+const TAME = 0.3;
 
 /** How far outside a bar to look, stepping over the blur at its edge, in px. */
 const SKIP = 2;
@@ -250,6 +274,29 @@ function seams( image ) {
 		tops.push( x );
 	}
 
+	// The colour of each column, for telling a fill from what it is beside.
+	const reds = new Float32Array( width );
+	const greens = new Float32Array( width );
+	const blues = new Float32Array( width );
+
+	for ( let x = 0; x < width; x++ ) {
+		let red = 0;
+		let green = 0;
+		let blue = 0;
+
+		for ( let y = 0; y < height; y++ ) {
+			const at = ( y * width + x ) * 4;
+
+			red += pixels[ at ];
+			green += pixels[ at + 1 ];
+			blue += pixels[ at + 2 ];
+		}
+
+		reds[ x ] = red / height;
+		greens[ x ] = green / height;
+		blues[ x ] = blue / height;
+	}
+
 	// How far each column strays from its own average, down the height.
 	const flat = new Float32Array( width );
 
@@ -294,16 +341,20 @@ function seams( image ) {
 			}
 		}
 
-		/*
-		 * No bar here, or something too wide to be one — a sky, a wall in
-		 * even light. Then the join is the single line that was found.
-		 */
-		const bar =
-			flat[ first ] < FLAT && to - from < bounded
-				? { left: from, right: to + 1 }
-				: { left: top, right: top };
+		if ( flat[ first ] >= FLAT || to - from >= bounded ) {
+			// No bar here, or something too wide to be one — a sky, a wall
+			// in even light. Then the join is the line that was found.
+			keep( found, { left: top, right: top } );
+		} else if ( from <= border || to >= width - border - 1 ) {
+			// Flat all the way to the side of the picture: a colour the
+			// photograph was laid on rather than a bar between two of them,
+			// and the join is the one edge of it that is not the picture's.
+			const inner = from <= border ? to : from;
 
-		keep( found, bar );
+			keep( found, { left: inner, right: inner } );
+		} else {
+			keep( found, { left: from, right: to + 1 } );
+		}
 	}
 
 	/*
@@ -323,7 +374,7 @@ function seams( image ) {
 	 * pixels out from each end, the bar's neighbours stray by 38 and 43; not
 	 * one of the fifty-one manages 12 on both sides.
 	 */
-	const widest = Math.max( 2, Math.round( width * BAND ) );
+	const widest = Math.max( 2, Math.round( width * SPAN ) );
 
 	for ( let x = border; x < width - border; x++ ) {
 		if ( flat[ x ] >= FLAT ) {
@@ -337,19 +388,95 @@ function seams( image ) {
 		}
 
 		const to = x - 1;
-		const outside = Math.min(
-			flat[ Math.max( 0, from - 1 - SKIP ) ],
-			flat[ Math.min( width - 1, to + 1 + SKIP ) ]
-		);
+		const span = to - from + 1;
+		const before = flat[ Math.max( 0, from - 1 - SKIP ) ];
+		const after = flat[ Math.min( width - 1, to + 1 + SKIP ) ];
+		// Anything reaching a side of the picture is a fill, not a bar, and
+		// is answered for below.
+		if ( from <= border || to >= width - border - 1 ) {
+			continue;
+		}
 
-		if ( to - from + 1 < 2 || to - from >= widest || outside < RESTLESS ) {
+		if (
+			span < 2 ||
+			span > widest ||
+			Math.min( before, after ) < RESTLESS
+		) {
 			continue;
 		}
 
 		keep( found, { left: from, right: to + 1 } );
 	}
 
+	/*
+	 * And the fills: a colour a picture was laid on rather than a bar
+	 * between two of them. A third of one picture here is plain terracotta,
+	 * and the join is simply where the photograph ends — one edge, not two,
+	 * and no width it could be too wide to be.
+	 *
+	 * Found by walking in from the side of the picture while the colour
+	 * stays the colour it started as. Starting at the edge is what makes it
+	 * reliable: a run of flat columns on its own set off along the white
+	 * wall at the end of a photograph and only then crossed into the red
+	 * bar beyond it, putting the join a finger's width inside the picture.
+	 * The colour at the very edge is the fill's own, and nothing else is
+	 * allowed into the run.
+	 *
+	 * Then it must be flat on average, not merely column by column, which
+	 * is what parts a fill from a blurred foreground or a wall in even
+	 * light.
+	 */
+	for ( const way of [ 1, -1 ] ) {
+		const side = 0 < way ? 0 : width - 1;
+
+		if ( flat[ side ] >= FLAT ) {
+			continue;
+		}
+
+		let far = side;
+		let sum = 0;
+		let wide = 0;
+
+		for ( let x = side; 0 <= x && x < width; x += way ) {
+			if (
+				flat[ x ] >= FLAT ||
+				Math.abs( reds[ x ] - reds[ side ] ) > TONE ||
+				Math.abs( greens[ x ] - greens[ side ] ) > TONE ||
+				Math.abs( blues[ x ] - blues[ side ] ) > TONE
+			) {
+				break;
+			}
+
+			far = x;
+			sum += flat[ x ];
+			wide++;
+		}
+
+		if ( wide < border || sum / wide > TAME ) {
+			continue;
+		}
+
+		keep( found, { left: far, right: far } );
+	}
+
 	found.sort( ( one, other ) => one.left - other.left );
+
+	/*
+	 * A last pass over them in order. The three ways of finding a join
+	 * arrive in their own order and each only compares against what is
+	 * there at the time, so the same join can be kept twice — a bar, and
+	 * the step onto it that was found before the bar existed.
+	 */
+	for ( let i = found.length - 1; 0 < i; i-- ) {
+		const near = found[ i - 1 ];
+		const far = found[ i ];
+
+		if ( far.left <= near.right + APART ) {
+			near.right = Math.max( near.right, far.right );
+
+			found.splice( i, 1 );
+		}
+	}
 
 	return found;
 }
@@ -366,7 +493,9 @@ function seams( image ) {
  */
 function keep( found, bar ) {
 	for ( const already of found ) {
-		if ( already.left <= bar.right && bar.left <= already.right ) {
+		// Touching counts as overlapping: a bar and the step onto it are the
+		// same join, and they meet without ever sharing a column.
+		if ( already.left <= bar.right + 1 && bar.left <= already.right + 1 ) {
 			already.left = Math.min( already.left, bar.left );
 			already.right = Math.max( already.right, bar.right );
 
