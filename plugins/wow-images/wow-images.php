@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       WOW Images
  * Description:       Keeps a WebP and an AVIF copy of every picture on the site and offers them to browsers that want them, so a gallery page arrives at half the weight without anybody choosing a format by hand.
- * Version:           0.1.0
+ * Version:           0.1.1
  * Requires at least: 7.0
  * Requires PHP:      8.1
  * Author:            Wow-arts
@@ -17,7 +17,7 @@ namespace WOW\Images;
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'WOW_IMAGES_VERSION', '0.1.0' );
+define( 'WOW_IMAGES_VERSION', '0.1.1' );
 define( 'WOW_IMAGES_FILE', __FILE__ );
 define( 'WOW_IMAGES_DIR', plugin_dir_path( __FILE__ ) );
 define( 'WOW_IMAGES_URL', plugin_dir_url( __FILE__ ) );
@@ -25,6 +25,7 @@ define( 'WOW_IMAGES_URL', plugin_dir_url( __FILE__ ) );
 require_once WOW_IMAGES_DIR . 'includes/formats.php';
 require_once WOW_IMAGES_DIR . 'includes/options.php';
 require_once WOW_IMAGES_DIR . 'includes/record.php';
+require_once WOW_IMAGES_DIR . 'includes/later.php';
 require_once WOW_IMAGES_DIR . 'includes/convert.php';
 require_once WOW_IMAGES_DIR . 'includes/retina.php';
 require_once WOW_IMAGES_DIR . 'includes/store.php';

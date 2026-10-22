@@ -23,6 +23,7 @@
 namespace WOW\Images\Convert;
 
 use WOW\Images\Formats;
+use WOW\Images\Later;
 use WOW\Images\Options;
 use WOW\Images\Record;
 
@@ -132,7 +133,7 @@ function file( string $path, string $target, string $format, ?int $quality = nul
  *                          attachment when not given.
  * @return array{made:int,kept:int,rejected:int,errors:string[],saving:int,meta:array}|\WP_Error
  */
-function attachment( int $id, bool $force = false, ?array $meta = null ) {
+function attachment( int $id, bool $force = false, ?array $meta = null, ?array $only = null ) {
 	$given = null !== $meta;
 	$meta  = $given ? $meta : wp_get_attachment_metadata( $id );
 
@@ -154,6 +155,11 @@ function attachment( int $id, bool $force = false, ?array $meta = null ) {
 	 */
 	$own     = Formats\of_mime( $mime );
 	$formats = array_values( array_diff( Options\active(), array( $own ) ) );
+
+	// A caller may ask for some of them and leave the rest for later.
+	if ( null !== $only ) {
+		$formats = array_values( array_intersect( $formats, $only ) );
+	}
 
 	if ( empty( $formats ) ) {
 		return new \WP_Error( 'wow_images_no_formats', __( 'No format is switched on that this server can write and this picture is not already in.', 'wow-images' ) );
@@ -288,7 +294,21 @@ function on_upload( $meta, $id ) {
 		return $meta;
 	}
 
-	$result = attachment( (int) $id, false, $meta );
+	/*
+	 * Only the quick formats while the upload is open; the slow ones are
+	 * asked for again a moment later, from a request nobody is waiting on.
+	 * What this buys is measured in later.php.
+	 */
+	$prompt = array_values(
+		array_filter(
+			Options\active(),
+			static fn ( string $format ): bool => ! Formats\slow( $format )
+		)
+	);
+
+	Later\schedule( (int) $id );
+
+	$result = attachment( (int) $id, false, $meta, $prompt );
 
 	return is_wp_error( $result ) ? $meta : $result['meta'];
 }

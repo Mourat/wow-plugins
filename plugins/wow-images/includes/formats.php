@@ -26,20 +26,46 @@ defined( 'ABSPATH' ) || exit;
  * lands around 40-55% of the JPEG it was made from; WebP at 82 around 75-85%.
  * Both are settings, and both can be moved on the settings screen.
  *
- * @var array<string,array{mime:string,label:string,quality:int}>
+ * Each one also says whether it is slow. That is not a judgement about the
+ * format but a measurement of this server: writing one picture's worth of
+ * AVIF takes between one and a half and two seconds, while the WebP beside
+ * it is too quick to measure. A slow format is not made while somebody is
+ * waiting for an upload to finish — see later.php.
+ *
+ * @var array<string,array{mime:string,label:string,quality:int,slow:bool}>
  */
 const FORMATS = array(
 	'avif' => array(
 		'mime'    => 'image/avif',
 		'label'   => 'AVIF',
 		'quality' => 55,
+		'slow'    => true,
 	),
 	'webp' => array(
 		'mime'    => 'image/webp',
 		'label'   => 'WebP',
 		'quality' => 82,
+		'slow'    => false,
 	),
 );
+
+/**
+ * Whether a format costs enough to be worth leaving until afterwards.
+ *
+ * @param string $format Format slug.
+ * @return bool True when it should be made in the background.
+ */
+function slow( string $format ): bool {
+	$slow = ! empty( FORMATS[ $format ]['slow'] );
+
+	/**
+	 * Filters whether a format is made in the background rather than at upload.
+	 *
+	 * @param bool   $slow   Whether it is left until afterwards.
+	 * @param string $format Format slug.
+	 */
+	return (bool) apply_filters( 'wow_images_slow_format', $slow, $format );
+}
 
 /**
  * What a picture has to be before there is any point reading it.
