@@ -29,76 +29,124 @@ import { forgetAttachment } from './attachment-url';
 import './edit-image.scss';
 
 /**
+ * Waits until the editor has stopped working.
+ *
+ * Every step core takes goes to the server and comes back — the crop is
+ * applied by one request and the preview redrawn from its answer. While
+ * that is happening it shows a waiting panel, so the panel is the signal:
+ * gone means done.
+ *
+ * @param {number}   id   Attachment id.
+ * @param {Function} then What to do once it is idle.
+ */
+function whenIdle( id, then ) {
+	const until = Date.now() + 15000;
+
+	const look = () => {
+		const wait = document.getElementById( `imgedit-wait-${ id }` );
+		const busy = wait && null !== wait.offsetParent;
+
+		if ( busy && Date.now() < until ) {
+			window.setTimeout( look, 100 );
+
+			return;
+		}
+
+		then();
+	};
+
+	// One turn of the loop first: the waiting panel is raised inside the
+	// click that starts the work, not before it.
+	window.setTimeout( look, 60 );
+}
+
+/**
  * Crop, save, and be done with it.
  *
  * Core's editor takes three presses to put a cropped picture back in a
  * block: apply the crop, save the edits, and then — because saving returns
  * to the library rather than closing — choose the picture again. The block
- * already holds this attachment and wants nothing else; the three presses
- * are the long way round to where it already was.
+ * already holds this attachment and wants nothing else.
  *
- * All three are core's own steps, in core's own order. imageEdit.crop()
- * queues the selection, imageEdit.save() posts it, and what normally
- * happens next — the editor view fetching the attachment afresh and going
- * back to the library — is replaced for this one press by fetching it and
- * closing instead. The attachment is still fetched, because the new file
- * has a new name and whatever is listening needs to hear it.
+ * So the same two buttons are pressed, in the same order, waiting in
+ * between exactly as a person waits for the picture to redraw. Pressed,
+ * not reached around: an earlier version called the functions behind them
+ * one after the other, which sent two requests about the same picture at
+ * once and sometimes saved a crop from the wrong place. A button does more
+ * than call a function — it does it at a moment when the editor is ready
+ * for it.
+ *
+ * What is not a press is the last step. Saving returns to the library,
+ * where the third press used to be; instead the attachment is handed to
+ * the block and the frame closed.
  *
  * @param {number}   id      Attachment id.
- * @param {string}   nonce   Edit nonce for it.
  * @param {Object}   frame   The media frame.
- * @param {Object}   button  The button that was pressed.
  * @param {Function} onSaved Hands the block the picture as it now is.
  */
-function quickSave( id, nonce, frame, button, onSaved ) {
+function quickSave( id, frame, onSaved ) {
 	const api = window.imageEdit;
-	const selection = document.getElementById( `imgedit-selection-${ id }` );
+	const panel = document.getElementById( `imgedit-panel-${ id }` );
 
-	// A selection not yet applied is what the person is looking at, so it
-	// is what they mean. Without one there is nothing to add, and whatever
-	// was done earlier is saved as it stands.
-	if ( selection?.value ) {
-		api.crop( id, nonce, button );
+	if ( ! panel ) {
+		return;
 	}
 
-	const view = api._view;
-	const original = view?.save;
+	const press = ( one ) => {
+		if ( one && ! one.disabled ) {
+			one.click();
 
-	if ( view ) {
-		view.save = function () {
-			view.save = original;
-
-			this.model.fetch().done( () => {
-				/*
-				 * The block is handed the picture as it now is, which is
-				 * what the third press used to do: choosing it again in the
-				 * library wrote the new address into the block. Taking that
-				 * press away took the writing away with it, and the cell
-				 * went on drawing the picture as it was before the crop.
-				 *
-				 * Told outright rather than left to notice. The cell could
-				 * work it out — the address it holds is stale and the
-				 * attachment knows better — but a thing that has just
-				 * happened is better said than inferred.
-				 */
-				const saved = this.model.toJSON();
-
-				forgetAttachment( id );
-				onSaved?.( saved );
-
-				frame.close();
-			} );
-		};
-	}
-
-	// False means there was nothing to save: no crop, no rotation, nothing.
-	if ( false === api.save( id, nonce ) ) {
-		if ( view ) {
-			view.save = original;
+			return true;
 		}
 
-		frame.close();
+		return false;
+	};
+
+	const save = () => {
+		const view = api?._view;
+		const original = view?.save;
+
+		if ( view ) {
+			view.save = function () {
+				view.save = original;
+
+				this.model.fetch().done( () => {
+					const saved = this.model.toJSON();
+
+					forgetAttachment( id );
+					onSaved?.( saved );
+
+					frame.close();
+				} );
+			};
+		}
+
+		if ( ! press( panel.querySelector( 'button.imgedit-submit-btn' ) ) ) {
+			// Nothing to save: no crop, no rotation, nothing.
+			if ( view ) {
+				view.save = original;
+			}
+
+			frame.close();
+		}
+	};
+
+	// A chosen crop is applied first, by its own button, and the saving
+	// waits for the picture to come back redrawn.
+	if (
+		hasCrop( id ) &&
+		press(
+			panel.querySelector(
+				'.imgedit-crop-apply button:not(.imgedit-crop-clear)'
+			)
+		)
+	) {
+		whenIdle( id, save );
+
+		return;
 	}
+
+	save();
 }
 
 /**
@@ -109,11 +157,10 @@ function quickSave( id, nonce, frame, button, onSaved ) {
  * delay, and the watch gives up rather than running for ever.
  *
  * @param {number}   id      Attachment id.
- * @param {string}   nonce   Edit nonce for it.
  * @param {Object}   frame   The media frame.
  * @param {Function} onSaved Hands the block the picture as it now is.
  */
-function addQuickSave( id, nonce, frame, onSaved ) {
+function addQuickSave( id, frame, onSaved ) {
 	const until = Date.now() + 10000;
 
 	const look = () => {
@@ -142,7 +189,7 @@ function addQuickSave( id, nonce, frame, onSaved ) {
 		button.textContent = __( 'Quick save', 'wow-blocks' );
 		button.disabled = true;
 		button.addEventListener( 'click', () =>
-			quickSave( id, nonce, frame, button, onSaved )
+			quickSave( id, frame, onSaved )
 		);
 
 		bar.appendChild( button );
@@ -380,7 +427,7 @@ async function editInFrame( id, onSaved ) {
 	frame.setState( 'edit-image' );
 	frame.once( 'close', () => forgetAttachment( id ) );
 
-	addQuickSave( id, model.get( 'nonces' )?.edit, frame, onSaved );
+	addQuickSave( id, frame, onSaved );
 }
 
 /**
