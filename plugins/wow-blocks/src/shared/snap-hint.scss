@@ -5,8 +5,9 @@
  * buttons beside it.
  */
 .wow-snap-hint {
-	margin: 12px 0 0;
-	padding-top: 10px;
+	max-width: 600px;
+	margin: 14px 0 0;
+	padding-top: 12px;
 	border-top: 1px solid #e0e0e0;
 	color: #757575;
 	font-size: 12px;
@@ -14,6 +15,7 @@
 
 	strong {
 		display: block;
+		margin-bottom: 2px;
 		color: #1e1e1e;
 	}
 }

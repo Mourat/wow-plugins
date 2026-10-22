@@ -747,7 +747,11 @@ function pull( edge, bars, reach, inward, asked ) {
  */
 function hint( id, tries = 0 ) {
 	const panel = document.getElementById( `imgedit-panel-${ id }` );
-	const where = panel?.querySelector( '#imgedit-crop' );
+
+	// Under the picture rather than beside the controls: the left column
+	// ends in empty space, and a line read before cropping belongs where
+	// the eye already is.
+	const where = panel?.querySelector( '.imgedit-tools' );
 
 	/*
 	 * The editor builds its panel a moment after it is asked to open, so
