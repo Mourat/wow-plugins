@@ -1,0 +1,19 @@
+/**
+ * The note under the crop controls in the image editor.
+ *
+ * Quiet: it is there to be found when wanted, not to compete with the
+ * buttons beside it.
+ */
+.wow-snap-hint {
+	margin: 12px 0 0;
+	padding-top: 10px;
+	border-top: 1px solid #e0e0e0;
+	color: #757575;
+	font-size: 12px;
+	line-height: 1.5;
+
+	strong {
+		display: block;
+		color: #1e1e1e;
+	}
+}

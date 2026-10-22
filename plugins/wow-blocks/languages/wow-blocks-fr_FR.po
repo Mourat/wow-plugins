@@ -50,7 +50,7 @@ msgstr "WOW Blocks : les blocs ne sont pas compilés. Exécutez ceci dans le dos
 #: build/album-grid/index.js:1
 #: build/media-row/index.js:3
 #: src/album-grid/edit.js:47
-#: src/media-row/edit.js:305
+#: src/media-row/edit.js:320
 msgid "Grid"
 msgstr "Grille"
 
@@ -121,13 +121,13 @@ msgstr "En dessous de 768 px, les colonnes s’empilent et la liste se retrouver
 
 #: build/media-band/index.js:1
 #: build/media-row/index.js:2
-#: src/shared/media-drop.js:149
+#: src/shared/media-drop.js:155
 msgid "The image could not be uploaded."
 msgstr "L’image n’a pas pu être téléversée."
 
 #: build/media-band/index.js:1
 #: build/media-row/index.js:2
-#: src/shared/media-drop.js:201
+#: src/shared/media-drop.js:207
 msgid "That is a link to a page, not an image."
 msgstr "Ceci est un lien vers une page, pas une image."
 
@@ -150,8 +150,8 @@ msgstr "Sans image"
 #: build/media-row/index.js:2
 #: src/media-band/edit.js:217
 #: src/media-band/edit.js:274
-#: src/media-row/edit.js:511
-#: src/media-row/edit.js:592
+#: src/media-row/edit.js:526
+#: src/media-row/edit.js:611
 msgid "Image"
 msgstr "Image"
 
@@ -159,7 +159,7 @@ msgstr "Image"
 #: build/media-row/index.js:2
 #: src/media-band/edit.js:247
 #: src/media-band/edit.js:318
-#: src/media-row/edit.js:695
+#: src/media-row/edit.js:714
 msgid "Replace image"
 msgstr "Remplacer l’image"
 
@@ -167,7 +167,7 @@ msgstr "Remplacer l’image"
 #: build/media-row/index.js:2
 #: src/media-band/edit.js:248
 #: src/media-band/edit.js:322
-#: src/media-row/edit.js:699
+#: src/media-row/edit.js:718
 msgid "Choose image"
 msgstr "Choisir une image"
 
@@ -184,7 +184,7 @@ msgstr "Couleur de l’aplat"
 #: build/media-band/index.js:1
 #: build/media-row/index.js:2
 #: src/media-band/edit.js:356
-#: src/media-row/edit.js:730
+#: src/media-row/edit.js:749
 msgid "Remove image"
 msgstr "Retirer l’image"
 
@@ -196,7 +196,7 @@ msgstr "Largeur de l’image, px"
 #: build/media-band/index.js:1
 #: build/media-row/index.js:2
 #: src/media-band/edit.js:378
-#: src/media-row/edit.js:740
+#: src/media-row/edit.js:759
 msgid "Framing"
 msgstr "Cadrage"
 
@@ -216,48 +216,48 @@ msgid "At 1× the image fits the strip width. Above that, the frame zooms toward
 msgstr "À 1×, l’image occupe toute la largeur de la bande. Au-delà, le cadre zoome vers le point choisi."
 
 #: build/media-row/index.js:2
-#: src/media-row/edit.js:50
+#: src/media-row/edit.js:51
 #: src/media-row/variations.js:38
 msgid "1 column"
 msgstr "1 colonne"
 
 #: build/media-row/index.js:2
-#: src/media-row/edit.js:53
+#: src/media-row/edit.js:54
 #: src/media-row/variations.js:29
 msgid "2 columns, narrow on the left"
 msgstr "2 colonnes, étroite à gauche"
 
 #: build/media-row/index.js:2
-#: src/media-row/edit.js:57
+#: src/media-row/edit.js:58
 #: src/media-row/variations.js:20
 msgid "2 columns, narrow on the right"
 msgstr "2 colonnes, étroite à droite"
 
 #: build/media-row/index.js:2
-#: src/media-row/edit.js:59
+#: src/media-row/edit.js:60
 #: src/media-row/variations.js:10
 msgid "3 columns"
 msgstr "3 colonnes"
 
 #: build/media-row/index.js:2
-#: src/media-row/edit.js:63
 #: src/media-row/edit.js:64
+#: src/media-row/edit.js:65
 msgid "wide"
 msgstr "large"
 
 #: build/media-row/index.js:2
-#: src/media-row/edit.js:65
+#: src/media-row/edit.js:66
 msgid "narrow"
 msgstr "étroite"
 
 #: build/media-row/index.js:2
-#: src/media-row/edit.js:536
-#: src/media-row/edit.js:601
+#: src/media-row/edit.js:551
+#: src/media-row/edit.js:620
 msgid "Fill"
 msgstr "Aplat"
 
 #: build/media-row/index.js:2
-#: src/media-row/edit.js:741
+#: src/media-row/edit.js:760
 msgid "The point guaranteed to stay in frame when the image is cropped."
 msgstr "Le point qui restera toujours dans le cadre lors du recadrage."
 
@@ -268,34 +268,34 @@ msgstr "Trois colonnes égales."
 
 #. translators: %d: gap size in pixels.
 #: build/media-row/index.js:3
-#: src/media-row/edit.js:265
+#: src/media-row/edit.js:280
 #, js-format
 msgid "%d px (default)"
 msgstr "%d px (par défaut)"
 
 #: build/media-row/index.js:3
-#: src/media-row/edit.js:308
+#: src/media-row/edit.js:323
 msgid "Layout"
 msgstr "Disposition"
 
 #: build/media-row/index.js:3
-#: src/media-row/edit.js:317
+#: src/media-row/edit.js:332
 msgid "Gap"
 msgstr "Écart"
 
 #: build/media-row/index.js:3
-#: src/media-row/edit.js:318
+#: src/media-row/edit.js:333
 msgid "The same gap between columns and between rows."
 msgstr "Le même écart entre les colonnes et entre les rangées."
 
 #: build/media-row/index.js:3
-#: src/media-row/edit.js:334
+#: src/media-row/edit.js:349
 msgid "Stack on mobile"
 msgstr "Empiler sur mobile"
 
 #. translators: 1: column number, 2: column type (narrow or wide).
 #: build/media-row/index.js:4
-#: src/media-row/edit.js:345
+#: src/media-row/edit.js:360
 #, js-format
 msgid "Column %1$d (%2$s)"
 msgstr "Colonne %1$d (%2$s)"
@@ -461,7 +461,7 @@ msgstr "Modifier"
 #: build/media-band/index.js:1
 #: build/media-row/index.js:2
 #: src/media-band/edit.js:289
-#: src/media-row/edit.js:666
+#: src/media-row/edit.js:685
 msgid "This image is no longer in the media library. Choose another one."
 msgstr "Cette image n’est plus dans la médiathèque. Choisissez-en une autre."
 
@@ -489,27 +489,39 @@ msgid "Quick save"
 msgstr "Enregistrement rapide"
 
 #: build/media-row/index.js:3
-#: src/media-row/edit.js:278
+#: src/media-row/edit.js:293
 msgid "Add a row above"
 msgstr "Ajouter une rangée au-dessus"
 
 #: build/media-row/index.js:3
-#: src/media-row/edit.js:284
+#: src/media-row/edit.js:299
 msgid "Add a row below"
 msgstr "Ajouter une rangée en dessous"
 
 #: build/media-row/index.js:2
-#: src/media-row/edit.js:528
-#: src/media-row/edit.js:620
+#: src/media-row/edit.js:543
+#: src/media-row/edit.js:639
 msgid "Video"
 msgstr "Vidéo"
 
 #: build/media-row/index.js:2
-#: src/media-row/edit.js:646
+#: src/media-row/edit.js:665
 msgid "Replace video"
 msgstr "Remplacer la vidéo"
 
 #: build/media-row/index.js:2
-#: src/media-row/edit.js:657
+#: src/media-row/edit.js:676
 msgid "Remove video"
 msgstr "Retirer la vidéo"
+
+#: build/media-band/index.js:1
+#: build/media-row/index.js:2
+#: src/shared/snap-to-seams.js:761
+msgid "Snapping to joins"
+msgstr "Aimantation aux raccords"
+
+#: build/media-band/index.js:1
+#: build/media-row/index.js:2
+#: src/shared/snap-to-seams.js:765
+msgid "The frame goes to the join between two photographs. Hold Shift to leave it exactly where you put it, or Ctrl to snap to the likeliest join when the magnet cannot see one by itself."
+msgstr "Le cadre se place sur le raccord entre deux photographies. Maintenez Maj pour le laisser exactement où vous l’avez posé, ou Ctrl pour l’aimanter au raccord le plus probable lorsque l’aimant n’en voit aucun de lui-même."

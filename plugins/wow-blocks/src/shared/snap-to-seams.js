@@ -68,7 +68,10 @@
  * away — the preview is read as before.
  */
 
+import { __ } from '@wordpress/i18n';
+
 import { knownUrl } from './attachment-url';
+import './snap-hint.scss';
 
 /**
  * How near the frame has to be to a join before it is pulled.
@@ -110,6 +113,24 @@ const SWAY = 3;
 
 /** How much of the height a join has to run down. */
 const BAR = 0.45;
+
+/**
+ * The same, for somebody who says there is a join and means it.
+ *
+ * The bar is strict because the magnet has to decide on its own, and the
+ * band just under it is crowded: measured over this library, the columns
+ * scoring between 0.40 and 0.50 belong to scaffolding poles, tree trunks
+ * and the railings of a fence far more often than to a join. Letting those
+ * in to catch one picture would cost fifty.
+ *
+ * But the person holding the mouse can see what the picture is. Held down
+ * as the frame is let go, Ctrl says "there is a join here, take your best
+ * answer" — and then the strongest column within reach wins, whatever it
+ * scores. One picture here is a pair of photographs whose halves meet at
+ * much the same brightness: its join reaches 0.46, which is the bar's own
+ * width away from being found by itself.
+ */
+const ASKED = 0.2;
 
 /** How far a column may stray from its own average and still count as flat. */
 const FLAT = 4;
@@ -159,15 +180,17 @@ const seen = new Map();
  * @param {HTMLImageElement}      image  The preview, as displayed.
  * @param {HTMLImageElement|null} source The picture to read in its place,
  *                                       drawn to the preview's size.
+ * @param {boolean}               asked  Whether the best answer was asked for.
  * @return {Array<{left: number, right: number}>} The joins, each as the two
  *         sides of its bar, in the picture's displayed pixels. A join with no
  *         bar has both sides in the same place.
  */
-function seams( image, source ) {
+function seams( image, source, asked ) {
 	const width = image.clientWidth;
 	const height = image.clientHeight;
 	const paint = source || image;
-	const key = `${ image.src }|${ width }x${ height }|${ paint.src }`;
+	const floor = asked ? ASKED : BAR;
+	const key = `${ image.src }|${ width }x${ height }|${ paint.src }|${ floor }`;
 
 	if ( seen.has( key ) ) {
 		return seen.get( key );
@@ -288,7 +311,7 @@ function seams( image, source ) {
 	// Peaks above the bar, and not two of them a few pixels apart.
 	for ( let x = border; x < width - border; x++ ) {
 		if (
-			share[ x ] < BAR ||
+			share[ x ] < floor ||
 			share[ x ] < share[ x - 1 ] ||
 			share[ x ] < share[ x + 1 ]
 		) {
@@ -415,16 +438,24 @@ function seams( image, source ) {
 		if ( flat[ first ] >= FLAT || to - from >= bounded ) {
 			// No bar here, or something too wide to be one — a sky, a wall
 			// in even light. Then the join is the line that was found.
-			keep( found, { left: top, right: top } );
+			keep( found, { left: top, right: top, weight: share[ top ] } );
 		} else if ( from <= border || to >= width - border - 1 ) {
 			// Flat all the way to the side of the picture: a colour the
 			// photograph was laid on rather than a bar between two of them,
 			// and the join is the one edge of it that is not the picture's.
 			const inner = from <= border ? to : from;
 
-			keep( found, { left: inner, right: inner } );
+			keep( found, {
+				left: inner,
+				right: inner,
+				weight: share[ top ],
+			} );
 		} else {
-			keep( found, { left: from, right: to + 1 } );
+			keep( found, {
+				left: from,
+				right: to + 1,
+				weight: share[ top ],
+			} );
 		}
 	}
 
@@ -488,7 +519,9 @@ function seams( image, source ) {
 			continue;
 		}
 
-		keep( found, { left: bar.from, right: bar.to + 1 } );
+		// Found by its flatness with a photograph on either side: as sure as
+		// anything here gets, whatever any column of it scores.
+		keep( found, { left: bar.from, right: bar.to + 1, weight: 1 } );
 	}
 
 	/*
@@ -539,7 +572,7 @@ function seams( image, source ) {
 			continue;
 		}
 
-		keep( found, { left: far, right: far } );
+		keep( found, { left: far, right: far, weight: 1 } );
 	}
 
 	found.sort( ( one, other ) => one.left - other.left );
@@ -588,6 +621,7 @@ function seams( image, source ) {
 
 		if ( far.left <= near.right + APART ) {
 			near.right = Math.max( near.right, far.right );
+			near.weight = Math.max( near.weight || 0, far.weight || 0 );
 
 			found.splice( i, 1 );
 		}
@@ -621,6 +655,7 @@ function keep( found, bar ) {
 		if ( already.left <= bar.right + 1 && bar.left <= already.right + 1 ) {
 			already.left = Math.min( already.left, bar.left );
 			already.right = Math.max( already.right, bar.right );
+			already.weight = Math.max( already.weight || 0, bar.weight || 0 );
 
 			return;
 		}
@@ -643,11 +678,14 @@ function keep( found, bar ) {
  *                                                      enough.
  * @param {number}                               inward Which way to step
  *                                                      off the join, in px.
+ * @param {boolean}                              asked  Whether the best answer was asked for.
  * @return {number} Where the edge should be.
  */
-function pull( edge, bars, reach, inward ) {
+function pull( edge, bars, reach, inward, asked ) {
 	let best = edge;
 	let near = reach + 1;
+	let strongest = -1;
+	let found = false;
 
 	for ( const bar of bars ) {
 		const away = Math.min(
@@ -655,13 +693,30 @@ function pull( edge, bars, reach, inward ) {
 			Math.abs( bar.right - edge )
 		);
 
-		if ( away < near ) {
+		if ( away > reach ) {
+			continue;
+		}
+
+		/*
+		 * Nearest wins when the magnet is deciding by itself, because every
+		 * join it has kept is one it is sure of. Asked outright, strongest
+		 * wins instead: the bar is off, so the columns within reach are a
+		 * mixed lot, and the best of them is the answer meant.
+		 */
+		const better = asked
+			? ( bar.weight || 0 ) > strongest ||
+				( ( bar.weight || 0 ) === strongest && away < near )
+			: away < near;
+
+		if ( better ) {
 			near = away;
+			strongest = bar.weight || 0;
 			best = 0 < inward ? bar.right : bar.left;
+			found = true;
 		}
 	}
 
-	return near <= reach ? best + inward : edge;
+	return found ? best + inward : edge;
 }
 
 /**
@@ -679,6 +734,58 @@ function pull( edge, bars, reach, inward ) {
  * @param {number} id Attachment id.
  * @return {Function} Call it to stop watching.
  */
+/**
+ * A line under the crop controls saying what the keys do.
+ *
+ * The magnet is invisible until it moves something, and the two keys that
+ * steer it are invisible full stop. Anybody who did not watch them being
+ * built would never guess, and whoever did will have forgotten by the
+ * spring. So the editor says it, once, where the cropping is done.
+ *
+ * @param {number} id    Attachment id.
+ * @param {number} tries How many times it has looked already.
+ */
+function hint( id, tries = 0 ) {
+	const panel = document.getElementById( `imgedit-panel-${ id }` );
+	const where = panel?.querySelector( '#imgedit-crop' );
+
+	/*
+	 * The editor builds its panel a moment after it is asked to open, so
+	 * the first look finds nothing. Asked again every fifth of a second for
+	 * three seconds, which is long enough for a slow answer from the server
+	 * and short enough to give up on an editor that never opened.
+	 */
+	if ( ! where ) {
+		if ( tries < 15 ) {
+			window.setTimeout( () => hint( id, tries + 1 ), 200 );
+		}
+
+		return;
+	}
+
+	if ( where.querySelector( '.wow-snap-hint' ) ) {
+		return;
+	}
+
+	const note = document.createElement( 'p' );
+
+	note.className = 'wow-snap-hint';
+
+	const what = document.createElement( 'strong' );
+
+	what.textContent = __( 'Snapping to joins', 'wow-blocks' );
+
+	const keys = document.createElement( 'span' );
+
+	keys.textContent = __(
+		'The frame goes to the join between two photographs. Hold Shift to leave it exactly where you put it, or Ctrl to snap to the likeliest join when the magnet cannot see one by itself.',
+		'wow-blocks'
+	);
+
+	note.append( what, keys );
+	where.append( note );
+}
+
 export default function snapToSeams( id ) {
 	const api = window.imageEdit;
 
@@ -727,6 +834,12 @@ export default function snapToSeams( id ) {
 		const magnet = ! ( event?.shiftKey || event?.altKey );
 
 		/*
+		 * Ctrl — or Cmd — says there is a join here even if the magnet
+		 * cannot see one well enough to be sure on its own.
+		 */
+		const asked = !! ( event?.ctrlKey || event?.metaKey );
+
+		/*
 		 * Not in the next free millisecond but a little after, because the
 		 * frame belongs to whoever touched it last. imgAreaSelect answers
 		 * the same release of the mouse, and a selection set while it is
@@ -756,7 +869,7 @@ export default function snapToSeams( id ) {
 				return;
 			}
 
-			const bars = magnet ? seams( image, sharper( image ) ) : [];
+			const bars = magnet ? seams( image, sharper( image ), asked ) : [];
 			const reach = Math.max(
 				REACH_LEAST,
 				Math.round( image.clientWidth * REACH_SHARE )
@@ -780,11 +893,13 @@ export default function snapToSeams( id ) {
 
 			if ( bars.length ) {
 				const pulled1 =
-					was.x1 <= 0 ? was.x1 : pull( was.x1, bars, reach, 1 );
+					was.x1 <= 0
+						? was.x1
+						: pull( was.x1, bars, reach, 1, asked );
 				const pulled2 =
 					was.x2 >= image.clientWidth
 						? was.x2
-						: pull( was.x2, bars, reach, -1 );
+						: pull( was.x2, bars, reach, -1, asked );
 
 				if (
 					( pulled1 !== was.x1 || pulled2 !== was.x2 ) &&
@@ -876,6 +991,8 @@ export default function snapToSeams( id ) {
 			api.setCropSelection( id, ias.getSelection() );
 		}, 40 );
 	};
+
+	hint( id );
 
 	document.addEventListener( 'mouseup', onLetGo );
 	document.addEventListener( 'touchend', onLetGo );

@@ -75,6 +75,12 @@
             ],
             "Quick save": [
                 "Enregistrement rapide"
+            ],
+            "Snapping to joins": [
+                "Aimantation aux raccords"
+            ],
+            "The frame goes to the join between two photographs. Hold Shift to leave it exactly where you put it, or Ctrl to snap to the likeliest join when the magnet cannot see one by itself.": [
+                "Le cadre se place sur le raccord entre deux photographies. Maintenez Maj pour le laisser exactement o\u00f9 vous l\u2019avez pos\u00e9, ou Ctrl pour l\u2019aimanter au raccord le plus probable lorsque l\u2019aimant n\u2019en voit aucun de lui-m\u00eame."
             ]
         }
     }
