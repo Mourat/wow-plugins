@@ -99,8 +99,12 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 	);
 	const { insertBlock } = useDispatch( blockEditorStore );
 
-	const addRowAbove = () =>
-		insertBlock( createBlock( 'wow/media-row' ), place, parent );
+	const addRow = ( where ) =>
+		insertBlock(
+			createBlock( 'wow/media-row' ),
+			'above' === where ? place : place + 1,
+			parent
+		);
 
 	// The cells array is always exactly as long as the layout has columns.
 	// Read afresh: an upload may have rewritten the cells since this render,
@@ -219,7 +223,13 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 					<ToolbarButton
 						icon="insert-before"
 						label={ __( 'Add a row above', 'wow-blocks' ) }
-						onClick={ addRowAbove }
+						onClick={ () => addRow( 'above' ) }
+					/>
+
+					<ToolbarButton
+						icon="insert-after"
+						label={ __( 'Add a row below', 'wow-blocks' ) }
+						onClick={ () => addRow( 'below' ) }
 					/>
 				</ToolbarGroup>
 
