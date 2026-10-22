@@ -458,7 +458,7 @@ msgstr "L’image n’a pas pu être copiée."
 #: build/media-row/index.js:2
 #: src/shared/edit-image.js:76
 msgid "Edit image"
-msgstr "Modifier l’image"
+msgstr "Modifier"
 
 #: build/media-band/index.js:1
 #: build/media-row/index.js:2

@@ -59,6 +59,8 @@ for folder in plugins/*/; do
 
 	[ -f "$main" ] || continue
 
+	base=""
+
 	# Committed since the tag, and anything not committed yet: a release is
 	# usually tagged in the same breath as the work that goes into it. Files
 	# that are new count too — git diff says nothing about a file it has
@@ -87,12 +89,28 @@ for folder in plugins/*/; do
 		| head -1)"
 
 	if [ -n "$was" ] && [ "$was" != "$now" ]; then
-		printf '%-20s %-8s already raised from %s\n' "$slug" "$now" "$was"
-		continue
+		lower="$( printf '%s\n%s\n' "$was" "$now" | sort -V | head -1 )"
+
+		if [ "$lower" = "$now" ]; then
+			# Below what was released. That is not a version anybody chose:
+			# it is a copy of the plugin from a site that has not updated
+			# yet, synced back over the repository. Raising from here would
+			# produce a release no site can see, so it is raised from what
+			# the tag says instead, and said out loud.
+			printf '%-20s %-8s BELOW the tag (%s) — syncing went backwards\n' "$slug" "$now" "$was"
+			base="$was"
+		else
+			printf '%-20s %-8s already raised from %s\n' "$slug" "$now" "$was"
+			continue
+		fi
 	fi
 
-	major="${now%%.*}"
-	rest="${now#*.}"
+	# What the next version is counted from, which is normally what the file
+	# says — but never what the file says when that is below the tag.
+	base="${base:-$now}"
+
+	major="${base%%.*}"
+	rest="${base#*.}"
 	minor="${rest%%.*}"
 	patch="${rest#*.}"
 	[ "$patch" = "$rest" ] && patch=0
