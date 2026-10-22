@@ -147,6 +147,50 @@ function addQuickSave( id, nonce, frame, onSaved ) {
 
 		bar.appendChild( button );
 		follow( id, button );
+		openCropTool( id );
+	};
+
+	look();
+}
+
+/**
+ * Presses Crop for the person, because that is what they came for.
+ *
+ * The editor opens with its tools folded away and the handles for choosing
+ * an area appear only once Crop is pressed. Nobody reaches this editor from
+ * a block for any other reason — the way in is a button on a picture that is
+ * already placed — so the press is a formality, and one press of a
+ * formality is one too many.
+ *
+ * Waited for rather than done at once: core renders that button disabled and
+ * enables it when the picture has loaded and it knows the size it is working
+ * with. Pressed through core's own handler, not by setting attributes, so
+ * everything that follows from a real press follows from this one too.
+ *
+ * @param {number} id Attachment id.
+ */
+function openCropTool( id ) {
+	const until = Date.now() + 10000;
+
+	const look = () => {
+		if ( Date.now() > until ) {
+			return;
+		}
+
+		const crop = document.querySelector(
+			`#imgedit-panel-${ id } button.imgedit-crop`
+		);
+
+		if ( ! crop || crop.disabled ) {
+			window.setTimeout( look, 120 );
+
+			return;
+		}
+
+		// Already open, by core or by somebody quicker than this.
+		if ( 'true' !== crop.getAttribute( 'aria-expanded' ) ) {
+			crop.click();
+		}
 	};
 
 	look();
