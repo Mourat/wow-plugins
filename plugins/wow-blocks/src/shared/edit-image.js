@@ -67,7 +67,20 @@ function quickSave( id, nonce, frame, button ) {
 		view.save = function () {
 			view.save = original;
 
-			this.model.fetch().done( () => frame.close() );
+			this.model.fetch().done( () => {
+				/*
+				 * Saying so here rather than leaving it to the frame's close
+				 * event, which is how the cell used to hear about it. The
+				 * saved picture has a new file name, the cell is still
+				 * drawing the old one, and a cell that goes on showing the
+				 * picture as it was before the crop is the whole of what
+				 * this button was supposed to avoid. It is a consequence of
+				 * saving, so it happens where the saving finishes.
+				 */
+				forgetAttachment( id );
+
+				frame.close();
+			} );
 		};
 	}
 
