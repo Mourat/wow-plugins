@@ -25,6 +25,7 @@ import { Button } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 
 import { forgetAttachment } from './attachment-url';
+import snapToSeams from './snap-to-seams';
 
 import './edit-image.scss';
 
@@ -475,7 +476,12 @@ async function editInFrame( id, onSaved ) {
 
 	state.set( 'image', model );
 	frame.setState( 'edit-image' );
-	frame.once( 'close', () => forgetAttachment( id ) );
+	const stopSnapping = snapToSeams( id );
+
+	frame.once( 'close', () => {
+		stopSnapping();
+		forgetAttachment( id );
+	} );
 
 	addQuickSave( id, frame, onSaved );
 }
