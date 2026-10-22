@@ -1,0 +1,157 @@
+/* The folder panel beside the media library. */
+
+.wow-folders {
+	box-sizing: border-box;
+	width: 240px;
+	flex: 0 0 240px;
+	margin: 16px 0 0;
+	padding: 12px;
+	border: 1px solid #c3c4c7;
+	border-radius: 4px;
+	background: #fff;
+}
+
+/* Laid out by the script; without it the panel just sits above the library. */
+.wow-folders-layout {
+	display: flex;
+	align-items: flex-start;
+	gap: 16px;
+}
+
+.wow-folders-layout > .wrap {
+	flex: 1 1 auto;
+	min-width: 0;
+}
+
+.wow-folders__head {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px;
+	margin-bottom: 8px;
+}
+
+.wow-folders__title {
+	font-size: 14px;
+}
+
+.wow-folders__search {
+	width: 100%;
+	margin-bottom: 8px;
+}
+
+.wow-folders__list {
+	margin: 0;
+	padding: 0;
+	list-style: none;
+	max-height: 60vh;
+	overflow-y: auto;
+}
+
+.wow-folders__item {
+	position: relative;
+	display: flex;
+	align-items: center;
+	margin: 0;
+	border-radius: 3px;
+}
+
+.wow-folders__item.is-current {
+	background: #f0f0f1;
+	font-weight: 600;
+}
+
+/*
+ * The uploader's drop zone covers the whole window on any drag, at
+ * z-index 250000, which would sit between the tile and the folder it is
+ * headed for. It stands down while one of our drags is in flight.
+ */
+body.wow-folders-dragging .uploader-window {
+	display: none !important;
+}
+
+/* Feedback while a file is dragged over a folder. */
+.wow-folders__item.is-drop-target {
+	outline: 2px dashed #2271b1;
+	outline-offset: -2px;
+	background: #f0f6fc;
+}
+
+.wow-folders__link {
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 8px;
+	flex: 1 1 auto;
+	min-width: 0;
+	padding: 6px 8px;
+	color: inherit;
+	text-decoration: none;
+}
+
+.wow-folders__name {
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.wow-folders__count {
+	flex: 0 0 auto;
+	padding: 0 6px;
+	border-radius: 9px;
+	background: #f0f0f1;
+	color: #50575e;
+	font-size: 11px;
+	line-height: 18px;
+}
+
+.wow-folders__tools {
+	display: none;
+	flex: 0 0 auto;
+	padding-right: 4px;
+}
+
+.wow-folders__item:hover .wow-folders__tools,
+.wow-folders__item:focus-within .wow-folders__tools {
+	display: flex;
+}
+
+.wow-folders__tools button {
+	padding: 2px;
+	border: 0;
+	background: none;
+	color: #50575e;
+	cursor: pointer;
+}
+
+.wow-folders__tools button:hover {
+	color: #2271b1;
+}
+
+.wow-folders__tools .dashicons {
+	width: 16px;
+	height: 16px;
+	font-size: 16px;
+}
+
+.wow-folders__empty {
+	margin: 8px 0 0;
+	color: #646970;
+}
+
+.wow-folders.is-busy {
+	opacity: 0.6;
+	pointer-events: none;
+}
+
+@media (max-width: 782px) {
+
+	.wow-folders-layout {
+		display: block;
+	}
+
+	.wow-folders {
+		width: auto;
+		margin-inline-end: 16px;
+	}
+}

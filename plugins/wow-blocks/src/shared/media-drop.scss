@@ -1,0 +1,23 @@
+/** Editor only: upload progress and errors shown over a cell. */
+
+.wow-drop-status {
+	position: absolute;
+	inset: 0;
+	z-index: 2;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 8px;
+	border: 0;
+	background: rgb(255 255 255 / 85%);
+	text-align: center;
+}
+
+/* The error is a button: a remote server's message can run long, and the
+   reader needs a way to dismiss it. */
+.wow-drop-status.is-error {
+	color: #8a2424;
+	font-size: 12px;
+	line-height: 1.4;
+	cursor: pointer;
+}

@@ -1,0 +1,103 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: WOW Map 0.1.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wow-map\n"
+"Last-Translator: Wow-arts\n"
+"Language-Team: French <fr@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-09-22T00:00:00+00:00\n"
+"PO-Revision-Date: 2026-09-22 04:40+0000\n"
+"Language: fr_FR\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: wow-map\n"
+
+#. Plugin Name of the plugin
+#: wow-map.php
+msgid "WOW Map"
+msgstr ""
+
+#. Description of the plugin
+#: wow-map.php
+msgid "A small OpenStreetMap map as a block. The picture is drawn once on this server and stored here, so a visitor never makes a request to anybody else."
+msgstr "Une petite carte OpenStreetMap sous forme de bloc. L’image est dessinée une seule fois sur ce serveur et conservée ici : le visiteur n’adresse aucune requête à un tiers."
+
+#. Author of the plugin
+#: wow-map.php
+msgid "Wow-arts"
+msgstr ""
+
+#: blocks/map/render.php
+#, php-format
+msgid "This map could not be drawn: %s"
+msgstr "Cette carte n’a pas pu être dessinée : %s"
+
+#. translators: %s: link to the OpenStreetMap copyright page, with "OpenStreetMap" as the text.
+#: blocks/map/render.php
+#, php-format
+msgid "© %s contributors"
+msgstr "© les contributeurs %s"
+
+#: includes/block.php
+msgid "WOW"
+msgstr ""
+
+#. translators: 1: tile address, 2: error message.
+#: includes/tiles.php
+#, php-format
+msgid "Could not reach %1$s: %2$s"
+msgstr "Impossible de joindre %1$s : %2$s"
+
+#. translators: 1: tile address, 2: HTTP status code.
+#: includes/tiles.php
+#, php-format
+msgid "%1$s answered with status %2$d."
+msgstr "%1$s a répondu avec le statut %2$d."
+
+#: includes/tiles.php
+msgid "The tile server refused the request and sent a placeholder picture instead. This happens when it does not recognise who is asking — see the wow_map_user_agent filter, and the tile usage policy at https://operations.osmfoundation.org/policies/tiles/"
+msgstr "Le serveur de tuiles a refusé la requête et a renvoyé une image de substitution. Cela se produit lorsqu’il ne reconnaît pas l’appelant — voyez le filtre wow_map_user_agent ainsi que les règles d’usage des tuiles sur https://operations.osmfoundation.org/policies/tiles/"
+
+#. translators: 1: tile address, 2: content type received.
+#: includes/tiles.php
+#, php-format
+msgid "%1$s returned %2$s instead of a picture."
+msgstr "%1$s a renvoyé %2$s au lieu d’une image."
+
+#. translators: %s: tile address.
+#: includes/tiles.php
+#, php-format
+msgid "The picture at %s could not be read."
+msgstr "L’image située à %s n’a pas pu être lue."
+
+#: includes/tiles.php
+msgid "This server has no GD, so no picture can be drawn."
+msgstr "Ce serveur n’a pas GD : aucune image ne peut être dessinée."
+
+#. translators: %s: folder path.
+#: includes/tiles.php
+#, php-format
+msgid "The folder %s could not be created or written to."
+msgstr "Le dossier %s n’a pas pu être créé ou n’est pas accessible en écriture."
+
+#. translators: %s: file path.
+#: includes/tiles.php
+#, php-format
+msgid "The picture could not be written to %s."
+msgstr "L’image n’a pas pu être écrite dans %s."
+
+#: includes/tiles.php
+msgid "This map is being drawn right now. Reload in a moment."
+msgstr "Cette carte est en cours de dessin. Rechargez dans un instant."
+
+#: blocks/map/block.json
+msgctxt "block title"
+msgid "Map"
+msgstr "Carte"
+
+#: blocks/map/block.json
+msgctxt "block description"
+msgid "A map of one place, drawn once on this server from OpenStreetMap and kept here, so that reading the page asks nothing of anybody else."
+msgstr "La carte d’un lieu, dessinée une seule fois sur ce serveur à partir d’OpenStreetMap et conservée ici, afin que la consultation de la page ne sollicite personne d’autre."

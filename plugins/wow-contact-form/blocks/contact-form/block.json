@@ -1,0 +1,22 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "wow/contact-form",
+	"title": "Contact form",
+	"category": "wow",
+	"icon": "email-alt",
+	"description": "A form the visitor writes to you with. Messages are kept on the site and sent on by email.",
+	"textdomain": "wow-contact-form",
+	"usesContext": [ "postId" ],
+	"supports": {
+		"autoRegister": true,
+		"html": false,
+		"multiple": false,
+		"reusable": false,
+		"spacing": {
+			"margin": [ "top", "bottom" ]
+		}
+	},
+	"style": "wow-contact-form",
+	"render": "file:./render.php"
+}

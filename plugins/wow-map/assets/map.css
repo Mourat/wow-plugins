@@ -1,0 +1,36 @@
+/*
+ * The map block.
+ *
+ * Almost nothing: the picture is drawn at exactly the size it is asked for,
+ * so there is little left for CSS to arrange.
+ */
+
+.wow-map {
+	margin: 0;
+}
+
+/*
+ * The picture has a fixed width in pixels, and a phone is narrower than some
+ * of those widths. Without this it would push the whole page sideways.
+ */
+.wow-map__image {
+	display: block;
+	height: auto;
+	max-width: 100%;
+}
+
+.wow-map__credit {
+	font-size: 0.75em;
+	margin-block-start: 0.4em;
+	opacity: 0.7;
+}
+
+.wow-map__credit a {
+	color: inherit;
+}
+
+/* Editors only: the block never renders this for a visitor. */
+.wow-map--failed {
+	font-size: 0.85em;
+	opacity: 0.8;
+}

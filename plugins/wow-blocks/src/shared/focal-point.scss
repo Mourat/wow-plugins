@@ -1,0 +1,30 @@
+/**
+ * Editor only: a hollow aiming ring for the focal point picker.
+ *
+ * Core fills its handle with `rgba( 255, 255, 255, 0.4 )` on top of a
+ * `backdrop-filter: blur()`, which hides exactly the spot being aimed at.
+ * Here the fill goes away and a dashed ring takes its place.
+ *
+ * Scoped under .wow-focal-point so core's own blocks keep their handle.
+ * Two classes also beat the emotion class carrying core's styles, which is
+ * injected into a <style> tag later than this stylesheet.
+ */
+
+.wow-focal-point .components-focal-point-picker__icon_container {
+	border: 3px dashed #fff;
+	background: transparent;
+	backdrop-filter: none;
+	box-shadow: none;
+
+	/* A white ring disappears against a light image. drop-shadow traces the
+	   dashes themselves through the alpha channel, so the dark contour lands
+	   on every dash rather than on a box around the handle. */
+	filter:
+		drop-shadow(0 0 1px rgb(0 0 0 / 90%))
+		drop-shadow(0 0 2px rgb(0 0 0 / 50%));
+}
+
+/** The grid of anchors sits above the picture, with the same breathing room. */
+.wow-focal-point__anchors {
+	margin-block-end: 12px;
+}

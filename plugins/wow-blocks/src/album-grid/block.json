@@ -1,0 +1,47 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "wow/album-grid",
+	"version": "0.1.0",
+	"title": "WOW: Album grid",
+	"category": "wow",
+	"icon": "screenoptions",
+	"description": "Album tiles showing the cover, the title and the number of images. The first cell holds the site logo.",
+	"keywords": [ "wow", "albums", "catalogue", "front page" ],
+	"textdomain": "wow-blocks",
+	"attributes": {
+		"showLogo": {
+			"type": "boolean",
+			"default": true
+		},
+		"tileWidth": {
+			"type": "number"
+		},
+		"maxColumns": {
+			"type": "number"
+		},
+		"badgeColor": {
+			"type": "string",
+			"default": "#da8a13"
+		},
+		"limit": {
+			"type": "number",
+			"default": 0
+		}
+	},
+	"supports": {
+		"html": false,
+		"anchor": true,
+		"align": [ "wide", "full" ],
+		"spacing": {
+			"margin": [ "top", "bottom" ]
+		},
+		"interactivity": {
+			"clientNavigation": true
+		}
+	},
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"render": "file:./render.php"
+}

@@ -1,0 +1,12 @@
+/**
+ * In the editor the block has to stay visible at any canvas width,
+ * otherwise it cannot be selected or configured.
+ */
+
+.editor-styles-wrapper .wow-album-list {
+	position: static;
+}
+
+.editor-styles-wrapper .wow-album-list--desktop-only {
+	display: block;
+}

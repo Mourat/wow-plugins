@@ -1,0 +1,29 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "wow/album-description",
+	"title": "Album description",
+	"category": "wow",
+	"icon": "editor-paragraph",
+	"description": "The album's description, written in the Excerpt box. Nothing at all is printed for an album without one.",
+	"textdomain": "wow-albums",
+	"usesContext": [ "postId" ],
+	"supports": {
+		"autoRegister": true,
+		"html": false,
+		"reusable": false,
+		"color": {
+			"text": true,
+			"background": false
+		},
+		"typography": {
+			"fontSize": true,
+			"lineHeight": true
+		},
+		"spacing": {
+			"margin": true,
+			"padding": false
+		}
+	},
+	"render": "file:./render.php"
+}

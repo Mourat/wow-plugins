@@ -1,0 +1,46 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "wow/map",
+	"title": "Map",
+	"category": "wow",
+	"icon": "location",
+	"description": "A map of one place, drawn once on this server from OpenStreetMap and kept here, so that reading the page asks nothing of anybody else.",
+	"textdomain": "wow-map",
+	"attributes": {
+		"latitude": {
+			"type": "string",
+			"default": "43.629528"
+		},
+		"longitude": {
+			"type": "string",
+			"default": "6.958389"
+		},
+		"zoom": {
+			"type": "number",
+			"default": 17.5
+		},
+		"width": {
+			"type": "number",
+			"default": 416
+		},
+		"height": {
+			"type": "number",
+			"default": 200
+		},
+		"alt": {
+			"type": "string",
+			"default": ""
+		}
+	},
+	"supports": {
+		"autoRegister": true,
+		"html": false,
+		"reusable": false,
+		"spacing": {
+			"margin": [ "top", "bottom" ]
+		}
+	},
+	"style": "wow-map",
+	"render": "file:./render.php"
+}

@@ -1,0 +1,324 @@
+# Copyright (C) 2026 Wow-arts
+# This file is distributed under the same license as the WOW Images plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: WOW Images 0.1.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wow-images\n"
+"Last-Translator: Wow-arts\n"
+"Language-Team: French <fr@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-10-20T22:34:05+00:00\n"
+"PO-Revision-Date: 2026-10-21 00:00+0000\n"
+"Language: fr_FR\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: wow-images\n"
+
+#. Plugin Name of the plugin
+#: wow-images.php
+msgid "WOW Images"
+msgstr ""
+
+#. Description of the plugin
+#: wow-images.php
+msgid "Keeps a WebP and an AVIF copy of every picture on the site and offers them to browsers that want them, so a gallery page arrives at half the weight without anybody choosing a format by hand."
+msgstr "Conserve de chaque image du site une copie en WebP et en AVIF et les propose aux navigateurs qui les acceptent : une page de galerie arrive deux fois plus légère sans que personne ait à choisir un format."
+
+#. Author of the plugin
+#: wow-images.php
+msgid "Wow-arts"
+msgstr ""
+
+#: includes/admin.php:55
+#: includes/admin.php:56
+#: includes/admin.php:106
+msgid "Image formats"
+msgstr "Formats d’image"
+
+#: includes/admin.php:80
+#: includes/admin.php:170
+#: includes/bulk.php:137
+msgid "Settings"
+msgstr "Réglages"
+
+#: includes/admin.php:109
+msgid "Beside every picture on the site this keeps a copy in one or more newer formats. The page offers all of them at once and each browser takes the best it understands, so nobody is sent a format they cannot open and nothing has to be chosen by hand."
+msgstr "À côté de chaque image du site, une copie est conservée dans un ou plusieurs formats plus récents. La page les propose toutes à la fois et chaque navigateur prend la meilleure qu’il comprend : personne ne reçoit un format qu’il ne peut pas ouvrir et rien n’est à choisir à la main."
+
+#: includes/admin.php:112
+msgid "This server"
+msgstr "Ce serveur"
+
+#: includes/admin.php:117
+msgid "Image library"
+msgstr "Bibliothèque d’images"
+
+#: includes/admin.php:118
+msgid "None — no picture can be converted."
+msgstr "Aucune — aucune image ne peut être convertie."
+
+#: includes/admin.php:125
+msgid "can be written here"
+msgstr "peut être écrit ici"
+
+#: includes/admin.php:127
+msgid "cannot be written here"
+msgstr "ne peut pas être écrit ici"
+
+#: includes/admin.php:129
+msgid "Files already made elsewhere are still offered to visitors. Only new pictures uploaded on this server will go without."
+msgstr "Les fichiers déjà créés ailleurs restent proposés aux visiteurs. Seules les nouvelles images téléversées sur ce serveur s’en passeront."
+
+#: includes/admin.php:136
+msgid "Pictures"
+msgstr "Images"
+
+#. translators: 1: number of pictures, 2: number still waiting.
+#: includes/admin.php:141
+#, php-format
+msgid "%1$s on the site, %2$s still to convert."
+msgstr "%1$s sur le site, %2$s encore à convertir."
+
+#. translators: 1: weight saved, 2: percentage.
+#: includes/admin.php:151
+#, php-format
+msgid "A visitor whose browser takes the best format on offer loads %1$s less — %2$s of what the originals weigh."
+msgstr "Un visiteur dont le navigateur prend le meilleur format proposé charge %1$s de moins, soit %2$s du poids des originaux."
+
+#: includes/admin.php:159
+msgid "Convert the whole library"
+msgstr "Convertir toute la médiathèque"
+
+#: includes/admin.php:174
+msgid "How pictures are stored"
+msgstr "Comment les images sont conservées"
+
+#: includes/admin.php:180
+msgid "Keep each picture in the format it was uploaded in"
+msgstr "Conserver chaque image dans le format dans lequel elle a été téléversée"
+
+#. translators: %s: format name, e.g. WebP.
+#: includes/admin.php:191
+#, php-format
+msgid "Store every picture as %s"
+msgstr "Conserver chaque image en %s"
+
+#: includes/admin.php:197
+#: includes/admin.php:226
+msgid "quality"
+msgstr "qualité"
+
+#: includes/admin.php:205
+msgid "Storing means replacing."
+msgstr "Conserver, c’est remplacer."
+
+#: includes/admin.php:206
+msgid "An uploaded JPEG is written out in the new format and the JPEG itself is not kept, so every crop made afterwards — today’s and any made years from now when a size changes — comes out of the converted file rather than out of the camera’s. That is why its quality is set separately here. Setting it higher than the crops is tempting and usually wrong: a copy that comes out larger than the picture it was made from is thrown away, and that picture then gains nothing. On this site’s photographs that happens to 4% of them at 82 and to 22% at 86."
+msgstr "Un JPEG téléversé est réécrit dans le nouveau format et le JPEG lui-même n’est pas conservé : toutes les coupes faites ensuite — celles d’aujourd’hui comme celles qui seront faites dans des années si une taille change — sortent du fichier converti et non de celui de l’appareil photo. C’est pourquoi sa qualité se règle à part ici. La monter au-dessus de celle des coupes est tentant et le plus souvent une erreur : une copie plus lourde que l’image dont elle est issue est jetée, et cette image ne gagne alors rien. Sur les photographies de ce site, cela arrive à 4 % d’entre elles à 82 et à 22 % à 86."
+
+#: includes/admin.php:209
+msgid "AVIF is not offered as the stored format on purpose. A handful of browsers still cannot read one, and a picture kept only as AVIF would show them nothing at all."
+msgstr "L’AVIF n’est volontairement pas proposé comme format de conservation. Quelques navigateurs ne savent toujours pas le lire, et une image conservée uniquement en AVIF ne leur montrerait rien du tout."
+
+#: includes/admin.php:216
+#: includes/admin.php:323
+msgid "Formats"
+msgstr "Formats"
+
+#: includes/admin.php:230
+msgid "quality at 2×"
+msgstr "qualité en 2×"
+
+#: includes/admin.php:237
+msgid "The second number is for the double-density sizes — the ones a phone or a Retina screen takes. Those are never drawn at their own size: four of their pixels are averaged into every pixel the eye receives, and an encoder’s artefacts live precisely in the detail that averaging destroys. Compressing them harder is the one saving in this whole business that costs nothing visible. On this site’s photographs it halves the weight of what most visitors actually download."
+msgstr "Le second nombre concerne les tailles en double densité, celles que prennent un téléphone ou un écran Retina. Elles ne sont jamais affichées à leur taille réelle : quatre de leurs pixels sont moyennés en un seul de ceux que reçoit l’œil, et les artefacts d’un encodeur logent précisément dans le détail que ce moyennage détruit. Les comprimer davantage est la seule économie de toute cette affaire qui ne coûte rien de visible. Sur les photographies de ce site, elle divise par deux le poids de ce que la plupart des visiteurs téléchargent réellement."
+
+#: includes/admin.php:241
+msgid "The two quality scales are not comparable — they belong to different encoders. The numbers offered here were measured on this site’s own photographs: AVIF at 55 lands around half the weight of the JPEG it came from, WebP at 82 around three quarters. Raising a number makes the copy larger and closer to the original; lowering it does the opposite. Changing either only affects pictures converted afterwards."
+msgstr "Les deux échelles de qualité ne sont pas comparables : elles appartiennent à des encodeurs différents. Les valeurs proposées ici ont été mesurées sur les photographies de ce site : l’AVIF à 55 pèse environ la moitié du JPEG dont il vient, le WebP à 82 environ les trois quarts. Augmenter une valeur donne une copie plus lourde et plus proche de l’original ; la baisser fait l’inverse. Dans les deux cas, seules les images converties ensuite sont concernées."
+
+#: includes/admin.php:248
+msgid "Smallest worthwhile saving"
+msgstr "Gain minimal pour être conservé"
+
+#: includes/admin.php:252
+msgid "%"
+msgstr "%"
+
+#: includes/admin.php:255
+msgid "A copy that does not come out at least this much smaller than the original is thrown away and not made again. Not every picture compresses: a flat drawing can leave a photographic encoder larger than it went in."
+msgstr "Une copie qui n’est pas au moins d’autant plus légère que l’original est jetée et n’est pas refaite. Toutes les images ne se compressent pas : un dessin en aplats peut ressortir d’un encodeur photographique plus lourd qu’il n’y est entré."
+
+#: includes/admin.php:261
+msgid "File names"
+msgstr "Noms de fichiers"
+
+#: includes/admin.php:267
+msgid "Add the extension: picture.jpg.webp"
+msgstr "Ajouter l’extension : image.jpg.webp"
+
+#: includes/admin.php:273
+msgid "Replace the extension: picture.webp"
+msgstr "Remplacer l’extension : image.webp"
+
+#: includes/admin.php:277
+msgid "Adding is the safe one: the name it is built from was already unique, so the copy cannot collide with anything. Replacing reads better and is what a server-side rewrite rule expects to find, but the day somebody uploads both picture.jpg and picture.png the two copies want the same name. Nothing here needs the rewrite rule — the page tells the browser about the copies itself."
+msgstr "Ajouter est le choix sûr : le nom dont la copie est tirée était déjà unique, elle ne peut donc entrer en collision avec rien. Remplacer se lit mieux et correspond à ce qu’attend une règle de réécriture côté serveur, mais le jour où quelqu’un téléverse à la fois image.jpg et image.png, les deux copies veulent le même nom. Rien ici n’a besoin de cette règle : la page annonce elle-même les copies au navigateur."
+
+#: includes/admin.php:284
+msgid "When to convert"
+msgstr "Quand convertir"
+
+#: includes/admin.php:288
+msgid "Convert a picture as it is uploaded"
+msgstr "Convertir une image au moment du téléversement"
+
+#: includes/admin.php:291
+msgid "Switch this off on a server where encoding is slow enough to make an upload time out, and convert from the screen in Tools instead."
+msgstr "À décocher sur un serveur où l’encodage est assez lent pour faire expirer un téléversement ; la conversion se fait alors depuis l’écran dans Outils."
+
+#: includes/admin.php:297
+msgid "On the site"
+msgstr "Sur le site"
+
+#: includes/admin.php:301
+msgid "Offer the copies to visitors"
+msgstr "Proposer les copies aux visiteurs"
+
+#: includes/admin.php:304
+msgid "Switched off, the copies go on being made and kept but every visitor is served the original. Useful for finding out whether something on the page is upset by the change, without undoing an afternoon of encoding."
+msgstr "Décoché, les copies continuent d’être créées et conservées mais chaque visiteur reçoit l’original. Utile pour vérifier si quelque chose sur la page supporte mal le changement, sans défaire une après-midi d’encodage."
+
+#: includes/admin.php:376
+msgid "Convert to WebP and AVIF"
+msgstr "Convertir en WebP et AVIF"
+
+#: includes/bulk.php:38
+#: includes/bulk.php:39
+#: includes/bulk.php:108
+msgid "Convert images"
+msgstr "Convertir les images"
+
+#: includes/bulk.php:80
+#: includes/bulk.php:101
+#: includes/bulk.php:279
+msgid "You are not allowed to do that."
+msgstr "Vous n’avez pas l’autorisation de faire cela."
+
+#: includes/bulk.php:134
+msgid "Every picture on the site is already done."
+msgstr "Toutes les images du site sont déjà traitées."
+
+#. translators: %s: number of pictures.
+#: includes/bulk.php:149
+#, php-format
+msgid "%s picture has work waiting."
+msgid_plural "%s pictures have work waiting."
+msgstr[0] "%s image attend d’être traitée."
+msgstr[1] "%s images attendent d’être traitées."
+
+#: includes/bulk.php:157
+msgid "This replaces the pictures, it does not only add to them."
+msgstr "Cette opération remplace les images, elle ne fait pas que leur ajouter des copies."
+
+#. translators: %s: format name, e.g. WebP.
+#: includes/bulk.php:162
+#, php-format
+msgid "Each picture is written out again as %s and the file it came from is deleted. The crops are cut afresh and the pages that point at them are corrected. There is no way back from here: take a copy of the uploads folder and of the database first."
+msgstr "Chaque image est réécrite en %s et le fichier dont elle vient est supprimé. Les coupes sont refaites et les pages qui les désignent sont corrigées. Il n’y a pas de retour en arrière : faites d’abord une copie du dossier des téléversements et de la base de données."
+
+#: includes/bulk.php:171
+msgid "The work happens on the server, not in this tab. Once it has started you can close this page, and it will carry on without you."
+msgstr "Le travail se fait sur le serveur, pas dans cet onglet. Une fois lancé, vous pouvez fermer cette page : il continuera sans vous."
+
+#: includes/bulk.php:180
+msgid "Start"
+msgstr "Démarrer"
+
+#. translators: 1: pictures done, 2: pictures in all.
+#: includes/bulk.php:204
+#, php-format
+msgid "%1$s of %2$s"
+msgstr "%1$s sur %2$s"
+
+#. translators: 1: pictures stored anew, 2: copies written, 3: addresses corrected.
+#: includes/bulk.php:219
+#, php-format
+msgid "Finished. %1$s pictures stored anew, %2$s copies written, %3$s addresses corrected."
+msgstr "Terminé. %1$s images reconservées, %2$s copies écrites, %3$s adresses corrigées."
+
+#: includes/bulk.php:231
+msgid "Some pictures could not be done:"
+msgstr "Certaines images n’ont pas pu être traitées :"
+
+#: includes/bulk.php:244
+msgid "Stop"
+msgstr "Arrêter"
+
+#: includes/bulk.php:244
+msgid "Clear"
+msgstr "Effacer"
+
+#: includes/bulk.php:264
+msgid "waiting for the server to pick the job up…"
+msgstr "en attente de la prise en charge par le serveur…"
+
+#: includes/bulk.php:265
+msgid "this server cannot call itself, so this tab is doing the work — leave it open"
+msgstr "ce serveur ne peut pas s’appeler lui-même : c’est cet onglet qui fait le travail, laissez-le ouvert"
+
+#: includes/bulk.php:266
+msgid "working"
+msgstr "en cours"
+
+#. translators: %s: image format name, e.g. AVIF.
+#: includes/convert.php:110
+#: includes/store.php:131
+#, php-format
+msgid "This server cannot write %s."
+msgstr "Ce serveur ne sait pas écrire le %s."
+
+#: includes/convert.php:140
+#: includes/retina.php:112
+#: includes/store.php:215
+msgid "This attachment has no image metadata."
+msgstr "Ce fichier joint n’a pas de métadonnées d’image."
+
+#: includes/convert.php:146
+msgid "This is not a picture that can be converted."
+msgstr "Ce n’est pas une image convertible."
+
+#: includes/convert.php:159
+msgid "No format is switched on that this server can write and this picture is not already in."
+msgstr "Aucun format activé ne peut être écrit par ce serveur et n’est différent de celui de cette image."
+
+#: includes/retina.php:147
+#: includes/store.php:227
+msgid "The picture itself is not on disk."
+msgstr "L’image elle-même n’est pas sur le disque."
+
+#: includes/store.php:208
+msgid "No stored format is chosen."
+msgstr "Aucun format de conservation n’est choisi."
+
+#: includes/store.php:219
+msgid "This picture is already in the stored format."
+msgstr "Cette image est déjà dans le format de conservation."
+
+#: includes/store.php:231
+msgid "This picture must not be replaced — an animated GIF would lose its animation."
+msgstr "Cette image ne doit pas être remplacée : un GIF animé perdrait son animation."
+
+#: includes/store.php:271
+msgid "Converting this picture would make it larger."
+msgstr "Convertir cette image la rendrait plus lourde."
+
+#: includes/store.php:298
+msgid "The crops could not be cut from the converted picture."
+msgstr "Les coupes n’ont pas pu être faites à partir de l’image convertie."
+
+#: includes/store.php:333
+msgid "The converted picture disappeared while the old one was being removed. Nothing further was changed."
+msgstr "L’image convertie a disparu pendant la suppression de l’ancienne. Rien d’autre n’a été modifié."

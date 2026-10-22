@@ -1,0 +1,292 @@
+# Copyright (C) 2026 Wow-arts
+# This file is distributed under the same license as the WOW Mail plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: WOW Mail 0.1.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wow-mail\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-10-21T01:12:28+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: wow-mail\n"
+
+#. Plugin Name of the plugin
+#: wow-mail.php
+msgid "WOW Mail"
+msgstr ""
+
+#. Description of the plugin
+#: wow-mail.php
+msgid "Sends the site's mail through a real mail server instead of out of the web server's back door, and says plainly which of the three things that decide whether it lands in the inbox are actually in place."
+msgstr ""
+
+#. Author of the plugin
+#: wow-mail.php
+msgid "Wow-arts"
+msgstr ""
+
+#: includes/admin.php:57
+#: includes/admin.php:58
+#: includes/admin.php:146
+msgid "Mail"
+msgstr ""
+
+#: includes/admin.php:76
+msgid "Settings"
+msgstr ""
+
+#: includes/admin.php:89
+#: includes/admin.php:112
+msgid "You are not allowed to do that."
+msgstr ""
+
+#: includes/admin.php:97
+msgid "That is not an address."
+msgstr ""
+
+#: includes/admin.php:151
+msgid "The test message was accepted by the mail server."
+msgstr ""
+
+#: includes/admin.php:151
+msgid "The test message did not go out."
+msgstr ""
+
+#: includes/admin.php:155
+msgid "Accepted is not the same as delivered. Look in the inbox, and then in the spam folder — which of the two it landed in is what the records below decide."
+msgstr ""
+
+#: includes/admin.php:158
+msgid "The exchange with the mail server:"
+msgstr ""
+
+#: includes/admin.php:164
+msgid "Whether this will land in the inbox"
+msgstr ""
+
+#: includes/admin.php:169
+msgid "Sending through"
+msgstr ""
+
+#: includes/admin.php:172
+msgid "a mail server —"
+msgstr ""
+
+#: includes/admin.php:174
+msgid "the web server’s own mail() — unauthenticated, and the usual reason mail is refused or filed as spam"
+msgstr ""
+
+#: includes/admin.php:179
+msgid "Sending as"
+msgstr ""
+
+#: includes/admin.php:186
+msgid "cannot be checked — this server does not allow DNS lookups"
+msgstr ""
+
+#: includes/admin.php:190
+msgid "It ends in -all, which asks receiving servers to refuse anything sent from elsewhere rather than merely doubt it. That is the right setting, and it means the mail server used here has to be one the record allows."
+msgstr ""
+
+#: includes/admin.php:193
+msgid "missing — anybody may send as this domain, and receiving servers know it"
+msgstr ""
+
+#: includes/admin.php:205
+msgid "missing"
+msgstr ""
+
+#: includes/admin.php:207
+msgid "Worth adding, and harmless to start with. A first record asks for reports without changing how anything is delivered:"
+msgstr ""
+
+#: includes/admin.php:216
+msgid "set up at the mail provider, under a name it chooses — there is no way to look for it from here. Ask the provider whether it signs outgoing mail."
+msgstr ""
+
+#: includes/admin.php:219
+msgid "Checking for certain"
+msgstr ""
+
+#: includes/admin.php:221
+msgid "Send a test to a Gmail address, open it there and choose “Show original”. The first lines give the receiving end’s own verdict — spf: PASS, dkim: PASS, dmarc: PASS — and that is the only answer that counts. Nothing checked from this side can tell you, because SPF is judged on the machine that delivers the message, not on the one this site hands it to."
+msgstr ""
+
+#. translators: %s: a domain name.
+#: includes/admin.php:231
+#, php-format
+msgid "These records belong to the domain %s and live with whoever holds it, not in WordPress. Sending through a mail server settles who is sending; these decide whether the receiving end believes it. Without them a perfectly configured site still lands in the spam folder."
+msgstr ""
+
+#: includes/admin.php:240
+msgid "The mail server"
+msgstr ""
+
+#: includes/admin.php:244
+msgid "Use it"
+msgstr ""
+
+#: includes/admin.php:246
+msgid "Send through SMTP instead of the web server"
+msgstr ""
+
+#: includes/admin.php:250
+msgid "Server and port"
+msgstr ""
+
+#: includes/admin.php:255
+msgid "STARTTLS (usually port 587)"
+msgstr ""
+
+#: includes/admin.php:256
+msgid "TLS from the start (usually port 465)"
+msgstr ""
+
+#: includes/admin.php:257
+msgid "No encryption"
+msgstr ""
+
+#: includes/admin.php:259
+msgid "The host gives these out with the mailbox. Without encryption the password crosses the network in the clear, so only choose that for a server on the same machine."
+msgstr ""
+
+#: includes/admin.php:263
+msgid "Signing in"
+msgstr ""
+
+#: includes/admin.php:265
+msgid "The server asks for a user name and password"
+msgstr ""
+
+#: includes/admin.php:267
+msgid "user name"
+msgstr ""
+
+#: includes/admin.php:270
+msgid "password"
+msgstr ""
+
+#: includes/admin.php:270
+msgid "leave empty to keep the one saved"
+msgstr ""
+
+#: includes/admin.php:274
+msgid "The password is set as a constant in a file rather than in the database, which is where it is best kept. Anything typed here is ignored."
+msgstr ""
+
+#: includes/admin.php:276
+msgid "Forget the saved password"
+msgstr ""
+
+#: includes/admin.php:278
+msgid "It is kept in the database, encrypted with a key made from this site’s salts — which live in wp-config.php and not in the database. That protects a database dump, which is how these usually get out; it protects nothing against somebody already on the server."
+msgstr ""
+
+#: includes/admin.php:279
+msgid "Better still is a constant in a file the database knows nothing about — wp-config.php, or a must-use plugin: define( 'WOW_MAIL_PASSWORD', '…' );"
+msgstr ""
+
+#: includes/admin.php:282
+msgid "Better than typing it here is a constant in a file, which keeps it out of the database and out of every backup of it — in wp-config.php, or in a must-use plugin: define( 'WOW_MAIL_PASSWORD', '…' );"
+msgstr ""
+
+#: includes/admin.php:288
+msgid "Who the mail is from"
+msgstr ""
+
+#: includes/admin.php:292
+msgid "Address and name"
+msgstr ""
+
+#: includes/admin.php:296
+msgid "Use it for everything the site sends"
+msgstr ""
+
+#: includes/admin.php:298
+msgid "It has to be a mailbox that exists, and at the same domain the mail server signs us in as. WordPress otherwise sends as wordpress@ the site’s domain, which is usually nothing at all — and a From address that bounces is read by a spam filter as exactly what it looks like."
+msgstr ""
+
+#: includes/admin.php:299
+msgid "A message sent through one provider’s server claiming to come from another’s domain has the shape of a forgery and is treated as one, however well everything else is set up."
+msgstr ""
+
+#: includes/admin.php:304
+msgid "Record"
+msgstr ""
+
+#: includes/admin.php:306
+msgid "Keep a short record of what was sent"
+msgstr ""
+
+#: includes/admin.php:307
+msgid "Who it was for and what it was about, for a fortnight. Never the message itself."
+msgstr ""
+
+#: includes/admin.php:315
+msgid "Send a test"
+msgstr ""
+
+#: includes/admin.php:321
+msgid "Send"
+msgstr ""
+
+#: includes/admin.php:322
+msgid "If it fails, the whole exchange with the mail server is shown — which greeting failed, which password was refused, which certificate was not trusted. That is nearly always where the answer is."
+msgstr ""
+
+#: includes/admin.php:325
+msgid "Recently sent"
+msgstr ""
+
+#: includes/admin.php:331
+msgid "Nothing has been sent lately."
+msgstr ""
+
+#: includes/admin.php:336
+msgid "When"
+msgstr ""
+
+#: includes/admin.php:337
+msgid "To"
+msgstr ""
+
+#: includes/admin.php:338
+msgid "About"
+msgstr ""
+
+#: includes/admin.php:339
+msgid "What happened"
+msgstr ""
+
+#. translators: %s: a length of time.
+#: includes/admin.php:346
+#, php-format
+msgid "%s ago"
+msgstr ""
+
+#: includes/admin.php:350
+msgid "sent"
+msgstr ""
+
+#: includes/admin.php:360
+msgid "Empty the record"
+msgstr ""
+
+#. translators: %s: the name of the site.
+#: includes/mailer.php:106
+#, php-format
+msgid "Test message from %s"
+msgstr ""
+
+#. translators: 1: the site address, 2: the date and time.
+#: includes/mailer.php:111
+#, php-format
+msgid ""
+"This is a test message from %1$s, sent at %2$s.\n"
+"\n"
+"If it arrived, the site can send mail. Whether it arrived in the inbox or in the spam folder is a different question, and the settings screen says what decides it."
+msgstr ""

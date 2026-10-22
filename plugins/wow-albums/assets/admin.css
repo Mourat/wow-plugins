@@ -1,0 +1,50 @@
+/* The album list: the cover and the drag handle. */
+
+.column-wow_album_handle {
+	width: 28px;
+	text-align: center;
+}
+
+.column-wow_album_thumbnail {
+	width: 110px;
+}
+
+.wow-album-thumb {
+	display: block;
+	width: 100px;
+	height: 100px;
+	object-fit: cover;
+}
+
+.wow-album-thumb--empty {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	box-sizing: border-box;
+	padding: 4px;
+	border: 1px dashed #c3c4c7;
+	color: #787c82;
+	font-size: 11px;
+	line-height: 1.3;
+	text-align: center;
+}
+
+.wow-album-handle {
+	color: #a7aaad;
+	cursor: move;
+}
+
+.wow-albums-sortable .wow-album-handle:hover {
+	color: #2271b1;
+}
+
+/* Reordering is off: the list is filtered or sorted some other way. */
+.wow-albums-locked .wow-album-handle {
+	opacity: 0.35;
+	cursor: default;
+}
+
+.wow-album-placeholder td {
+	height: 108px;
+	background: #f0f6fc;
+}

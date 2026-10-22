@@ -1,0 +1,65 @@
+name: Release
+
+# A tag is the whole trigger. Push v0.2.0 and every plugin in the repository
+# is built, zipped and attached to a release of that name; the file WordPress
+# reads goes with them.
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: npm
+          cache-dependency-path: plugins/*/package-lock.json
+
+      # Only the plugins that have something to build. The rest are PHP and
+      # are shipped as they are.
+      - name: Build
+        run: |
+          set -eu
+          for dir in plugins/*/; do
+            if [ -f "$dir/package.json" ]; then
+              echo "::group::$dir"
+              ( cd "$dir" && npm ci && npm run build )
+              echo "::endgroup::"
+            fi
+          done
+
+      # zip rather than a PHP library: the command is certainly here, the
+      # extension is not. The folder inside the archive has to be named after
+      # the plugin, which is what zipping from plugins/ gives.
+      - name: Zip
+        run: |
+          set -eu
+          mkdir -p dist
+          cd plugins
+          for dir in */; do
+            slug="${dir%/}"
+            zip -q -r "../dist/$slug.zip" "$slug" \
+              -x "$slug/node_modules/*" "$slug/.git/*" "$slug/.github/*"
+            echo "$slug.zip"
+          done
+
+      - name: Manifest
+        run: php bin/package.php "$GITHUB_REPOSITORY" "$GITHUB_REF_NAME"
+
+      - name: Publish
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" dist/* \
+            --title "$GITHUB_REF_NAME" \
+            --generate-notes

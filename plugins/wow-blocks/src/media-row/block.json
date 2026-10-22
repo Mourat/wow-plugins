@@ -1,0 +1,44 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "wow/media-row",
+	"version": "0.1.0",
+	"title": "WOW: Image row",
+	"category": "wow",
+	"icon": "grid-view",
+	"description": "A fixed-grid row of one, two or three columns. Each column holds an image or a solid colour fill.",
+	"keywords": [ "wow", "gallery", "columns", "images" ],
+	"textdomain": "wow-blocks",
+	"attributes": {
+		"layout": {
+			"type": "string",
+			"default": "three"
+		},
+		"cells": {
+			"type": "array",
+			"default": []
+		},
+		"gap": {
+			"type": "number"
+		},
+		"stackOnMobile": {
+			"type": "boolean",
+			"default": true
+		}
+	},
+	"supports": {
+		"html": false,
+		"anchor": true,
+		"align": false,
+		"spacing": {
+			"margin": [ "top", "bottom" ]
+		},
+		"interactivity": {
+			"clientNavigation": true
+		}
+	},
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"render": "file:./render.php"
+}

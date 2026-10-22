@@ -1,0 +1,5 @@
+MIT License
+
+Copyright (c) 2009 Kazuhiko Arase
+
+http://www.opensource.org/licenses/mit-license.php

@@ -1,0 +1,45 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "wow/album-list",
+	"version": "0.1.0",
+	"title": "WOW: Album list",
+	"category": "wow",
+	"icon": "list-view",
+	"description": "A floating list linking to every album. The current album is highlighted.",
+	"keywords": [ "wow", "albums", "navigation", "list" ],
+	"textdomain": "wow-blocks",
+	"attributes": {
+		"stickyTop": {
+			"type": "number",
+			"default": 50
+		},
+		"hideOnMobile": {
+			"type": "boolean",
+			"default": true
+		}
+	},
+	"supports": {
+		"html": false,
+		"anchor": true,
+		"color": {
+			"text": true,
+			"background": false,
+			"link": true
+		},
+		"typography": {
+			"fontSize": true,
+			"lineHeight": true
+		},
+		"spacing": {
+			"margin": [ "top", "bottom" ]
+		},
+		"interactivity": {
+			"clientNavigation": true
+		}
+	},
+	"editorScript": "file:./index.js",
+	"editorStyle": "file:./index.css",
+	"style": "file:./style-index.css",
+	"render": "file:./render.php"
+}

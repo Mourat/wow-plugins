@@ -1,0 +1,76 @@
+/* Room for a third filter in a toolbar core laid out for two. */
+
+/*
+ * The filter area of the modal is a two-column grid: filter by type on the
+ * left, filter by date on the right, each with its label above it. Core
+ * places all four by name, ours has no place of its own — left alone it lands
+ * on a third row, below the toolbar's fixed height, and gets cut off.
+ *
+ * So the grid gains a column. The folder column is the widest of the three:
+ * folder names are album titles and run long, while file types and months do
+ * not.
+ */
+.media-toolbar-secondary:has(#wow-media-folder-filter) {
+	grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr);
+}
+
+.media-toolbar-secondary:has(#wow-media-folder-filter):has(#media-attachment-date-filters) {
+	grid-template-columns: minmax(0, 1fr) minmax(0, 0.8fr) minmax(0, 1.4fr);
+}
+
+/*
+ * The folder filter is not placed by hand. Core's filters are, and the
+ * browser drops anything else into the first free cell — which is the new
+ * column when the date filter is there, and the empty second one when it is
+ * not. One rule fewer to get wrong, and nothing can land on top of core.
+ */
+select#wow-media-folder-filter {
+	max-width: 100%;
+	margin-right: 0;
+}
+
+/*
+ * Three filters need more of the toolbar than two did. The search box gives
+ * up the width; it stays wide enough to type into, and both halves still add
+ * up to the whole, so neither wraps under the other.
+ */
+.attachments-browser:has(#wow-media-folder-filter) .media-toolbar-secondary {
+	max-width: 72%;
+}
+
+.attachments-browser:has(#wow-media-folder-filter) .media-toolbar-primary {
+	max-width: calc(28% - 20px);
+}
+
+/*
+ * On a narrow screen core stacks the area instead, which would give three
+ * filters six lines inside a toolbar with room for three. Side by side they
+ * fit; the labels stay for screen readers, hidden the way core hides its own.
+ */
+@media screen and (max-width: 782px) {
+
+	.media-toolbar-secondary:has(#wow-media-folder-filter) {
+		display: flex;
+		flex-wrap: wrap;
+		align-items: center;
+		column-gap: 8px;
+	}
+
+	.media-toolbar-secondary:has(#wow-media-folder-filter) > label {
+		position: absolute;
+		width: 1px;
+		height: 1px;
+		margin: -1px;
+		padding: 0;
+		border: 0;
+		overflow: hidden;
+		clip-path: inset(50%);
+		white-space: nowrap;
+	}
+
+	.media-toolbar-secondary:has(#wow-media-folder-filter) > select {
+		flex: 1 1 30%;
+		min-width: 0;
+		margin-right: 0;
+	}
+}

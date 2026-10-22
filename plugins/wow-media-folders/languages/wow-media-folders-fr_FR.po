@@ -1,0 +1,205 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: WOW Media Folders 0.1.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wow-media-folders\n"
+"Last-Translator: Wow-arts\n"
+"Language-Team: French <fr@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-09-21T00:17:42+00:00\n"
+"PO-Revision-Date: 2026-09-21 02:18+0000\n"
+"Language: fr_FR\n"
+"Plural-Forms: nplurals=2; plural=(n > 1);\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: wow-media-folders\n"
+
+#. Plugin Name of the plugin
+#: wow-media-folders.php
+msgid "WOW Media Folders"
+msgstr ""
+
+#. Description of the plugin
+#: wow-media-folders.php
+msgid "Folders for the media library: a flat taxonomy on attachments, filled in automatically from albums, filterable from a sidebar in both library views and from a dropdown in the editor's media modal."
+msgstr "Des dossiers pour la médiathèque : une taxonomie plate sur les fichiers, remplie automatiquement depuis les albums, filtrable depuis un panneau dans les deux vues et depuis une liste déroulante dans la fenêtre des médias de l’éditeur."
+
+#. Author of the plugin
+#: wow-media-folders.php
+msgid "Wow-arts"
+msgstr ""
+
+#: includes/admin-list.php:48
+#: includes/modal.php:79
+msgid "Filter by folder"
+msgstr "Filtrer par dossier"
+
+#: includes/admin-list.php:51
+#: includes/modal.php:80
+msgid "All folders"
+msgstr "Tous les dossiers"
+
+#. translators: %s: folder name.
+#: includes/admin-list.php:75
+#, php-format
+msgid "Move to “%s”"
+msgstr "Déplacer vers « %s »"
+
+#: includes/admin-list.php:78
+msgid "Take out of every folder"
+msgstr "Retirer de tous les dossiers"
+
+#. translators: %s: number of files.
+#: includes/admin-list.php:137
+#, php-format
+msgid "%s file moved."
+msgid_plural "%s files moved."
+msgstr[0] "%s fichier déplacé."
+msgstr[1] "%s fichiers déplacés."
+
+#: includes/admin-list.php:203
+#: includes/admin-sidebar.php:130
+#: includes/taxonomy.php:29
+msgid "Folders"
+msgstr "Dossiers"
+
+#: includes/admin-sidebar.php:133
+msgid "New"
+msgstr "Nouveau"
+
+#: includes/admin-sidebar.php:138
+msgid "Search folders"
+msgstr "Rechercher des dossiers"
+
+#: includes/admin-sidebar.php:140
+msgid "Folder name…"
+msgstr "Nom du dossier…"
+
+#: includes/admin-sidebar.php:145
+msgid "All files"
+msgstr "Tous les fichiers"
+
+#: includes/admin-sidebar.php:151
+#: includes/modal.php:81
+msgid "No folder"
+msgstr "Sans dossier"
+
+#: includes/admin-sidebar.php:166
+msgid "Rename folder"
+msgstr "Renommer le dossier"
+
+#: includes/admin-sidebar.php:169
+msgid "Delete folder"
+msgstr "Supprimer le dossier"
+
+#: includes/admin-sidebar.php:178
+msgid "No folder matches that name."
+msgstr "Aucun dossier ne porte ce nom."
+
+#: includes/admin-sidebar.php:219
+msgid "Name for the new folder"
+msgstr "Nom du nouveau dossier"
+
+#: includes/admin-sidebar.php:220
+msgid "New name for the folder"
+msgstr "Nouveau nom du dossier"
+
+#. translators: %s: folder name.
+#: includes/admin-sidebar.php:222
+#, php-format
+msgid "Delete the folder “%s”? The files inside stay in the library."
+msgstr "Supprimer le dossier « %s » ? Les fichiers qu’il contient restent dans la médiathèque."
+
+#: includes/admin-sidebar.php:223
+msgid "That did not work. Reload the page and try again."
+msgstr "Cela n’a pas fonctionné. Rechargez la page et réessayez."
+
+#: includes/ajax.php:29
+#: includes/ajax.php:58
+msgid "You do not have permission to do that."
+msgstr "Vous n’avez pas les droits nécessaires."
+
+#: includes/ajax.php:48
+msgid "Unknown request."
+msgstr "Requête inconnue."
+
+#: includes/ajax.php:70
+msgid "Nothing to move."
+msgstr "Rien à déplacer."
+
+#: includes/ajax.php:77
+#: includes/ajax.php:161
+#: includes/ajax.php:190
+msgid "No such folder."
+msgstr "Ce dossier n’existe pas."
+
+#: includes/ajax.php:123
+#: includes/ajax.php:165
+msgid "A folder needs a name."
+msgstr "Un dossier doit avoir un nom."
+
+#: includes/taxonomy.php:27
+msgctxt "taxonomy general name"
+msgid "Folders"
+msgstr "Dossiers"
+
+#: includes/taxonomy.php:28
+msgctxt "taxonomy singular name"
+msgid "Folder"
+msgstr "Dossier"
+
+#: includes/taxonomy.php:30
+msgid "All Folders"
+msgstr "Tous les dossiers"
+
+#: includes/taxonomy.php:31
+msgid "Edit Folder"
+msgstr "Modifier le dossier"
+
+#: includes/taxonomy.php:32
+msgid "View Folder"
+msgstr "Voir le dossier"
+
+#: includes/taxonomy.php:33
+msgid "Update Folder"
+msgstr "Mettre à jour le dossier"
+
+#: includes/taxonomy.php:34
+msgid "Add New Folder"
+msgstr "Ajouter un dossier"
+
+#: includes/taxonomy.php:35
+msgid "New folder name"
+msgstr "Nom du nouveau dossier"
+
+#: includes/taxonomy.php:36
+msgid "Search Folders"
+msgstr "Rechercher des dossiers"
+
+#: includes/taxonomy.php:37
+msgid "No folders found"
+msgstr "Aucun dossier trouvé"
+
+#: includes/taxonomy.php:38
+msgid "No folders"
+msgstr "Aucun dossier"
+
+#: includes/taxonomy.php:39
+msgid "Separate folders with commas"
+msgstr "Séparez les dossiers par des virgules"
+
+#: includes/taxonomy.php:40
+msgid "Add or remove folders"
+msgstr "Ajouter ou retirer des dossiers"
+
+#: includes/taxonomy.php:41
+msgid "Choose from the most used folders"
+msgstr "Choisir parmi les dossiers les plus utilisés"
+
+#: includes/taxonomy.php:42
+msgid "&larr; Go to Folders"
+msgstr "&larr; Aller aux dossiers"
+
+#: includes/admin-list.php:214
+msgid "Folder"
+msgstr "Dossier"

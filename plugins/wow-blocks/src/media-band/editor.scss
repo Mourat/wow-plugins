@@ -1,0 +1,18 @@
+/** Editor only: visible placeholders until a fill and an image are set. */
+
+.wow-band .wow-band__fill:not([style*="background"]),
+.wow-band .wow-band__media.is-empty {
+	background: repeating-linear-gradient(45deg, #f0f0f0, #f0f0f0 8px, #e6e6e6 8px, #e6e6e6 16px);
+}
+
+/* The image picker sits in the block itself: the inspector may be closed. */
+.wow-band .wow-band__media.is-empty {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 4px;
+}
+
+.wow-band--no-image .wow-band__inner {
+	min-height: var(--wow-band-height);
+}

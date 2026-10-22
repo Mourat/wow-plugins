@@ -1,0 +1,26 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 3,
+	"name": "wow/album-links",
+	"title": "Album links",
+	"category": "wow",
+	"icon": "list-view",
+	"description": "Every album as a menu item. Plain, it fills a navigation submenu; as a disclosure, it is a collapsible list for the mobile overlay. Either way it keeps itself up to date as albums come and go.",
+	"textdomain": "wow-albums",
+	"attributes": {
+		"disclosure": {
+			"type": "boolean",
+			"default": false
+		},
+		"label": {
+			"type": "string",
+			"default": ""
+		}
+	},
+	"supports": {
+		"autoRegister": true,
+		"html": false,
+		"reusable": false
+	},
+	"render": "file:./render.php"
+}

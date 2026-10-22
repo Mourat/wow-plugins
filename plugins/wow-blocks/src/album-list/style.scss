@@ -1,0 +1,63 @@
+/**
+ * The floating album list.
+ *
+ * It floats through position: sticky: the list sits in a column beside the
+ * content and travels with the page until the column runs out. The client's
+ * previous site worked the same way.
+ */
+
+.wow-album-list {
+	position: sticky;
+	inset-block-start: var(--wow-album-list-top, 50px);
+	color: #111;
+	font-size: 11px;
+}
+
+.wow-album-list__items {
+	margin: 0;
+	padding-inline-start: 1.2em;
+	list-style: disc;
+}
+
+/*
+ * The gap between albums. It used to come from the item's own leading; the
+ * link is a block now and sets its own line-height, so the gap is stated
+ * outright.
+ */
+.wow-album-list__item {
+	margin-block-end: 0.4em;
+	line-height: 1.7;
+}
+
+/*
+ * Colour and size come from the list, so the bullets match the titles.
+ *
+ * display: block is what makes the line-height below count. Inline, the link
+ * would sit in a line box that is never shorter than the item's strut, and
+ * the tighter value would show nowhere.
+ */
+.wow-album-list__link {
+	display: block;
+	color: inherit;
+	line-height: 1.3;
+	text-decoration: none;
+	text-transform: lowercase;
+}
+
+.wow-album-list__link:hover,
+.wow-album-list__link:focus {
+	text-decoration: underline;
+}
+
+.wow-album-list__item.is-current > .wow-album-list__link {
+	font-weight: 700;
+}
+
+/* On a narrow screen the columns stack, and the list would end up on top
+   of the gallery. */
+@media (max-width: 768px) {
+
+	.wow-album-list--desktop-only {
+		display: none;
+	}
+}

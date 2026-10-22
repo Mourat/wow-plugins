@@ -1,0 +1,96 @@
+/* The column in the media library. */
+
+.manage-column.column-wow_images {
+	width: 8em;
+}
+
+.wow-images-saving {
+	font-weight: 600;
+}
+
+.wow-images-detail,
+.wow-images-none {
+	color: #646970;
+	font-size: 11px;
+}
+
+/* What this server can and cannot do, on the settings screen. */
+
+.wow-images-support th {
+	width: 16em;
+}
+
+.wow-images-yes {
+	color: #007017;
+}
+
+.wow-images-no {
+	color: #b32d2e;
+}
+
+/* The conversion screen. */
+
+.wow-images-row {
+	display: flex;
+	gap: 1em;
+	justify-content: space-between;
+	padding: 6px 10px;
+	background: #fff;
+	border-bottom: 1px solid #f0f0f1;
+}
+
+.wow-images-row__name {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+
+.wow-images-row__note {
+	flex: none;
+	color: #646970;
+}
+
+.wow-images-row.is-working .wow-images-row__note {
+	color: #2271b1;
+}
+
+.wow-images-row.is-done .wow-images-row__note {
+	color: #007017;
+}
+
+.wow-images-row.is-failed .wow-images-row__note {
+	color: #b32d2e;
+}
+
+/* The job in progress. */
+
+.wow-images-bar {
+	max-width: 40em;
+	height: 10px;
+	margin: 1em 0 .5em;
+	background: #dcdcde;
+	border-radius: 5px;
+	overflow: hidden;
+}
+
+.wow-images-bar span {
+	display: block;
+	height: 100%;
+	background: #2271b1;
+	transition: width .4s ease;
+}
+
+.wow-images-tally {
+	margin: 0 0 1em;
+}
+
+.wow-images-note {
+	color: #646970;
+}
+
+.wow-images-errors {
+	margin: 0 0 0 1.5em;
+	list-style: disc;
+	font-family: monospace;
+	font-size: 12px;
+}

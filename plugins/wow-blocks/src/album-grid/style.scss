@@ -1,0 +1,100 @@
+/**
+ * The album grid on the front page.
+ *
+ * Tiles have a fixed width and never stretch: on a wide screen a stretched
+ * tile would show its cover larger than the crop and blur it. So a tile that
+ * does not fit wraps to the next line and the grid stays centred.
+ *
+ * repeat(auto-fit, <fixed>) creates no empty tracks, unlike auto-fill;
+ * without that, justify-content: center would centre the emptiness too.
+ */
+
+.wow-album-grid {
+
+	/* On a screen narrower than the tile it shrinks, or it would overflow. */
+	--wow-album-track: min(var(--wow-album-tile), 100%);
+
+	display: grid;
+	grid-template-columns: repeat(auto-fit, var(--wow-album-track));
+	justify-content: center;
+	gap: var(--wow-gap);
+	max-width: calc(var(--wow-album-columns) * var(--wow-album-track) + (var(--wow-album-columns) - 1) * var(--wow-gap));
+	margin-inline: auto;
+}
+
+.wow-album-cell {
+	position: relative;
+	display: block;
+	aspect-ratio: 1;
+	overflow: hidden;
+}
+
+/* The logo is fitted whole and never cropped, unlike the covers. */
+.wow-album-logo {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	padding: 8px;
+	box-sizing: border-box;
+}
+
+.wow-album-logo__image {
+	max-width: 100%;
+	max-height: 100%;
+	width: auto;
+	height: auto;
+	object-fit: contain;
+}
+
+.wow-album-logo--empty {
+	border: 1px dashed currentcolor;
+	color: #8c8f94;
+	font-size: 14px;
+	line-height: 1.3;
+	text-align: center;
+}
+
+.wow-album-tile {
+	color: #fff;
+	text-decoration: none;
+}
+
+.wow-album-tile__image {
+	display: block;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	object-fit: cover;
+}
+
+.wow-album-tile__image--empty {
+	background: #dcdcde;
+}
+
+.wow-album-tile__title {
+	position: absolute;
+	inset-inline: 0;
+	inset-block-end: 0;
+	padding: 12px 14px;
+	color: #fff;
+	font-size: 20px;
+	font-weight: 600;
+	line-height: 1.15;
+	text-shadow: 0 1px 4px rgb(0 0 0 / 55%);
+}
+
+/* The badge geometry is carried over from the client's previous project. */
+.wow-album-tile__count {
+	position: absolute;
+	inset-block-start: 20px;
+	inset-inline-end: 20px;
+	min-width: 42px;
+	padding: 8px 10px;
+	box-sizing: border-box;
+	border-radius: 4px;
+	background: var(--wow-album-badge, #da8a13);
+	color: #fff;
+	font-size: 14px;
+	line-height: 1.4;
+	text-align: center;
+}

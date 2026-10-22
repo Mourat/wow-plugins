@@ -1,0 +1,136 @@
+/*
+ * The contact form.
+ *
+ * Deliberately quiet: colours and type come from the theme through the block
+ * editor's own custom properties, so the form looks like the rest of the site
+ * rather than like a form somebody bolted on.
+ */
+
+/*
+ * Two columns. The fields arrive in pairs that belong together — first name
+ * beside last name, company beside email — and the grid places them so
+ * without the markup knowing; only the message and what follows it claim
+ * the full width. On a narrow screen the pairs stack again.
+ */
+.wow-contact-form__form {
+	column-gap: 1.5rem;
+	display: grid;
+	grid-template-columns: repeat(2, minmax(0, 1fr));
+	margin: 0;
+	max-width: 34rem;
+	row-gap: 1.25rem;
+}
+
+.wow-contact-form__field--message,
+.wow-contact-form__actions {
+	grid-column: 1 / -1;
+}
+
+@media (max-width: 600px) {
+	.wow-contact-form__form {
+		grid-template-columns: minmax(0, 1fr);
+	}
+}
+
+.wow-contact-form__field {
+	display: flex;
+	flex-direction: column;
+	gap: 0.35rem;
+	margin: 0;
+}
+
+.wow-contact-form__label {
+	font-size: 0.85em;
+	letter-spacing: 0.02em;
+}
+
+/*
+ * Red, and the only thing marking a field as required for a sighted visitor
+ * now that the line explaining the asterisk is gone. It stays aria-hidden:
+ * what a screen reader announces is the required attribute on the field
+ * itself, which says the same thing in words.
+ */
+.wow-contact-form__required {
+	color: var(--wow-contact-form-required, #d93025);
+}
+
+.wow-contact-form__input {
+	background: var(--wp--preset--color--base, #fff);
+	border: 1px solid currentColor;
+	border-radius: 2px;
+	/*
+	 * Neither theme resets box-sizing globally, so the default is content-box:
+	 * padding and border would add to the 100% width below instead of fitting
+	 * inside it, and the field would overflow its grid column by almost
+	 * exactly the width of the column-gap next to it — which is what made the
+	 * two columns look glued together.
+	 */
+	box-sizing: border-box;
+	color: inherit;
+	font: inherit;
+	padding: 0.6rem 0.7rem;
+	width: 100%;
+}
+
+.wow-contact-form__input--textarea {
+	/* Horizontal dragging would break the column; vertical is useful. */
+	resize: vertical;
+}
+
+.wow-contact-form__input:focus-visible {
+	outline: 2px solid currentColor;
+	outline-offset: 2px;
+}
+
+.wow-contact-form__error {
+	font-size: 0.85em;
+	font-weight: 700;
+}
+
+.wow-contact-form__notice {
+	border-inline-start: 3px solid currentColor;
+	margin: 0 0 1.5rem;
+	padding-inline-start: 0.8rem;
+}
+
+.wow-contact-form__actions {
+	margin: 0;
+}
+
+.wow-contact-form__submit {
+	/*
+	 * The colour of the header and the footer, stated outright. It used to
+	 * read from the theme's "contrast" preset with this as a fallback, but
+	 * that preset is defined — as #111111 — so the fallback never applied and
+	 * the button came out near-black.
+	 */
+	background: var(--wow-contact-form-button, var(--wp--custom--wow-accent, #326688));
+	border: 0;
+	border-radius: 2px;
+	/* Stated rather than relied on: browsers agree on it for buttons, but the
+	   width below is only correct if the padding sits inside it. */
+	box-sizing: border-box;
+	color: #fff;
+	cursor: pointer;
+	font: inherit;
+	padding: 0.7rem 1.6rem;
+	width: 100%;
+}
+
+.wow-contact-form__submit:hover,
+.wow-contact-form__submit:focus-visible {
+	opacity: 0.85;
+}
+
+/*
+ * The honeypot. Off-screen rather than display:none, which some robots know
+ * to leave alone — the whole value of the field is that a robot fills it in.
+ */
+.wow-contact-form__trap {
+	height: 1px;
+	left: -9999px;
+	overflow: hidden;
+	position: absolute;
+	top: auto;
+	width: 1px;
+}

@@ -1,0 +1,90 @@
+/**
+ * The narrow divider strip.
+ *
+ * A larger gap sets it off from above (--wow-band-lead) and there is no
+ * space below: the strip splits the gallery into themed parts, so it needs
+ * more room to breathe. Inside, the image and the fill meet edge to edge,
+ * as in the original design.
+ */
+
+.wow-band {
+	max-width: var(--wow-max-width);
+	margin-inline: auto;
+}
+
+/* Same specificity trick as the row: see the comment in
+   media-row/style.scss. */
+.wow-band.wp-block-wow-media-band {
+	margin-block-start: var(--wow-band-lead);
+	margin-block-end: 0;
+}
+
+.wow-band.wp-block-wow-media-band:first-child {
+	margin-block-start: 0;
+}
+
+.wow-band__inner {
+	display: grid;
+	height: var(--wow-band-height);
+	overflow: hidden;
+}
+
+.wow-band--image-left .wow-band__inner {
+	grid-template-columns: var(--wow-band-image-width) 1fr;
+}
+
+.wow-band--image-right .wow-band__inner {
+	grid-template-columns: 1fr var(--wow-band-image-width);
+}
+
+.wow-band--no-image .wow-band__inner {
+	grid-template-columns: 1fr;
+}
+
+/**
+ * The strip describes its own cell rather than leaning on the row block's
+ * styles: on a page holding nothing but a strip, those styles are never
+ * enqueued.
+ */
+.wow-band__media {
+	position: relative;
+	height: 100%;
+	overflow: hidden;
+}
+
+.wow-band__fill {
+	height: 100%;
+}
+
+/**
+ * Framing: the focal point sets the spot, the scale sets how close it gets.
+ *
+ * The image element is made `scale` times the size of the window and filled
+ * by `object-fit: cover`, so zooming costs nothing but geometry. The element
+ * is then offset until the focal point sits in the middle of the window, and
+ * clamped so no edge of the image is ever dragged inside it.
+ *
+ * Not `transform: scale()` around the focal point, which is what this used to
+ * be: that keeps the focal point exactly where it already was in the window.
+ * Aim at 83% down and the subject stays 83% down, hugging the bottom edge,
+ * while the middle of the window shows something noticeably higher up. A
+ * crosshair is only intuitive when what it covers ends up in the middle.
+ *
+ * Every term below is expressed in the window's own width and height, so the
+ * image's intrinsic size never enters into it and the editor and the front
+ * end cannot drift apart.
+ */
+.wow-band__media .wow-cell__image {
+	position: absolute;
+	display: block;
+	width: calc(100% * var(--wow-band-scale, 1));
+	height: calc(100% * var(--wow-band-scale, 1));
+	margin: 0;
+	object-fit: cover;
+	object-position: var(--wow-band-origin, 50% 50%);
+
+	/* Physical properties on purpose: object-position above is physical too,
+	   and the two have to agree about which way is left. */
+	left: clamp(calc(100% * (1 - var(--wow-band-scale, 1))), calc(100% * (0.5 - var(--wow-band-x, 0.5) * var(--wow-band-scale, 1))), 0%);
+	top: clamp(calc(100% * (1 - var(--wow-band-scale, 1))), calc(100% * (0.5 - var(--wow-band-y, 0.5) * var(--wow-band-scale, 1))), 0%);
+}

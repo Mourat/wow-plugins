@@ -1,0 +1,104 @@
+# Copyright (C) 2026 Wow-arts
+# This file is distributed under the same license as the WOW Map plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: WOW Map 0.1.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wow-map\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-09-22T02:32:00+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: wow-map\n"
+
+#. Plugin Name of the plugin
+#: wow-map.php
+msgid "WOW Map"
+msgstr ""
+
+#. Description of the plugin
+#: wow-map.php
+msgid "A small OpenStreetMap map as a block. The picture is drawn once on this server and stored here, so a visitor never makes a request to anybody else."
+msgstr ""
+
+#. Author of the plugin
+#: wow-map.php
+msgid "Wow-arts"
+msgstr ""
+
+#. translators: %s: reason the map could not be drawn.
+#: blocks/map/render.php:47
+#, php-format
+msgid "This map could not be drawn: %s"
+msgstr ""
+
+#. translators: %s: link to the OpenStreetMap copyright page, with "OpenStreetMap" as the text.
+#: blocks/map/render.php:80
+#, php-format
+msgid "© %s contributors"
+msgstr ""
+
+#: includes/block.php:71
+msgid "WOW"
+msgstr ""
+
+#. translators: 1: tile address, 2: error message.
+#: includes/tiles.php:87
+#, php-format
+msgid "Could not reach %1$s: %2$s"
+msgstr ""
+
+#. translators: 1: tile address, 2: HTTP status code.
+#: includes/tiles.php:101
+#, php-format
+msgid "%1$s answered with status %2$d."
+msgstr ""
+
+#: includes/tiles.php:111
+msgid "The tile server refused the request and sent a placeholder picture instead. This happens when it does not recognise who is asking — see the wow_map_user_agent filter, and the tile usage policy at https://operations.osmfoundation.org/policies/tiles/"
+msgstr ""
+
+#. translators: 1: tile address, 2: content type received.
+#: includes/tiles.php:122
+#, php-format
+msgid "%1$s returned %2$s instead of a picture."
+msgstr ""
+
+#. translators: %s: tile address.
+#: includes/tiles.php:136
+#, php-format
+msgid "The picture at %s could not be read."
+msgstr ""
+
+#: includes/tiles.php:220
+msgid "This server has no GD, so no picture can be drawn."
+msgstr ""
+
+#. translators: %s: folder path.
+#: includes/tiles.php:228
+#, php-format
+msgid "The folder %s could not be created or written to."
+msgstr ""
+
+#. translators: %s: file path.
+#: includes/tiles.php:266
+#, php-format
+msgid "The picture could not be written to %s."
+msgstr ""
+
+#: includes/tiles.php:316
+msgid "This map is being drawn right now. Reload in a moment."
+msgstr ""
+
+#: blocks/map/block.json
+msgctxt "block title"
+msgid "Map"
+msgstr ""
+
+#: blocks/map/block.json
+msgctxt "block description"
+msgid "A map of one place, drawn once on this server from OpenStreetMap and kept here, so that reading the page asks nothing of anybody else."
+msgstr ""

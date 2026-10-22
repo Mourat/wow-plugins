@@ -1,0 +1,25 @@
+{
+	"name": "wow-blocks",
+	"version": "0.1.0",
+	"private": true,
+	"description": "WOW row blocks for galleries built on a fixed grid.",
+	"scripts": {
+		"build": "wp-scripts build",
+		"start": "wp-scripts start",
+		"format": "wp-scripts format",
+		"lint:js": "wp-scripts lint-js",
+		"lint:css": "wp-scripts lint-style"
+	},
+	"devDependencies": {
+		"@wordpress/api-fetch": "^7.55.0",
+		"@wordpress/block-editor": "^17.1.0",
+		"@wordpress/blocks": "^16.0.0",
+		"@wordpress/components": "^40.1.0",
+		"@wordpress/data": "^10.55.0",
+		"@wordpress/element": "^8.7.0",
+		"@wordpress/i18n": "^6.28.0",
+		"@wordpress/notices": "^5.55.0",
+		"@wordpress/scripts": "^35.0.0",
+		"@wordpress/server-side-render": "^6.31.0"
+	}
+}

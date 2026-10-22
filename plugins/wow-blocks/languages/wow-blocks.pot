@@ -1,0 +1,441 @@
+# Copyright (C) 2026 Wow-arts
+# This file is distributed under the same license as the WOW Blocks plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: WOW Blocks 0.1.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wow-blocks\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-09-22T13:17:32+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: wow-blocks\n"
+
+#. Plugin Name of the plugin
+#: wow-blocks.php
+msgid "WOW Blocks"
+msgstr ""
+
+#. Description of the plugin
+#: wow-blocks.php
+msgid "Fixed-grid gallery rows: one, two or three columns, each holding an image or a solid colour fill, plus a narrow divider strip."
+msgstr ""
+
+#. Author of the plugin
+#: wow-blocks.php
+msgid "Wow-arts"
+msgstr ""
+
+#: build/album-grid/render.php:69
+#: src/album-grid/render.php:69
+msgid "Upload a site logo"
+msgstr ""
+
+#: build/album-list/render.php:76
+#: src/album-list/render.php:76
+msgid "Albums"
+msgstr ""
+
+#: wow-blocks.php:52
+msgid "WOW"
+msgstr ""
+
+#: wow-blocks.php:75
+msgid "WOW Blocks: the blocks are not built. Run this in the plugin folder:"
+msgstr ""
+
+#: build/album-grid/index.js:1
+#: build/media-row/index.js:2
+#: src/album-grid/edit.js:47
+#: src/media-row/edit.js:181
+msgid "Grid"
+msgstr ""
+
+#: build/album-grid/index.js:1
+#: src/album-grid/edit.js:50
+msgid "Logo in the first cell"
+msgstr ""
+
+#: build/album-grid/index.js:1
+#: src/album-grid/edit.js:51
+msgid "Uses the site logo. Until one is set, the cell stays reserved."
+msgstr ""
+
+#: build/album-grid/index.js:1
+#: src/album-grid/edit.js:63
+msgid "Tile width, px"
+msgstr ""
+
+#: build/album-grid/index.js:1
+#: src/album-grid/edit.js:75
+msgid "Columns on a wide screen"
+msgstr ""
+
+#: build/album-grid/index.js:1
+#: src/album-grid/edit.js:76
+msgid "Tiles never stretch: extras wrap to the next line and the grid stays centred."
+msgstr ""
+
+#: build/album-grid/index.js:1
+#: src/album-grid/edit.js:91
+msgid "How many albums to show"
+msgstr ""
+
+#: build/album-grid/index.js:1
+#: src/album-grid/edit.js:92
+msgid "0 shows every album."
+msgstr ""
+
+#: build/album-grid/index.js:1
+#: src/album-grid/edit.js:105
+msgid "Badge colour"
+msgstr ""
+
+#: build/album-list/index.js:1
+#: src/album-list/edit.js:26
+msgid "List"
+msgstr ""
+
+#: build/album-list/index.js:1
+#: src/album-list/edit.js:29
+msgid "Offset from the top when scrolled, px"
+msgstr ""
+
+#: build/album-list/index.js:1
+#: src/album-list/edit.js:33
+msgid "How far the list sits from the top of the window once the page is scrolled."
+msgstr ""
+
+#: build/album-list/index.js:1
+#: src/album-list/edit.js:48
+msgid "Hide on narrow screens"
+msgstr ""
+
+#: build/album-list/index.js:1
+#: src/album-list/edit.js:49
+msgid "Below 768px the columns stack, and the list would sit on top of the gallery."
+msgstr ""
+
+#: build/media-band/index.js:1
+#: build/media-row/index.js:1
+#: src/shared/framing-picker.js:117
+msgid "Pin to a side"
+msgstr ""
+
+#: build/media-band/index.js:1
+#: build/media-row/index.js:1
+#: src/shared/framing-picker.js:121
+msgid "Puts that side of the picture against the same side of the cell, so nothing is cut off there."
+msgstr ""
+
+#: build/media-band/index.js:1
+#: build/media-row/index.js:1
+#: src/shared/media-drop.js:123
+msgid "The image could not be uploaded."
+msgstr ""
+
+#: build/media-band/index.js:1
+#: build/media-row/index.js:1
+#: src/shared/media-drop.js:175
+msgid "That is a link to a page, not an image."
+msgstr ""
+
+#: build/media-band/index.js:1
+#: src/media-band/edit.js:28
+msgid "Left"
+msgstr ""
+
+#: build/media-band/index.js:1
+#: src/media-band/edit.js:29
+msgid "Right"
+msgstr ""
+
+#: build/media-band/index.js:1
+#: src/media-band/edit.js:30
+msgid "No image"
+msgstr ""
+
+#: build/media-band/index.js:1
+#: build/media-row/index.js:1
+#: src/shared/notices.js:28
+msgid "The image went to the media library only: there was no free place for it here."
+msgstr ""
+
+#: build/media-band/index.js:1
+#: build/media-row/index.js:1
+#: src/media-band/edit.js:140
+#: src/media-band/edit.js:197
+#: src/media-row/edit.js:327
+#: src/media-row/edit.js:377
+msgid "Image"
+msgstr ""
+
+#: build/media-band/index.js:1
+#: build/media-row/index.js:1
+#: src/media-band/edit.js:170
+#: src/media-band/edit.js:218
+#: src/media-row/edit.js:411
+msgid "Replace image"
+msgstr ""
+
+#: build/media-band/index.js:1
+#: build/media-row/index.js:1
+#: src/media-band/edit.js:171
+#: src/media-band/edit.js:222
+#: src/media-row/edit.js:412
+msgid "Choose image"
+msgstr ""
+
+#: build/media-band/index.js:1
+#: src/media-band/edit.js:178
+msgid "Row"
+msgstr ""
+
+#: build/media-band/index.js:1
+#: src/media-band/edit.js:182
+msgid "Fill colour"
+msgstr ""
+
+#: build/media-band/index.js:1
+#: build/media-row/index.js:1
+#: src/media-band/edit.js:246
+#: src/media-row/edit.js:425
+msgid "Remove image"
+msgstr ""
+
+#: build/media-band/index.js:1
+#: src/media-band/edit.js:252
+msgid "Image width, px"
+msgstr ""
+
+#: build/media-band/index.js:1
+#: build/media-row/index.js:1
+#: src/media-band/edit.js:267
+#: src/media-row/edit.js:430
+msgid "Framing"
+msgstr ""
+
+#: build/media-band/index.js:1
+#: src/media-band/edit.js:268
+msgid "The point the frame centres on."
+msgstr ""
+
+#: build/media-band/index.js:1
+#: src/media-band/edit.js:283
+msgid "Scale"
+msgstr ""
+
+#: build/media-band/index.js:1
+#: src/media-band/edit.js:284
+msgid "At 1× the image fits the strip width. Above that, the frame zooms towards the chosen point."
+msgstr ""
+
+#: build/media-row/index.js:1
+#: src/media-row/edit.js:39
+#: src/media-row/variations.js:38
+msgid "1 column"
+msgstr ""
+
+#: build/media-row/index.js:1
+#: src/media-row/edit.js:42
+#: src/media-row/variations.js:29
+msgid "2 columns, narrow on the left"
+msgstr ""
+
+#: build/media-row/index.js:1
+#: src/media-row/edit.js:46
+#: src/media-row/variations.js:20
+msgid "2 columns, narrow on the right"
+msgstr ""
+
+#: build/media-row/index.js:1
+#: src/media-row/edit.js:48
+#: src/media-row/variations.js:10
+msgid "3 columns"
+msgstr ""
+
+#: build/media-row/index.js:1
+#: src/media-row/edit.js:52
+#: src/media-row/edit.js:53
+msgid "wide"
+msgstr ""
+
+#: build/media-row/index.js:1
+#: src/media-row/edit.js:54
+msgid "narrow"
+msgstr ""
+
+#: build/media-row/index.js:1
+#: src/media-row/edit.js:339
+#: src/media-row/edit.js:386
+msgid "Fill"
+msgstr ""
+
+#: build/media-row/index.js:1
+#: src/media-row/edit.js:431
+msgid "The point guaranteed to stay in frame when the image is cropped."
+msgstr ""
+
+#: build/media-row/index.js:1
+#: src/media-row/variations.js:11
+msgid "Three equal columns."
+msgstr ""
+
+#. translators: %d: gap size in pixels.
+#: build/media-row/index.js:2
+#: src/media-row/edit.js:155
+#, js-format
+msgid "%d px (default)"
+msgstr ""
+
+#: build/media-row/index.js:2
+#: src/media-row/edit.js:184
+msgid "Layout"
+msgstr ""
+
+#: build/media-row/index.js:2
+#: src/media-row/edit.js:193
+msgid "Gap"
+msgstr ""
+
+#: build/media-row/index.js:2
+#: src/media-row/edit.js:194
+msgid "The same gap between columns and between rows."
+msgstr ""
+
+#: build/media-row/index.js:2
+#: src/media-row/edit.js:210
+msgid "Stack on mobile"
+msgstr ""
+
+#. translators: 1: column number, 2: column type (narrow or wide).
+#: build/media-row/index.js:3
+#: src/media-row/edit.js:221
+#, js-format
+msgid "Column %1$d (%2$s)"
+msgstr ""
+
+#: build/album-grid/block.json
+#: src/album-grid/block.json
+msgctxt "block title"
+msgid "WOW: Album grid"
+msgstr ""
+
+#: build/album-grid/block.json
+#: src/album-grid/block.json
+msgctxt "block description"
+msgid "Album tiles showing the cover, the title and the number of images. The first cell holds the site logo."
+msgstr ""
+
+#: build/album-grid/block.json
+#: build/album-list/block.json
+#: build/media-band/block.json
+#: build/media-row/block.json
+#: src/album-grid/block.json
+#: src/album-list/block.json
+#: src/media-band/block.json
+#: src/media-row/block.json
+msgctxt "block keyword"
+msgid "wow"
+msgstr ""
+
+#: build/album-grid/block.json
+#: build/album-list/block.json
+#: src/album-grid/block.json
+#: src/album-list/block.json
+msgctxt "block keyword"
+msgid "albums"
+msgstr ""
+
+#: build/album-grid/block.json
+#: src/album-grid/block.json
+msgctxt "block keyword"
+msgid "catalogue"
+msgstr ""
+
+#: build/album-grid/block.json
+#: src/album-grid/block.json
+msgctxt "block keyword"
+msgid "front page"
+msgstr ""
+
+#: build/album-list/block.json
+#: src/album-list/block.json
+msgctxt "block title"
+msgid "WOW: Album list"
+msgstr ""
+
+#: build/album-list/block.json
+#: src/album-list/block.json
+msgctxt "block description"
+msgid "A floating list linking to every album. The current album is highlighted."
+msgstr ""
+
+#: build/album-list/block.json
+#: src/album-list/block.json
+msgctxt "block keyword"
+msgid "navigation"
+msgstr ""
+
+#: build/album-list/block.json
+#: src/album-list/block.json
+msgctxt "block keyword"
+msgid "list"
+msgstr ""
+
+#: build/media-band/block.json
+#: src/media-band/block.json
+msgctxt "block title"
+msgid "WOW: Narrow strip"
+msgstr ""
+
+#: build/media-band/block.json
+#: src/media-band/block.json
+msgctxt "block description"
+msgid "A low divider strip: a solid colour fill with an image on the left or the right."
+msgstr ""
+
+#: build/media-band/block.json
+#: src/media-band/block.json
+msgctxt "block keyword"
+msgid "divider"
+msgstr ""
+
+#: build/media-band/block.json
+#: src/media-band/block.json
+msgctxt "block keyword"
+msgid "strip"
+msgstr ""
+
+#: build/media-row/block.json
+#: src/media-row/block.json
+msgctxt "block title"
+msgid "WOW: Image row"
+msgstr ""
+
+#: build/media-row/block.json
+#: src/media-row/block.json
+msgctxt "block description"
+msgid "A fixed-grid row of one, two or three columns. Each column holds an image or a solid colour fill."
+msgstr ""
+
+#: build/media-row/block.json
+#: src/media-row/block.json
+msgctxt "block keyword"
+msgid "gallery"
+msgstr ""
+
+#: build/media-row/block.json
+#: src/media-row/block.json
+msgctxt "block keyword"
+msgid "columns"
+msgstr ""
+
+#: build/media-row/block.json
+#: src/media-row/block.json
+msgctxt "block keyword"
+msgid "images"
+msgstr ""

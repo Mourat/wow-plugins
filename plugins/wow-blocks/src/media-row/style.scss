@@ -1,0 +1,78 @@
+/**
+ * The row grid. The same rules serve both the front end and the editor.
+ *
+ * Column widths are derived from the gap, so at any gap the row stays
+ * exactly --wow-max-width wide and a narrow column stays exactly a third.
+ */
+
+.wow-row {
+	max-width: var(--wow-max-width);
+	margin-inline: auto;
+}
+
+/**
+ * Vertical rhythm.
+ *
+ * For a container core prints `> * { margin-block-end: 0 }` and
+ * `> * + * { margin-block-start: <theme blockGap> }`, at the same
+ * specificity as a single class. A single `.wow-row` lost on rule order,
+ * and the space between rows stayed the theme's rather than ours. The
+ * doubled class raises the specificity, and margin-block-start mirrors
+ * core's model, so margins neither add up nor collapse unexpectedly.
+ */
+.wow-row.wp-block-wow-media-row {
+	margin-block-start: var(--wow-gap);
+	margin-block-end: 0;
+}
+
+.wow-row.wp-block-wow-media-row:first-child {
+	margin-block-start: 0;
+}
+
+.wow-row__grid {
+	--wow-narrow: calc((100% - 2 * var(--wow-gap)) / 3);
+
+	display: grid;
+	gap: var(--wow-gap);
+}
+
+.wow-row--single .wow-row__grid {
+	grid-template-columns: 1fr;
+}
+
+.wow-row--three .wow-row__grid {
+	grid-template-columns: repeat(3, 1fr);
+}
+
+.wow-row--two-narrow-left .wow-row__grid {
+	grid-template-columns: var(--wow-narrow) 1fr;
+}
+
+.wow-row--two-narrow-right .wow-row__grid {
+	grid-template-columns: 1fr var(--wow-narrow);
+}
+
+.wow-cell {
+	position: relative;
+	height: var(--wow-row-height);
+	overflow: hidden;
+}
+
+.wow-cell__image,
+.wow-cell__fill {
+	display: block;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+}
+
+.wow-cell__image {
+	object-fit: cover;
+}
+
+@media (max-width: 781px) {
+
+	.wow-row--stack .wow-row__grid {
+		grid-template-columns: 1fr;
+	}
+}
