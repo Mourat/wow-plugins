@@ -21,18 +21,31 @@ Each has its own README, and that is where the reasoning for it lives.
 
 ## Making a release
 
+    bin/bump.sh --apply
+    git commit -am "What changed"
     git tag v0.2.0
-    git push origin v0.2.0
-
-That is the whole of it. The workflow in `.github/workflows/release.yml`
-builds every plugin that has something to build, zips each one, writes the
-file the sites read and publishes the release.
+    git push origin main --follow-tags
 
 **The tag is only a name.** What a site compares against what it has
-installed is the `Version:` header inside each plugin, so a plugin that
-changed needs its own version raised in its own main file. One that did not
-change can be left alone: it goes into the release at the version it already
-had, and no site will see anything to do.
+installed is the `Version:` header inside each plugin. A plugin that changed
+and kept its version reaches nobody, and that shows up days later as "the
+site did not update", looking like a fault in the updater — which is why the
+first line is not left to memory.
+
+`bin/bump.sh` asks git what changed under `plugins/` since the last tag and
+raises those plugins by a patch, in the header and in the plugin's own
+`_VERSION` constant both. Run without `--apply` it only says what it would
+do. `--minor` and `--major` step further along; `--all` raises everything,
+changed or not. Run twice before tagging it does nothing the second time:
+one release is one step.
+
+A plugin that did not change is left alone. It still goes into the release at
+the version it already had, so every plugin is always downloadable from the
+newest release, and no site sees anything to do about it.
+
+The workflow in `.github/workflows/release.yml` does the rest: builds every
+plugin that has something to build, zips each one, writes the file the sites
+read and publishes the release.
 
 ## How a site gets them
 
