@@ -1,0 +1,27 @@
+/**
+ * The bar on the alternative-text screen.
+ */
+#wow-blocks-alt-progress {
+	max-width: 900px;
+	margin: 16px 0;
+}
+
+.wow-blocks-bar {
+	height: 14px;
+	border-radius: 7px;
+	background: #dcdcde;
+	overflow: hidden;
+}
+
+.wow-blocks-bar span {
+	display: block;
+	width: 0;
+	height: 100%;
+	background: var(--wp-admin-theme-color, #2271b1);
+	transition: width 200ms linear;
+}
+
+.wow-blocks-tally {
+	margin: 8px 0 0;
+	color: #50575e;
+}

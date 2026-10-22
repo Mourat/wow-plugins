@@ -207,15 +207,31 @@ function all_pictures(): array {
  *
  * @param bool $apply False to work out what would be written and write
  *                    nothing.
- * @return array{written: int, skipped: int, samples: array<string,string>}
+ * @param int  $limit How many to write before stopping, 0 for all of them.
+ *                    A screen filling sixteen hundred in one request has
+ *                    nothing to show while it works, so it asks for a few
+ *                    hundred at a time and draws a bar between the asks.
+ * @return array{written: int, skipped: int, left: int, samples: array<string,string>}
+ *         How many were written (or would be), how many were left alone
+ *         because somebody had already described them, how many are still
+ *         waiting beyond the limit, and one example from each album.
  */
-function fill( bool $apply = false ): array {
+function fill( bool $apply = false, int $limit = 0 ): array {
 	$written = 0;
 	$skipped = 0;
+	$left    = 0;
 	$samples = array();
 	$seen    = array();
 
 	foreach ( all_pictures() as $id => $album ) {
+		// Asked for a batch and the batch is full: the rest are counted so
+		// that whoever is watching a bar knows how far there is to go.
+		if ( $limit > 0 && $written >= $limit ) {
+			++$left;
+
+			continue;
+		}
+
 		if ( '' !== trim( (string) get_post_meta( $id, '_wp_attachment_image_alt', true ) ) ) {
 			++$skipped;
 
@@ -247,6 +263,7 @@ function fill( bool $apply = false ): array {
 	return array(
 		'written' => $written,
 		'skipped' => $skipped,
+		'left'    => $left,
 		'samples' => $samples,
 	);
 }
