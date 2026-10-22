@@ -565,10 +565,9 @@ export default function snapToSeams( id ) {
 	};
 
 	const onLetGo = ( event ) => {
-		// Asked to be left alone.
-		if ( event?.shiftKey || event?.altKey ) {
-			return;
-		}
+		// Shift — or Alt — asks for the frame to be left where it was put.
+		// The fields below are still written: those are not the magnet.
+		const magnet = ! ( event?.shiftKey || event?.altKey );
 
 		/*
 		 * Not in the next free millisecond but a little after, because the
@@ -600,16 +599,12 @@ export default function snapToSeams( id ) {
 				return;
 			}
 
-			const bars = seams( image );
-
-			if ( ! bars.length ) {
-				return;
-			}
-
+			const bars = magnet ? seams( image ) : [];
 			const reach = Math.max(
 				REACH_LEAST,
 				Math.round( image.clientWidth * REACH_SHARE )
 			);
+
 			/*
 			 * A pixel inside the join rather than on it. Shrinking the
 			 * picture for the editor smears a hard edge across a pixel or
@@ -617,25 +612,34 @@ export default function snapToSeams( id ) {
 			 * the divider rather than just outside it. Giving up one pixel
 			 * of a photograph is nothing; leaving a red line along its edge
 			 * is the thing being fixed.
-			 */
-			/*
+			 *
 			 * An edge already against the side of the picture is where it
 			 * was put on purpose — all the way — and is left alone. Pulling
 			 * it inwards would be the magnet taking something nobody asked
 			 * it to take, on a side nobody was holding.
 			 */
-			const x1 = was.x1 <= 0 ? was.x1 : pull( was.x1, bars, reach, 1 );
-			const x2 =
-				was.x2 >= image.clientWidth
-					? was.x2
-					: pull( was.x2, bars, reach, -1 );
+			let x1 = was.x1;
+			let x2 = was.x2;
 
-			if ( ( x1 === was.x1 && x2 === was.x2 ) || x2 - x1 < 3 ) {
-				return;
+			if ( bars.length ) {
+				const pulled1 =
+					was.x1 <= 0 ? was.x1 : pull( was.x1, bars, reach, 1 );
+				const pulled2 =
+					was.x2 >= image.clientWidth
+						? was.x2
+						: pull( was.x2, bars, reach, -1 );
+
+				if (
+					( pulled1 !== was.x1 || pulled2 !== was.x2 ) &&
+					3 <= pulled2 - pulled1
+				) {
+					x1 = pulled1;
+					x2 = pulled2;
+
+					ias.setSelection( x1, was.y1, x2, was.y2, true );
+					ias.update();
+				}
 			}
-
-			ias.setSelection( x1, was.y1, x2, was.y2, true );
-			ias.update();
 
 			/*
 			 * The width and height fields have to be written too, and this
@@ -650,8 +654,27 @@ export default function snapToSeams( id ) {
 			 * the join and ran on past it, and a sliver of the divider came
 			 * through on both halves while the editor looked perfect.
 			 *
-			 * At full scale, as core keeps them, and clamped to the picture
-			 * the way core clamps them.
+			 * The two the frame starts at are written for a second reason,
+			 * and it is a plain bug in the editor rather than anything to
+			 * do with joins. Dragging a frame never fills them in: they are
+			 * left reading zero from the moment the panel was built. Lose
+			 * focus on any of the four afterwards and core rebuilds the
+			 * frame from what they say —
+			 *
+			 *     x1 = ( xS === sel.x1 ) ? sel.x1 : Math.round( xS * sizer );
+			 *
+			 * — so a frame drawn around the right of a picture is thrown
+			 * against the left edge, keeping its width. Crop it and the
+			 * wrong half is saved, which is a thing that has happened here
+			 * more than once. Writing where the frame actually starts means
+			 * that rebuilding gives back the frame that is drawn.
+			 *
+			 * The width is clamped to the room left to the right of it, so
+			 * that core's other arithmetic — x2 = x1 + round( w * sizer ),
+			 * and x1 = 0 should that land past the edge — cannot overflow
+			 * by the odd pixel rounding leaves behind.
+			 *
+			 * At full scale, as core keeps them.
 			 */
 			const sizer = api?.hold?.sizer || 1;
 			const whole = api?.hold || {};
@@ -666,18 +689,29 @@ export default function snapToSeams( id ) {
 				}
 			};
 
+			const startX = Math.round( x1 / sizer );
+			const startY = Math.round( was.y1 / sizer );
+
+			put( 'start-x', startX );
+			put( 'start-y', startY );
 			put(
 				'sel-width',
-				Math.min(
-					whole.w || Infinity,
-					Math.round( ( x2 - x1 ) / sizer )
+				Math.max(
+					1,
+					Math.min(
+						Math.floor( ( x2 - x1 ) / sizer ),
+						( whole.w || Infinity ) - startX
+					)
 				)
 			);
 			put(
 				'sel-height',
-				Math.min(
-					whole.h || Infinity,
-					Math.round( ( was.y2 - was.y1 ) / sizer )
+				Math.max(
+					1,
+					Math.min(
+						Math.floor( ( was.y2 - was.y1 ) / sizer ),
+						( whole.h || Infinity ) - startY
+					)
 				)
 			);
 
