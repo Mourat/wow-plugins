@@ -483,3 +483,9 @@ msgstr "Le nom n’a pas pu être copié"
 #, js-format
 msgid "Copy the name: %s"
 msgstr "Copier le nom : %s"
+
+#: build/media-band/index.js:1
+#: build/media-row/index.js:2
+#: src/shared/edit-image.js:121
+msgid "Quick save"
+msgstr "Enregistrement rapide"

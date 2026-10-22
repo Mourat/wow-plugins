@@ -29,6 +29,107 @@ import { forgetAttachment } from './attachment-url';
 import './edit-image.scss';
 
 /**
+ * Crop, save, and be done with it.
+ *
+ * Core's editor takes three presses to put a cropped picture back in a
+ * block: apply the crop, save the edits, and then — because saving returns
+ * to the library rather than closing — choose the picture again. The block
+ * already holds this attachment and wants nothing else; the three presses
+ * are the long way round to where it already was.
+ *
+ * All three are core's own steps, in core's own order. imageEdit.crop()
+ * queues the selection, imageEdit.save() posts it, and what normally
+ * happens next — the editor view fetching the attachment afresh and going
+ * back to the library — is replaced for this one press by fetching it and
+ * closing instead. The attachment is still fetched, because the new file
+ * has a new name and whatever is listening needs to hear it.
+ *
+ * @param {number} id     Attachment id.
+ * @param {string} nonce  Edit nonce for it.
+ * @param {Object} frame  The media frame.
+ * @param {Object} button The button that was pressed.
+ */
+function quickSave( id, nonce, frame, button ) {
+	const api = window.imageEdit;
+	const selection = document.getElementById( `imgedit-selection-${ id }` );
+
+	// A selection not yet applied is what the person is looking at, so it
+	// is what they mean. Without one there is nothing to add, and whatever
+	// was done earlier is saved as it stands.
+	if ( selection?.value ) {
+		api.crop( id, nonce, button );
+	}
+
+	const view = api._view;
+	const original = view?.save;
+
+	if ( view ) {
+		view.save = function () {
+			view.save = original;
+
+			this.model.fetch().done( () => frame.close() );
+		};
+	}
+
+	// False means there was nothing to save: no crop, no rotation, nothing.
+	if ( false === api.save( id, nonce ) ) {
+		if ( view ) {
+			view.save = original;
+		}
+
+		frame.close();
+	}
+}
+
+/**
+ * Puts the button in core's own toolbar, once it has one.
+ *
+ * The editor arrives over the network after the state changes, so there is
+ * nothing to put it beside until it does. Watching beats guessing at a
+ * delay, and the watch gives up rather than running for ever.
+ *
+ * @param {number} id    Attachment id.
+ * @param {string} nonce Edit nonce for it.
+ * @param {Object} frame The media frame.
+ */
+function addQuickSave( id, nonce, frame ) {
+	const until = Date.now() + 10000;
+
+	const look = () => {
+		if ( Date.now() > until || 'edit-image' !== frame.state()?.id ) {
+			return;
+		}
+
+		const bar = document.querySelector(
+			`#imgedit-panel-${ id } .imgedit-submit.imgedit-menu`
+		);
+
+		if ( ! bar ) {
+			window.setTimeout( look, 120 );
+
+			return;
+		}
+
+		if ( bar.querySelector( '.wow-quick-save' ) ) {
+			return;
+		}
+
+		const button = document.createElement( 'button' );
+
+		button.type = 'button';
+		button.className = 'button button-primary wow-quick-save';
+		button.textContent = __( 'Quick save', 'wow-blocks' );
+		button.addEventListener( 'click', () =>
+			quickSave( id, nonce, frame, button )
+		);
+
+		bar.appendChild( button );
+	};
+
+	look();
+}
+
+/**
  * Puts an already open media frame into its image-editing state.
  *
  * @param {number} id Attachment id.
@@ -49,6 +150,8 @@ async function editInFrame( id ) {
 	state.set( 'image', model );
 	frame.setState( 'edit-image' );
 	frame.once( 'close', () => forgetAttachment( id ) );
+
+	addQuickSave( id, model.get( 'nonces' )?.edit, frame );
 }
 
 /**
