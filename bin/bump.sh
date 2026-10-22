@@ -60,8 +60,14 @@ for folder in plugins/*/; do
 	[ -f "$main" ] || continue
 
 	# Committed since the tag, and anything not committed yet: a release is
-	# usually tagged in the same breath as the work that goes into it.
-	touched="$(git diff --name-only "$tag" -- "plugins/$slug" | wc -l | tr -d ' ')"
+	# usually tagged in the same breath as the work that goes into it. Files
+	# that are new count too — git diff says nothing about a file it has
+	# never been told of, and a plugin whose only change is a new file would
+	# otherwise go out at its old version.
+	touched="$( {
+		git diff --name-only "$tag" -- "plugins/$slug"
+		git ls-files --others --exclude-standard -- "plugins/$slug"
+	} | sort -u | wc -l | tr -d ' ' )"
 
 	if [ "$touched" = "0" ] && [ "$all" = "0" ]; then
 		continue

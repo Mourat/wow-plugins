@@ -18,7 +18,9 @@ import {
 	SelectControl,
 } from '@wordpress/components';
 import { useSelect } from '@wordpress/data';
+import { useEffect, useRef } from '@wordpress/element';
 
+import averageColor from '../shared/average-color';
 import { config } from '../shared/config';
 import useAttachment from '../shared/attachment-url';
 import useAttachmentDeleted, {
@@ -98,6 +100,41 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 	const focal = image?.focalPoint || { x: 0.5, y: 0.5 };
 	const origin = `${ focal.x * 100 }% ${ focal.y * 100 }%`;
 
+	/*
+	 * Moving the framing repaints the fill with the average colour of what
+	 * the strip now shows. Only from the two controls that move it, never
+	 * from the attributes themselves: a block drawn on opening an album has
+	 * changed nothing, and must not quietly repaint a colour somebody chose.
+	 *
+	 * After the dragging stops, not during it. The crosshair reports every
+	 * pixel it passes over, and a fill that flickers through forty colours
+	 * on the way to one is a worse way of arriving there.
+	 *
+	 * The colour is only ever written here. The picker below stays exactly
+	 * as it was: if the average is not the wanted colour, say so by hand and
+	 * it stands until the framing moves again.
+	 */
+	const pending = useRef( 0 );
+
+	useEffect( () => () => window.clearTimeout( pending.current ), [] );
+
+	const repaint = ( framing ) => {
+		window.clearTimeout( pending.current );
+
+		pending.current = window.setTimeout( async () => {
+			const found = await averageColor( {
+				url: imageUrl,
+				width,
+				height: config.bandHeight,
+				...framing,
+			} );
+
+			if ( found ) {
+				write( { backgroundColor: found } );
+			}
+		}, 350 );
+	};
+
 	// The framing is carried over from the attributes as they are now: this
 	// runs from a drop that may have started several renders ago, and the
 	// rendered copy of the image would be the one from before the drop.
@@ -108,14 +145,20 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 			return;
 		}
 
+		const framing = current.image?.focalPoint || { x: 0.5, y: 0.5 };
+
 		write( {
 			image: {
 				id: selected.id,
 				url: selected.url,
 				alt: selected.alt || '',
-				focalPoint: current.image?.focalPoint || { x: 0.5, y: 0.5 },
+				focalPoint: framing,
 			},
 		} );
+
+		// A picture dropped in and left where it fell has a colour too, and
+		// nobody should have to nudge the crosshair to be given it.
+		repaint( { url: selected.url, focal: framing, scale } );
 	};
 
 	// The strip holds one image. A drop of several keeps the first and says
@@ -326,11 +369,15 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 										) }
 										url={ imageUrl }
 										value={ focal }
-										onChange={ ( focalPoint ) =>
+										onChange={ ( focalPoint ) => {
 											setAttributes( {
 												image: { ...image, focalPoint },
-											} )
-										}
+											} );
+											repaint( {
+												focal: focalPoint,
+												scale,
+											} );
+										} }
 									/>
 
 									<RangeControl
@@ -344,11 +391,15 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 										min={ 1 }
 										max={ 4 }
 										step={ 0.1 }
-										onChange={ ( value ) =>
+										onChange={ ( value ) => {
 											setAttributes( {
 												imageScale: value || 1,
-											} )
-										}
+											} );
+											repaint( {
+												focal,
+												scale: value || 1,
+											} );
+										} }
 									/>
 								</>
 							) }
