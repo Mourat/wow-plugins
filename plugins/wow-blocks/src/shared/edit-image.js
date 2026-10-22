@@ -134,12 +134,21 @@ function addQuickSave( id, nonce, frame ) {
 /**
  * Keeps the button dim until there is something for it to do.
  *
- * Core already works out when a crop can be applied and when there are
- * edits worth saving, and dims its own two buttons accordingly. Rather than
- * work it out a second time and risk disagreeing with it, this reads those
- * two: whenever either of them would do something, so would this.
+ * Two questions, asked the way core asks them itself.
  *
- * Read rather than listened to, because the state changes inside core's
+ * Is there a crop to apply? Core's own crop() reads the hidden field
+ * #imgedit-selection-<id> and gives up when it is empty, so that field is
+ * the answer. Not the state of the Apply Crop button beside it: the class
+ * core dims is on the div wrapping that button, and a div has no disabled
+ * property to read — asking it returns undefined, which reads as "yes, go
+ * ahead", which is how this button came to be live from the moment the
+ * editor opened.
+ *
+ * Is there anything else worth saving — a rotation, a resize? Core's Save
+ * Edits button is a button, it is disabled until there is, and it can be
+ * read as it looks.
+ *
+ * Read rather than listened to, because the selection changes inside core's
  * own drag handling, which announces nothing. Four times a second is far
  * below noticing and costs two lookups.
  *
@@ -161,14 +170,12 @@ function follow( id, button ) {
 			return;
 		}
 
-		const can = ( selector ) => {
-			const one = panel.querySelector( selector );
+		const selection = document.getElementById(
+			`imgedit-selection-${ id }`
+		);
+		const save = panel.querySelector( 'button.imgedit-submit-btn' );
 
-			return !! one && ! one.disabled;
-		};
-
-		button.disabled =
-			! can( '.imgedit-crop-apply' ) && ! can( '.imgedit-submit-btn' );
+		button.disabled = ! selection?.value && ( ! save || save.disabled );
 	}, 250 );
 }
 
