@@ -329,6 +329,17 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 													<EditImageButton
 														id={ image?.id }
 														open={ open }
+														onSaved={ ( saved ) =>
+															write( {
+																image: {
+																	...image,
+																	url:
+																		saved.url ||
+																		saved.source_url ||
+																		'',
+																},
+															} )
+														}
 													/>
 												) }
 											</>

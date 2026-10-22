@@ -508,6 +508,14 @@ function CellControls( { cell, palette, onChange, onFill } ) {
 											<EditImageButton
 												id={ cell.id }
 												open={ open }
+												onSaved={ ( media ) =>
+													onChange( {
+														url:
+															media.url ||
+															media.source_url ||
+															'',
+													} )
+												}
 											/>
 										) }
 									</>

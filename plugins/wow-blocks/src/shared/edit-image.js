@@ -44,12 +44,13 @@ import './edit-image.scss';
  * closing instead. The attachment is still fetched, because the new file
  * has a new name and whatever is listening needs to hear it.
  *
- * @param {number} id     Attachment id.
- * @param {string} nonce  Edit nonce for it.
- * @param {Object} frame  The media frame.
- * @param {Object} button The button that was pressed.
+ * @param {number}   id      Attachment id.
+ * @param {string}   nonce   Edit nonce for it.
+ * @param {Object}   frame   The media frame.
+ * @param {Object}   button  The button that was pressed.
+ * @param {Function} onSaved Hands the block the picture as it now is.
  */
-function quickSave( id, nonce, frame, button ) {
+function quickSave( id, nonce, frame, button, onSaved ) {
 	const api = window.imageEdit;
 	const selection = document.getElementById( `imgedit-selection-${ id }` );
 
@@ -69,15 +70,21 @@ function quickSave( id, nonce, frame, button ) {
 
 			this.model.fetch().done( () => {
 				/*
-				 * Saying so here rather than leaving it to the frame's close
-				 * event, which is how the cell used to hear about it. The
-				 * saved picture has a new file name, the cell is still
-				 * drawing the old one, and a cell that goes on showing the
-				 * picture as it was before the crop is the whole of what
-				 * this button was supposed to avoid. It is a consequence of
-				 * saving, so it happens where the saving finishes.
+				 * The block is handed the picture as it now is, which is
+				 * what the third press used to do: choosing it again in the
+				 * library wrote the new address into the block. Taking that
+				 * press away took the writing away with it, and the cell
+				 * went on drawing the picture as it was before the crop.
+				 *
+				 * Told outright rather than left to notice. The cell could
+				 * work it out — the address it holds is stale and the
+				 * attachment knows better — but a thing that has just
+				 * happened is better said than inferred.
 				 */
+				const saved = this.model.toJSON();
+
 				forgetAttachment( id );
+				onSaved?.( saved );
 
 				frame.close();
 			} );
@@ -101,11 +108,12 @@ function quickSave( id, nonce, frame, button ) {
  * nothing to put it beside until it does. Watching beats guessing at a
  * delay, and the watch gives up rather than running for ever.
  *
- * @param {number} id    Attachment id.
- * @param {string} nonce Edit nonce for it.
- * @param {Object} frame The media frame.
+ * @param {number}   id      Attachment id.
+ * @param {string}   nonce   Edit nonce for it.
+ * @param {Object}   frame   The media frame.
+ * @param {Function} onSaved Hands the block the picture as it now is.
  */
-function addQuickSave( id, nonce, frame ) {
+function addQuickSave( id, nonce, frame, onSaved ) {
 	const until = Date.now() + 10000;
 
 	const look = () => {
@@ -134,7 +142,7 @@ function addQuickSave( id, nonce, frame ) {
 		button.textContent = __( 'Quick save', 'wow-blocks' );
 		button.disabled = true;
 		button.addEventListener( 'click', () =>
-			quickSave( id, nonce, frame, button )
+			quickSave( id, nonce, frame, button, onSaved )
 		);
 
 		bar.appendChild( button );
@@ -234,9 +242,10 @@ function hasCrop( id ) {
 /**
  * Puts an already open media frame into its image-editing state.
  *
- * @param {number} id Attachment id.
+ * @param {number}   id      Attachment id.
+ * @param {Function} onSaved Hands the block the picture as it now is.
  */
-async function editInFrame( id ) {
+async function editInFrame( id, onSaved ) {
 	const { wp } = window;
 	const frame = wp?.media?.frame;
 	const state = frame?.states?.get?.( 'edit-image' );
@@ -253,18 +262,19 @@ async function editInFrame( id ) {
 	frame.setState( 'edit-image' );
 	frame.once( 'close', () => forgetAttachment( id ) );
 
-	addQuickSave( id, model.get( 'nonces' )?.edit, frame );
+	addQuickSave( id, model.get( 'nonces' )?.edit, frame, onSaved );
 }
 
 /**
  * Opens WordPress's image editor for the attachment a block holds.
  *
  * @param {Object}   props
- * @param {number}   props.id   Attachment id; nothing is rendered without one.
- * @param {Function} props.open Opens the media frame, from MediaUpload.
+ * @param {number}   props.id      Attachment id; nothing is rendered without one.
+ * @param {Function} props.open    Opens the media frame, from MediaUpload.
+ * @param {Function} props.onSaved Hands the block the picture as it now is.
  * @return {Element|null} The button.
  */
-export default function EditImageButton( { id, open } ) {
+export default function EditImageButton( { id, open, onSaved } ) {
 	if ( ! id ) {
 		return null;
 	}
@@ -275,7 +285,7 @@ export default function EditImageButton( { id, open } ) {
 			variant="secondary"
 			onClick={ () => {
 				open();
-				editInFrame( id );
+				editInFrame( id, onSaved );
 			} }
 		>
 			{ __( 'Edit image', 'wow-blocks' ) }
