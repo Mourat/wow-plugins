@@ -92,6 +92,50 @@ function quickSave( id, frame, onSaved ) {
 		return;
 	}
 
+	/*
+	 * The four number fields beside the picture are hushed while this runs,
+	 * and this is the reason.
+	 *
+	 * Core answers losing focus on any of them by rebuilding the selection
+	 * from what they say — and the rebuilding has a corner in it:
+	 *
+	 *     x2 = sel.x1 + Math.round( x * sizer );
+	 *     if ( x2 > imgw ) { x1 = 0; x2 = imgw; }
+	 *
+	 * The width is kept at full scale and turned back into screen pixels by
+	 * multiplying, so rounding it twice can land a pixel past the right
+	 * edge. One pixel is enough: the selection is thrown to the left edge
+	 * and widened to the whole picture. It only happens to a selection
+	 * pressed up against the right edge, which is exactly the selection
+	 * somebody draws when they want the right of a photograph — and it only
+	 * happens when a field loses focus, which is what pressing a button
+	 * does.
+	 *
+	 * Hushed for the two presses and no longer: typing a number into them
+	 * is a real thing to want, and it still works the moment this is done.
+	 */
+	const fields = [ 'sel-width', 'sel-height', 'start-x', 'start-y' ]
+		.map( ( which ) =>
+			document.getElementById( `imgedit-${ which }-${ id }` )
+		)
+		.filter( Boolean )
+		.map( ( field ) => ( {
+			field,
+			keyup: field.onkeyup,
+			blur: field.onblur,
+		} ) );
+
+	fields.forEach( ( { field } ) => {
+		field.onkeyup = null;
+		field.onblur = null;
+	} );
+
+	const listenAgain = () =>
+		fields.forEach( ( { field, keyup, blur } ) => {
+			field.onkeyup = keyup;
+			field.onblur = blur;
+		} );
+
 	const press = ( one ) => {
 		if ( one && ! one.disabled ) {
 			one.click();
@@ -113,6 +157,7 @@ function quickSave( id, frame, onSaved ) {
 				this.model.fetch().done( () => {
 					const saved = this.model.toJSON();
 
+					listenAgain();
 					forgetAttachment( id );
 					onSaved?.( saved );
 
@@ -127,6 +172,7 @@ function quickSave( id, frame, onSaved ) {
 				view.save = original;
 			}
 
+			listenAgain();
 			frame.close();
 		}
 	};
