@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       WOW Blocks
  * Description:       Fixed-grid gallery rows: one, two or three columns, each holding an image or a solid colour fill, plus a narrow divider strip.
- * Version:           0.1.37
+ * Version:           0.1.38
  * Requires at least: 6.5
  * Requires PHP:      8.1
  * Author:            Wow-arts
@@ -17,7 +17,7 @@ namespace WOW\Blocks;
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'WOW_BLOCKS_VERSION', '0.1.37' );
+define( 'WOW_BLOCKS_VERSION', '0.1.38' );
 define( 'WOW_BLOCKS_FILE', __FILE__ );
 define( 'WOW_BLOCKS_DIR', plugin_dir_path( __FILE__ ) );
 define( 'WOW_BLOCKS_URL', plugin_dir_url( __FILE__ ) );
@@ -28,6 +28,7 @@ require_once WOW_BLOCKS_DIR . 'includes/render-helpers.php';
 require_once WOW_BLOCKS_DIR . 'includes/albums.php';
 require_once WOW_BLOCKS_DIR . 'includes/alt-text.php';
 require_once WOW_BLOCKS_DIR . 'includes/alt-admin.php';
+require_once WOW_BLOCKS_DIR . 'includes/widget.php';
 require_once WOW_BLOCKS_DIR . 'includes/duplicate.php';
 require_once WOW_BLOCKS_DIR . 'includes/blocks.php';
 

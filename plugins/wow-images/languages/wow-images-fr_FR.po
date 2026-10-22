@@ -1,5 +1,3 @@
-# Copyright (C) 2026 Wow-arts
-# This file is distributed under the same license as the WOW Images plugin.
 msgid ""
 msgstr ""
 "Project-Id-Version: WOW Images 0.1.0\n"
@@ -39,7 +37,7 @@ msgstr "Formats d’image"
 
 #: includes/admin.php:80
 #: includes/admin.php:170
-#: includes/bulk.php:137
+#: includes/bulk.php:145
 msgid "Settings"
 msgstr "Réglages"
 
@@ -197,128 +195,166 @@ msgstr "Convertir en WebP et AVIF"
 
 #: includes/bulk.php:38
 #: includes/bulk.php:39
-#: includes/bulk.php:108
+#: includes/bulk.php:116
 msgid "Convert images"
 msgstr "Convertir les images"
 
-#: includes/bulk.php:80
-#: includes/bulk.php:101
-#: includes/bulk.php:279
+#: includes/bulk.php:88
+#: includes/bulk.php:109
+#: includes/bulk.php:287
 msgid "You are not allowed to do that."
 msgstr "Vous n’avez pas l’autorisation de faire cela."
 
-#: includes/bulk.php:134
+#: includes/bulk.php:142
 msgid "Every picture on the site is already done."
 msgstr "Toutes les images du site sont déjà traitées."
 
 #. translators: %s: number of pictures.
-#: includes/bulk.php:149
+#: includes/bulk.php:157
 #, php-format
 msgid "%s picture has work waiting."
 msgid_plural "%s pictures have work waiting."
 msgstr[0] "%s image attend d’être traitée."
 msgstr[1] "%s images attendent d’être traitées."
 
-#: includes/bulk.php:157
+#: includes/bulk.php:165
 msgid "This replaces the pictures, it does not only add to them."
 msgstr "Cette opération remplace les images, elle ne fait pas que leur ajouter des copies."
 
 #. translators: %s: format name, e.g. WebP.
-#: includes/bulk.php:162
+#: includes/bulk.php:170
 #, php-format
 msgid "Each picture is written out again as %s and the file it came from is deleted. The crops are cut afresh and the pages that point at them are corrected. There is no way back from here: take a copy of the uploads folder and of the database first."
 msgstr "Chaque image est réécrite en %s et le fichier dont elle vient est supprimé. Les coupes sont refaites et les pages qui les désignent sont corrigées. Il n’y a pas de retour en arrière : faites d’abord une copie du dossier des téléversements et de la base de données."
 
-#: includes/bulk.php:171
+#: includes/bulk.php:179
 msgid "The work happens on the server, not in this tab. Once it has started you can close this page, and it will carry on without you."
 msgstr "Le travail se fait sur le serveur, pas dans cet onglet. Une fois lancé, vous pouvez fermer cette page : il continuera sans vous."
 
-#: includes/bulk.php:180
+#: includes/bulk.php:188
 msgid "Start"
 msgstr "Démarrer"
 
 #. translators: 1: pictures done, 2: pictures in all.
-#: includes/bulk.php:204
+#: includes/bulk.php:212
 #, php-format
 msgid "%1$s of %2$s"
 msgstr "%1$s sur %2$s"
 
 #. translators: 1: pictures stored anew, 2: copies written, 3: addresses corrected.
-#: includes/bulk.php:219
+#: includes/bulk.php:227
 #, php-format
 msgid "Finished. %1$s pictures stored anew, %2$s copies written, %3$s addresses corrected."
 msgstr "Terminé. %1$s images reconservées, %2$s copies écrites, %3$s adresses corrigées."
 
-#: includes/bulk.php:231
+#: includes/bulk.php:239
 msgid "Some pictures could not be done:"
 msgstr "Certaines images n’ont pas pu être traitées :"
 
-#: includes/bulk.php:244
+#: includes/bulk.php:252
 msgid "Stop"
 msgstr "Arrêter"
 
-#: includes/bulk.php:244
+#: includes/bulk.php:252
 msgid "Clear"
 msgstr "Effacer"
 
-#: includes/bulk.php:264
+#: includes/bulk.php:272
 msgid "waiting for the server to pick the job up…"
 msgstr "en attente de la prise en charge par le serveur…"
 
-#: includes/bulk.php:265
+#: includes/bulk.php:273
 msgid "this server cannot call itself, so this tab is doing the work — leave it open"
 msgstr "ce serveur ne peut pas s’appeler lui-même : c’est cet onglet qui fait le travail, laissez-le ouvert"
 
-#: includes/bulk.php:266
+#: includes/bulk.php:274
 msgid "working"
 msgstr "en cours"
 
 #. translators: %s: image format name, e.g. AVIF.
-#: includes/convert.php:110
+#: includes/convert.php:111
 #: includes/store.php:131
 #, php-format
 msgid "This server cannot write %s."
 msgstr "Ce serveur ne sait pas écrire le %s."
 
-#: includes/convert.php:140
+#: includes/convert.php:141
 #: includes/retina.php:112
-#: includes/store.php:215
+#: includes/store.php:266
 msgid "This attachment has no image metadata."
 msgstr "Ce fichier joint n’a pas de métadonnées d’image."
 
-#: includes/convert.php:146
+#: includes/convert.php:147
 msgid "This is not a picture that can be converted."
 msgstr "Ce n’est pas une image convertible."
 
-#: includes/convert.php:159
+#: includes/convert.php:165
 msgid "No format is switched on that this server can write and this picture is not already in."
 msgstr "Aucun format activé ne peut être écrit par ce serveur et n’est différent de celui de cette image."
 
 #: includes/retina.php:147
-#: includes/store.php:227
+#: includes/store.php:278
 msgid "The picture itself is not on disk."
 msgstr "L’image elle-même n’est pas sur le disque."
 
-#: includes/store.php:208
+#: includes/store.php:259
 msgid "No stored format is chosen."
 msgstr "Aucun format de conservation n’est choisi."
 
-#: includes/store.php:219
+#: includes/store.php:270
 msgid "This picture is already in the stored format."
 msgstr "Cette image est déjà dans le format de conservation."
 
-#: includes/store.php:231
+#: includes/store.php:282
 msgid "This picture must not be replaced — an animated GIF would lose its animation."
 msgstr "Cette image ne doit pas être remplacée : un GIF animé perdrait son animation."
 
-#: includes/store.php:271
+#: includes/store.php:322
 msgid "Converting this picture would make it larger."
 msgstr "Convertir cette image la rendrait plus lourde."
 
-#: includes/store.php:298
+#: includes/store.php:349
 msgid "The crops could not be cut from the converted picture."
 msgstr "Les coupes n’ont pas pu être faites à partir de l’image convertie."
 
-#: includes/store.php:333
+#: includes/store.php:384
 msgid "The converted picture disappeared while the old one was being removed. Nothing further was changed."
 msgstr "L’image convertie a disparu pendant la suppression de l’ancienne. Rien d’autre n’a été modifié."
+
+#: includes/widget.php:103
+msgid "Pictures and weight"
+msgstr "Images et poids"
+
+#: includes/widget.php:122
+msgid "pictures"
+msgstr "images"
+
+#. translators: %s: number of files.
+#: includes/widget.php:130
+#, php-format
+msgid "in %s files"
+msgstr "dans %s fichiers"
+
+#: includes/widget.php:138
+msgid "saved by WebP and AVIF"
+msgstr "économisés par WebP et AVIF"
+
+#. translators: %s: percentage.
+#: includes/widget.php:147
+#, php-format
+msgid "%s per cent lighter"
+msgstr "%s pour cent plus léger"
+
+#. translators: 1: percentage, 2: weight of the originals.
+#: includes/widget.php:159
+#, php-format
+msgid "The copies are %1$s%% lighter than the %2$s of originals they were made from."
+msgstr "Les copies sont %1$s %% plus légères que les %2$s d’originaux dont elles proviennent."
+
+#. translators: 1: number of pictures, 2: opening link tag, 3: closing link tag.
+#: includes/widget.php:171
+#, php-format
+msgid "%1$s picture is still to convert. %2$sConvert it%3$s."
+msgid_plural "%1$s pictures are still to convert. %2$sConvert them%3$s."
+msgstr[0] "%1$s image reste à convertir. %2$sLa convertir%3$s."
+msgstr[1] "%1$s images restent à convertir. %2$sLes convertir%3$s."

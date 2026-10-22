@@ -413,7 +413,7 @@ add_filter( 'handle_bulk_actions-upload', __NAMESPACE__ . '\\handle_bulk_action'
  * @param string $hook Current admin page.
  */
 function assets( string $hook ): void {
-	$ours = array( 'upload.php', 'settings_page_' . PAGE, 'tools_page_' . \WOW\Images\Bulk\PAGE );
+	$ours = array( 'index.php', 'upload.php', 'settings_page_' . PAGE, 'tools_page_' . \WOW\Images\Bulk\PAGE );
 
 	if ( ! in_array( $hook, $ours, true ) ) {
 		return;

@@ -94,3 +94,45 @@
 	font-family: monospace;
 	font-size: 12px;
 }
+
+/* The dashboard widget: three figures, a bar and a line of explanation. */
+.wow-images-figures {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 18px 28px;
+	margin: 0 0 14px;
+}
+
+.wow-images-figures li {
+	margin: 0;
+}
+
+.wow-images-figures strong {
+	display: block;
+	font-size: 22px;
+	line-height: 1.2;
+}
+
+.wow-images-figures span {
+	color: #50575e;
+	font-size: 12px;
+}
+
+.wow-images-tally-bar {
+	height: 10px;
+	border-radius: 5px;
+	background: #dcdcde;
+	overflow: hidden;
+}
+
+.wow-images-tally-bar span {
+	display: block;
+	height: 100%;
+	background: var(--wp-admin-theme-color, #2271b1);
+}
+
+.wow-images-note {
+	margin: 10px 0 0;
+	color: #50575e;
+	font-size: 12px;
+}

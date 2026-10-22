@@ -39,11 +39,11 @@ msgstr "Téléversez un logo de site"
 msgid "Albums"
 msgstr "Albums"
 
-#: wow-blocks.php:56
+#: wow-blocks.php:57
 msgid "WOW"
 msgstr ""
 
-#: wow-blocks.php:79
+#: wow-blocks.php:80
 msgid "WOW Blocks: the blocks are not built. Run this in the plugin folder:"
 msgstr "WOW Blocks : les blocs ne sont pas compilés. Exécutez ceci dans le dossier de l’extension :"
 
@@ -584,3 +584,37 @@ msgstr "Les décrire"
 #: includes/alt-admin.php:224
 msgid "Every picture in an album has text. New ones are described as the album is saved."
 msgstr "Toutes les images des albums ont un texte. Les nouvelles sont décrites à l’enregistrement de l’album."
+
+#: includes/widget.php:145
+msgid "Albums and photographs"
+msgstr "Albums et photographies"
+
+#: includes/widget.php:181
+msgid "albums"
+msgstr "albums"
+
+#: includes/widget.php:185
+msgid "photographs in them"
+msgstr "photographies"
+
+#: includes/widget.php:189
+msgid "added this month"
+msgstr "ajoutées ce mois-ci"
+
+#: includes/widget.php:209
+msgid "Every photograph has alternative text."
+msgstr "Toutes les photographies ont un texte alternatif."
+
+#. translators: 1: percentage, 2: opening link tag, 3: closing link tag.
+#: includes/widget.php:214
+#, php-format
+msgid "%1$s%% of the photographs have alternative text. %2$sDescribe the rest%3$s."
+msgstr "%1$s %% des photographies ont un texte alternatif. %2$sDécrire les autres%3$s."
+
+#. translators: %s: number of pages.
+#: includes/widget.php:228
+#, php-format
+msgid "%s page has no description for search engines."
+msgid_plural "%s pages have no description for search engines."
+msgstr[0] "%s page n’a pas de description pour les moteurs de recherche."
+msgstr[1] "%s pages n’ont pas de description pour les moteurs de recherche."
