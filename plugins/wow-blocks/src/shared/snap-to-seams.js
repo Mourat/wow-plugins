@@ -30,17 +30,27 @@
  */
 
 /**
- * How near the frame has to be to a join before it is pulled, in px.
+ * How near the frame has to be to a join before it is pulled.
  *
- * Measured against a real attempt: the joins in a picture 600 wide sat at
- * 243 and 263, and the frame was let go at 218 and at 299 — twenty-five and
- * thirty-six pixels out, which is what "roughly there" looks like when
- * somebody drags to a seam. Twelve pixels never reached. Thirty-two is
- * about a twentieth of the picture's width, and there is little to lose by
- * being generous: a picture has one or two joins in it, not a field of
- * candidates, and Shift or Alt turns the whole thing off.
+ * A share of the picture's width rather than a count of pixels, because
+ * what counts as "roughly there" is what the eye judges against the whole
+ * picture, not against a ruler.
+ *
+ * The share comes from watching it fail. In a picture 600 wide, with joins
+ * at 243 and 263, four attempts to drag to them landed at 218, 299, 307 and
+ * 189 — twenty-five, thirty-six, forty-four and fifty-four pixels out.
+ * Twelve pixels caught nothing; thirty-two caught half. A tenth of the
+ * width is sixty here, which catches all four.
+ *
+ * Generous on purpose. A picture holds one or two joins, not a field of
+ * candidates, so there is little for an over-eager pull to land on by
+ * mistake — and Shift or Alt turns it off for a crop that means to be near
+ * a join without being on it.
  */
-const REACH = 32;
+const REACH_SHARE = 0.1;
+
+/** Never less than this, for a picture shown small. */
+const REACH_LEAST = 24;
 
 /** How far apart two joins must be to count as two, in px. */
 const APART = 8;
@@ -158,11 +168,12 @@ function seams( image ) {
  *
  * @param {number}   edge  Where the frame's edge is.
  * @param {number[]} lines Where the joins are.
+ * @param {number}   reach How near is near enough.
  * @return {number} Where the edge should be.
  */
-function pull( edge, lines ) {
+function pull( edge, lines, reach ) {
 	let best = edge;
-	let near = REACH + 1;
+	let near = reach + 1;
 
 	for ( const line of lines ) {
 		const away = Math.abs( line - edge );
@@ -173,7 +184,7 @@ function pull( edge, lines ) {
 		}
 	}
 
-	return near <= REACH ? best : edge;
+	return near <= reach ? best : edge;
 }
 
 /**
@@ -241,8 +252,12 @@ export default function snapToSeams( id ) {
 				return;
 			}
 
-			const x1 = pull( was.x1, lines );
-			const x2 = pull( was.x2, lines );
+			const reach = Math.max(
+				REACH_LEAST,
+				Math.round( image.clientWidth * REACH_SHARE )
+			);
+			const x1 = pull( was.x1, lines, reach );
+			const x2 = pull( was.x2, lines, reach );
 
 			if ( ( x1 === was.x1 && x2 === was.x2 ) || x2 - x1 < 3 ) {
 				return;
