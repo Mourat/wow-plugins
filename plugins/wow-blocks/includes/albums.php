@@ -167,6 +167,19 @@ function cell_image_ids( $cells ): array {
 			continue;
 		}
 
+		/*
+		 * A film counts as its poster. The film itself has no sizes and no
+		 * thumbnail, so an album tile asked to draw it would draw nothing;
+		 * the poster is an ordinary picture and is what the album shows.
+		 */
+		if ( 'video' === ( $cell['kind'] ?? '' ) ) {
+			if ( ! empty( $cell['posterId'] ) ) {
+				$ids[] = (int) $cell['posterId'];
+			}
+
+			continue;
+		}
+
 		if ( ! empty( $cell['id'] ) || ! empty( $cell['url'] ) ) {
 			$ids[] = (int) ( $cell['id'] ?? 0 );
 		}

@@ -59,6 +59,7 @@
 }
 
 .wow-cell__image,
+.wow-cell__video,
 .wow-cell__fill {
 	display: block;
 	width: 100%;
@@ -66,8 +67,26 @@
 	margin: 0;
 }
 
-.wow-cell__image {
+.wow-cell__image,
+.wow-cell__video {
 	object-fit: cover;
+}
+
+/*
+ * The two copies of a film, one over the other, so that the end of a loop
+ * can be faded into its beginning instead of cutting. Both fill the cell;
+ * which of them is seen is a matter of opacity, and the one underneath is
+ * the one still holding the poster.
+ */
+.wow-cell__film {
+	position: absolute;
+	inset: 0;
+	display: block;
+}
+
+.wow-cell__film .wow-cell__video {
+	position: absolute;
+	inset: 0;
 }
 
 @media (max-width: 781px) {

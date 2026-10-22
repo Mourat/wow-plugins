@@ -57,6 +57,31 @@ export function replaceCell( cells, index, patch ) {
 }
 
 /**
+ * A cell holding a short film.
+ *
+ * The film and its poster are two attachments, and both ids are kept: the
+ * film to play, the poster to show until it does — and the poster is also
+ * what the album tile and anything else counting pictures sees, since the
+ * film itself has no sizes to draw.
+ *
+ * @param {Object} media  The film, as the media library describes it.
+ * @param {Object} poster The poster attachment, if one was made.
+ * @return {Object} Cell fields.
+ */
+export function videoToCell( media, poster ) {
+	return {
+		kind: 'video',
+		id: media.id || 0,
+		url: media.url || '',
+		alt: media.alt || media.title || '',
+		color: '',
+		posterId: poster?.id || 0,
+		posterUrl: poster?.url || '',
+		focalPoint: { x: 0.5, y: 0.5 },
+	};
+}
+
+/**
  * Whether a cell is filled.
  *
  * @param {Object} cell The cell.

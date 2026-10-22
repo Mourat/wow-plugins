@@ -31,7 +31,9 @@ import {
 	mediaToCell,
 	replaceCell,
 	resizeCells,
+	videoToCell,
 } from '../shared/cells';
+import posterFrom, { posterName } from '../shared/video-poster';
 import useAttachment from '../shared/attachment-url';
 import CopyName from '../shared/copy-name';
 import fillColor from '../shared/fill-color';
@@ -75,6 +77,10 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 
 	const palette = useSelect(
 		( select ) => select( blockEditorStore ).getSettings().colors || [],
+		[]
+	);
+	const mediaUpload = useSelect(
+		( select ) => select( blockEditorStore ).getSettings().mediaUpload,
 		[]
 	);
 
@@ -166,6 +172,53 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 				patch
 			),
 		} );
+	};
+
+	/*
+	 * A film is placed in two steps, and the cell is not kept waiting for
+	 * the second. The film itself goes in at once; its poster is cut from
+	 * the first frame here in the browser, uploaded as an ordinary picture,
+	 * and written into the cell when it arrives. A film without a poster is
+	 * still a film — it simply has nothing to show before it plays.
+	 */
+	const uploadPoster = ( file ) =>
+		new Promise( ( done ) => {
+			if ( ! file || ! mediaUpload ) {
+				done( null );
+
+				return;
+			}
+
+			mediaUpload( {
+				allowedTypes: [ 'image' ],
+				filesList: [ file ],
+				onFileChange: ( list ) => {
+					const one = list?.[ 0 ];
+
+					if ( one?.id ) {
+						done( one );
+					}
+				},
+				onError: () => done( null ),
+			} );
+		} );
+
+	const chooseVideo = async ( index, media ) => {
+		if ( ! media?.url ) {
+			return;
+		}
+
+		updateCell( index, videoToCell( media, null ) );
+
+		const frame = await posterFrom( media.url, posterName( media.url ) );
+		const poster = frame ? await uploadPoster( frame ) : null;
+
+		if ( poster ) {
+			updateCell( index, {
+				posterId: poster.id || 0,
+				posterUrl: poster.url || '',
+			} );
+		}
 	};
 
 	// A drop can carry several files. The first takes the cell it landed on,
@@ -297,10 +350,14 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 					<CellControls
 						cell={ activeCell }
 						palette={ palette }
+						canVideo={ 'single' === layout }
 						onChange={ ( patch ) =>
 							updateCell( activeIndex, patch )
 						}
 						onFill={ () => fillCell( activeIndex ) }
+						onVideo={ ( media ) =>
+							chooseVideo( activeIndex, media )
+						}
 					/>
 				</PanelBody>
 			</InspectorControls>
@@ -315,7 +372,9 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 							isActive={ index === activeIndex }
 							onSelect={ () => setActiveIndex( index ) }
 							onChange={ ( patch ) => updateCell( index, patch ) }
+							canVideo={ 'single' === layout }
 							onFill={ () => fillCell( index ) }
+							onVideo={ ( media ) => chooseVideo( index, media ) }
 							onMedia={ ( patch, offset ) =>
 								placeMedia( index, patch, offset )
 							}
@@ -340,16 +399,22 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
  *                                  land in a cell further along the row.
  * @param {Function} props.onFill   Turns the cell into a fill, coloured from
  *                                  the pictures beside it.
+ * @param {boolean}  props.canVideo Whether a film may go in this cell; only
+ *                                  a row of one column takes one.
+ * @param {Function} props.onVideo  Puts a film in the cell and makes its
+ *                                  poster.
  * @return {Element} The cell markup.
  */
 function Cell( {
 	cell,
 	column,
 	isActive,
+	canVideo,
 	onSelect,
 	onChange,
 	onMedia,
 	onFill,
+	onVideo,
 } ) {
 	/*
 	 * Only an image cell has an attachment to lose. A cell switched over to
@@ -416,6 +481,19 @@ function Cell( {
 				/>
 			) }
 
+			{ 'video' === cell.kind && cell.url && (
+				// silent decorative loop standing in for a photograph.
+				<video
+					className="wow-cell__video"
+					src={ cell.url }
+					poster={ cell.posterUrl || undefined }
+					muted
+					loop
+					autoPlay
+					playsInline
+				/>
+			) }
+
 			{ ! filled && (
 				<div className="wow-cell__placeholder">
 					<MediaUploadCheck>
@@ -435,6 +513,25 @@ function Cell( {
 							) }
 						/>
 					</MediaUploadCheck>
+
+					{ canVideo && (
+						<MediaUploadCheck>
+							<MediaUpload
+								allowedTypes={ [ 'video' ] }
+								onSelect={ onVideo }
+								render={ ( { open } ) => (
+									<Button
+										variant="secondary"
+										size="small"
+										onClick={ open }
+									>
+										{ __( 'Video', 'wow-blocks' ) }
+									</Button>
+								) }
+							/>
+						</MediaUploadCheck>
+					) }
+
 					<Button variant="secondary" size="small" onClick={ onFill }>
 						{ __( 'Fill', 'wow-blocks' ) }
 					</Button>
@@ -459,9 +556,19 @@ function Cell( {
  * @param {Function} props.onChange Changes the cell fields.
  * @param {Function} props.onFill   Turns the cell into a fill, coloured from
  *                                  the pictures beside it.
+ * @param {boolean}  props.canVideo Whether a film may go in this cell.
+ * @param {Function} props.onVideo  Puts a film in the cell and makes its
+ *                                  poster.
  * @return {Element} The settings markup.
  */
-function CellControls( { cell, palette, onChange, onFill } ) {
+function CellControls( {
+	cell,
+	palette,
+	canVideo,
+	onChange,
+	onFill,
+	onVideo,
+} ) {
 	// As in Cell: a colour cell's leftover id is not an image it is showing.
 	const { url, missing } = useAttachment(
 		'image' === cell.kind ? cell.id || 0 : 0,
@@ -493,6 +600,29 @@ function CellControls( { cell, palette, onChange, onFill } ) {
 					>
 						{ __( 'Fill', 'wow-blocks' ) }
 					</Button>
+
+					{ canVideo && (
+						<MediaUploadCheck>
+							<MediaUpload
+								allowedTypes={ [ 'video' ] }
+								value={ 'video' === cell.kind ? cell.id : 0 }
+								onSelect={ onVideo }
+								render={ ( { open } ) => (
+									<Button
+										variant={
+											'video' === cell.kind
+												? 'primary'
+												: 'secondary'
+										}
+										size="small"
+										onClick={ open }
+									>
+										{ __( 'Video', 'wow-blocks' ) }
+									</Button>
+								) }
+							/>
+						</MediaUploadCheck>
+					) }
 				</ButtonGroup>
 			</BaseControl>
 
@@ -502,6 +632,31 @@ function CellControls( { cell, palette, onChange, onFill } ) {
 					value={ cell.color }
 					onChange={ ( color ) => onChange( { color: color || '' } ) }
 				/>
+			) }
+
+			{ 'video' === cell.kind && (
+				<div className="wow-image-actions">
+					<MediaUploadCheck>
+						<MediaUpload
+							allowedTypes={ [ 'video' ] }
+							value={ cell.id }
+							onSelect={ onVideo }
+							render={ ( { open } ) => (
+								<Button variant="secondary" onClick={ open }>
+									{ __( 'Replace video', 'wow-blocks' ) }
+								</Button>
+							) }
+						/>
+					</MediaUploadCheck>
+
+					<Button
+						variant="link"
+						isDestructive
+						onClick={ () => onChange( emptyCell() ) }
+					>
+						{ __( 'Remove video', 'wow-blocks' ) }
+					</Button>
+				</div>
 			) }
 
 			{ 'image' === cell.kind && (

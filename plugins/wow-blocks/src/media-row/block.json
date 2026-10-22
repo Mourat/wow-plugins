@@ -7,7 +7,12 @@
 	"category": "wow",
 	"icon": "grid-view",
 	"description": "A fixed-grid row of one, two or three columns. Each column holds an image or a solid colour fill.",
-	"keywords": [ "wow", "gallery", "columns", "images" ],
+	"keywords": [
+		"wow",
+		"gallery",
+		"columns",
+		"images"
+	],
 	"textdomain": "wow-blocks",
 	"attributes": {
 		"layout": {
@@ -31,7 +36,10 @@
 		"anchor": true,
 		"align": false,
 		"spacing": {
-			"margin": [ "top", "bottom" ]
+			"margin": [
+				"top",
+				"bottom"
+			]
 		},
 		"interactivity": {
 			"clientNavigation": true
@@ -40,5 +48,6 @@
 	"editorScript": "file:./index.js",
 	"editorStyle": "file:./index.css",
 	"style": "file:./style-index.css",
-	"render": "file:./render.php"
+	"render": "file:./render.php",
+	"viewScript": "file:./view.js"
 }

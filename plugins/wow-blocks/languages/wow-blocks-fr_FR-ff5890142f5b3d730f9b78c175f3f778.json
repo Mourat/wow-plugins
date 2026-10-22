@@ -111,6 +111,15 @@
             ],
             "Add a row below": [
                 "Ajouter une rang\u00e9e en dessous"
+            ],
+            "Video": [
+                "Vid\u00e9o"
+            ],
+            "Replace video": [
+                "Remplacer la vid\u00e9o"
+            ],
+            "Remove video": [
+                "Retirer la vid\u00e9o"
             ]
         }
     }

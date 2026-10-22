@@ -28,12 +28,16 @@ function normalize_cell( $cell ): array {
 
 	$focal = isset( $cell['focalPoint'] ) && is_array( $cell['focalPoint'] ) ? $cell['focalPoint'] : array();
 
+	$kind = (string) ( $cell['kind'] ?? '' );
+
 	return array(
-		'kind'       => 'color' === ( $cell['kind'] ?? '' ) ? 'color' : 'image',
+		'kind'       => in_array( $kind, array( 'color', 'video' ), true ) ? $kind : 'image',
 		'id'         => (int) ( $cell['id'] ?? 0 ),
 		'url'        => esc_url_raw( (string) ( $cell['url'] ?? '' ) ),
 		'alt'        => sanitize_text_field( (string) ( $cell['alt'] ?? '' ) ),
 		'color'      => (string) sanitize_hex_color( (string) ( $cell['color'] ?? '' ) ),
+		'posterId'   => (int) ( $cell['posterId'] ?? 0 ),
+		'posterUrl'  => esc_url_raw( (string) ( $cell['posterUrl'] ?? '' ) ),
 		'focalPoint' => array(
 			'x' => clamp_unit( $focal['x'] ?? 0.5 ),
 			'y' => clamp_unit( $focal['y'] ?? 0.5 ),
@@ -76,6 +80,10 @@ function render_cell( array $cell, string $size, string $sizes_attr ): string {
 			'<span class="wow-cell__fill" style="background-color:%s"></span>',
 			esc_attr( $cell['color'] )
 		);
+	}
+
+	if ( 'video' === $cell['kind'] ) {
+		return render_video( $cell, $size );
 	}
 
 	/*
@@ -147,6 +155,66 @@ function available_size( int $id, string $size ): string {
 	}
 
 	return belongs_to_source( (string) $meta['file'], (string) $meta['sizes'][ $size ]['file'] ) ? $size : 'full';
+}
+
+/**
+ * A short film in a cell, standing in for a photograph.
+ *
+ * It is written out as a poster and nothing else: no source, no controls,
+ * no autoplay attribute. The address of the film is kept in a data
+ * attribute until the cell comes near the screen, which is what makes it as
+ * cheap to arrive at as a lazily loaded picture — a video element given a
+ * source fetches its first frames whatever `preload` says, and a page of
+ * them would be a page of downloads nobody asked for.
+ *
+ * The poster is an ordinary attachment, made from the first frame when the
+ * film was placed, so it has every size, every format and all of the
+ * loading sense that the pictures beside it have. Before the film plays,
+ * and for anyone whose browser will not play it at all, the cell is that
+ * picture.
+ *
+ * Muted is not a preference: a film that is not muted is a film no browser
+ * will start by itself.
+ *
+ * @param array  $cell Normalised cell.
+ * @param string $size Image size for the poster.
+ */
+function render_video( array $cell, string $size ): string {
+	if ( '' === $cell['url'] ) {
+		return '';
+	}
+
+	$poster = '';
+
+	if ( $cell['posterId'] > 0 ) {
+		$poster = (string) wp_get_attachment_image_url(
+			$cell['posterId'],
+			available_size( $cell['posterId'], $size )
+		);
+	}
+
+	if ( '' === $poster ) {
+		$poster = $cell['posterUrl'];
+	}
+
+	$attrs = array(
+		'class'          => 'wow-cell__video',
+		'data-wow-video' => $cell['url'],
+		'preload'        => 'none',
+	);
+
+	if ( '' !== $poster ) {
+		$attrs['poster'] = $poster;
+	}
+
+	if ( '' !== $cell['alt'] ) {
+		$attrs['aria-label'] = $cell['alt'];
+	}
+
+	return sprintf(
+		'<video muted loop playsinline disablepictureinpicture %s></video>',
+		html_attributes( $attrs )
+	);
 }
 
 /**
