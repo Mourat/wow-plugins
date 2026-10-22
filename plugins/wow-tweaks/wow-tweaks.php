@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       WOW Tweaks
  * Description:       Small adjustments to how WordPress behaves on this site — the kind that would otherwise live as half-remembered lines in wp-config.php.
- * Version:           0.1.2
+ * Version:           0.1.3
  * Requires at least: 7.0
  * Requires PHP:      8.1
  * Author:            Wow-arts
@@ -17,7 +17,7 @@ namespace WOW\Tweaks;
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'WOW_TWEAKS_VERSION', '0.1.2' );
+define( 'WOW_TWEAKS_VERSION', '0.1.3' );
 define( 'WOW_TWEAKS_FILE', __FILE__ );
 define( 'WOW_TWEAKS_DIR', plugin_dir_path( __FILE__ ) );
 

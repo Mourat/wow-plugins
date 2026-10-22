@@ -80,14 +80,51 @@ function ways(): array {
 }
 
 /**
- * Whether an answer came from a cache rather than from the site itself.
+ * How old the page in front of the site is, in seconds.
  *
- * This matters more than the status code. Apache, asked to PURGE, answers
- * 200 and serves the page: taking that for success would mean a button
- * that always says "emptied" and never empties anything, which is the
- * worst of all the things it could be. Varnish signs what it touches —
- * X-Varnish on every answer, "varnish" in Via — and says so in the body of
- * a purge. One of those has to be there.
+ * This is the whole measurement, and it took a false report to find it.
+ * The cache at this host hides behind nginx and signs nothing: no
+ * X-Varnish, no Via, nothing in the body. What it cannot hide is Age \u2014
+ * the header every cache must send saying how long it has been holding
+ * what it just handed over. The live site answered with an age of 9166,
+ * which is a cache keeping a page for two and a half hours and saying so
+ * while pretending to be nginx.
+ *
+ * So the question "did it empty" is not asked of the purge request, whose
+ * answer can be anything; it is asked of the site afterwards. A page that
+ * was two hours old and is now newborn was emptied. Nothing else proves
+ * it, and nothing less is worth reporting.
+ *
+ * @return int|null The age, or null when nothing in front admits to one.
+ */
+function age(): ?int {
+	$answer = wp_remote_get(
+		home_url( '/' ),
+		array(
+			'timeout'     => 8,
+			'sslverify'   => false,
+			'redirection' => 0,
+			// A cache answers a conditional request with 304 and no age;
+			// this has to look like the first visitor of the morning.
+			'headers'     => array( 'Cache-Control' => 'no-transform' ),
+		)
+	);
+
+	if ( is_wp_error( $answer ) ) {
+		return null;
+	}
+
+	$headers = wp_remote_retrieve_headers( $answer );
+	$age     = $headers['age'] ?? null;
+
+	return null === $age || '' === $age ? null : max( 0, (int) $age );
+}
+
+/**
+ * Whether an answer looks like it came from a cache rather than the site.
+ *
+ * Secondary evidence, for the caches that do sign their work. Age above is
+ * the one that decides.
  *
  * @param array|\WP_Error $answer What came back.
  * @return bool True when a cache is speaking.
@@ -102,28 +139,10 @@ function from_cache( $answer ): bool {
 	$body    = strtolower( substr( (string) wp_remote_retrieve_body( $answer ), 0, 400 ) );
 
 	return isset( $headers['x-varnish'] )
+		|| isset( $headers['age'] )
 		|| false !== strpos( $via, 'varnish' )
 		|| false !== strpos( $body, 'purge' )
 		|| false !== strpos( $body, 'banned' );
-}
-
-/**
- * Whether there is a cache in front of the site at all.
- *
- * Asked plainly, with an ordinary request, so that the answer to "nothing
- * happened" can say which of the two kinds of nothing it was: no cache
- * there, or a cache that would not listen.
- */
-function in_front(): bool {
-	return from_cache(
-		wp_remote_head(
-			home_url( '/' ),
-			array(
-				'timeout'   => 5,
-				'sslverify' => false,
-			)
-		)
-	);
 }
 
 /**
@@ -133,16 +152,7 @@ function in_front(): bool {
  */
 function purge(): array {
 	$report = array();
-
-	if ( ! in_front() ) {
-		return array(
-			array(
-				'label'  => __( 'No cache', 'wow-tweaks' ),
-				'answer' => __( 'nothing in front of this site answers like one', 'wow-tweaks' ),
-				'ok'     => false,
-			),
-		);
-	}
+	$before = age();
 
 	foreach ( ways() as $way ) {
 		$answer = wp_remote_request(
@@ -166,21 +176,45 @@ function purge(): array {
 			continue;
 		}
 
-		$code  = (int) wp_remote_retrieve_response_code( $answer );
-		$cache = from_cache( $answer );
-		$ok    = $code >= 200 && $code < 300 && $cache;
+		$code = (int) wp_remote_retrieve_response_code( $answer );
 
 		$report[] = array(
 			'label'  => $way['label'],
-			'answer' => $code . ' ' . wp_remote_retrieve_response_message( $answer )
-				. ( $cache ? '' : ' (' . __( 'answered by the site, not by a cache', 'wow-tweaks' ) . ')' ),
-			'ok'     => $ok,
+			'answer' => $code . ' ' . wp_remote_retrieve_response_message( $answer ),
+			'ok'     => false,
 		);
 
-		if ( $ok ) {
+		// A code in the two hundreds is encouraging and proves nothing;
+		// the page itself is asked below.
+		if ( $code >= 200 && $code < 300 ) {
 			break;
 		}
 	}
+
+	$after = age();
+
+	if ( null === $before && null === $after ) {
+		$report[] = array(
+			'label'  => __( 'The page', 'wow-tweaks' ),
+			'answer' => __( 'says nothing about its age, so there is no cache in front of it to empty', 'wow-tweaks' ),
+			'ok'     => false,
+		);
+
+		return $report;
+	}
+
+	$emptied = null === $after || ( null !== $before && $after < $before );
+
+	$report[] = array(
+		'label'  => __( 'The page', 'wow-tweaks' ),
+		'answer' => sprintf(
+			/* translators: 1: seconds before, 2: seconds after. */
+			__( 'was %1$s old, is now %2$s', 'wow-tweaks' ),
+			null === $before ? __( 'of unknown age', 'wow-tweaks' ) : human_time_diff( time() - $before, time() ),
+			null === $after ? __( 'fresh', 'wow-tweaks' ) : human_time_diff( time() - $after, time() )
+		),
+		'ok'     => $emptied,
+	);
 
 	return $report;
 }
