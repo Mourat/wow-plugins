@@ -187,10 +187,28 @@ function openCropTool( id ) {
 			return;
 		}
 
-		// Already open, by core or by somebody quicker than this.
-		if ( 'true' !== crop.getAttribute( 'aria-expanded' ) ) {
-			crop.click();
+		/*
+		 * Open already, or something is selected: either way, hands off.
+		 *
+		 * Pressing this button a second time closes the tool and a third
+		 * opens it again, and opening it is not the harmless act it looks.
+		 * Core rebuilds the selection from the number fields beside the
+		 * picture — and those fields are never written while a selection is
+		 * dragged, only reset to zero. A reopened selection therefore keeps
+		 * its size and moves to the top left corner, so what gets cropped is
+		 * the left of the picture when the right was chosen.
+		 *
+		 * This press is meant to save the person the first one, not to race
+		 * them for it. If they got there first, there is nothing to do.
+		 */
+		if (
+			'true' === crop.getAttribute( 'aria-expanded' ) ||
+			document.getElementById( `imgedit-selection-${ id }` )?.value
+		) {
+			return;
 		}
+
+		crop.click();
 	};
 
 	look();
@@ -243,7 +261,63 @@ function follow( id, button ) {
 		const save = panel.querySelector( 'button.imgedit-submit-btn' );
 
 		button.disabled = ! hasCrop( id ) && ( ! save || save.disabled );
+
+		tellTheTruth( id );
 	}, 250 );
+}
+
+/**
+ * Keeps the two number fields saying where the selection actually is.
+ *
+ * Core writes the width and the height of a dragged selection into their
+ * fields and leaves the starting coordinates alone — they are only ever
+ * reset to zero, never filled in. So the panel says a selection starts at
+ * the top left corner while it plainly does not, and worse, core believes
+ * it: reopening the crop tool rebuilds the selection from these fields and
+ * drops it into the corner, keeping its size.
+ *
+ * Filling them in is a line of arithmetic the selection already carries,
+ * and it makes both the panel and core right about the same thing. A field
+ * being typed into is left alone, because somebody typing a number means it
+ * more than this does.
+ *
+ * @param {number} id Attachment id.
+ */
+function tellTheTruth( id ) {
+	const held = document.getElementById( `imgedit-selection-${ id }` )?.value;
+
+	if ( ! held ) {
+		return;
+	}
+
+	let selection;
+
+	try {
+		selection = JSON.parse( held );
+	} catch {
+		return;
+	}
+
+	[
+		[ `imgedit-start-x-${ id }`, selection.x ],
+		[ `imgedit-start-y-${ id }`, selection.y ],
+	].forEach( ( [ which, value ] ) => {
+		const field = document.getElementById( which );
+
+		if (
+			! field ||
+			field === field.ownerDocument.activeElement ||
+			! Number.isFinite( value )
+		) {
+			return;
+		}
+
+		const rounded = String( Math.round( value ) );
+
+		if ( field.value !== rounded ) {
+			field.value = rounded;
+		}
+	} );
 }
 
 /**
