@@ -28,6 +28,9 @@ const known = new Map();
 /** Ids WordPress has answered for with "no such attachment". */
 const gone = new Set();
 
+/** How long to wait before asking a second time, in ms. */
+const ASK_AGAIN = 1500;
+
 /**
  * Hooks waiting to hear that a note has been torn up.
  *
@@ -144,11 +147,56 @@ export default function useAttachment( id, saved ) {
 					return;
 				}
 
-				gone.add( id );
+				/*
+				 * Asked again before it is believed.
+				 *
+				 * "No such attachment" is the one answer that is written
+				 * down for the rest of the session, and a picture just
+				 * uploaded can give it once: the block writes its id the
+				 * moment the upload returns, the cell asks about it, and
+				 * the answer can arrive from a request that started before
+				 * WordPress had finished making the attachment. Believed
+				 * first time, the cell went on showing nothing for a
+				 * picture that was there — plainly there, in the media
+				 * library — until the page was reloaded, which is exactly
+				 * what was reported here.
+				 *
+				 * A deleted picture answers the same way twice and is told
+				 * about a second later, which nobody notices.
+				 */
+				window.setTimeout( () => {
+					if ( cancelled ) {
+						return;
+					}
 
-				if ( ! cancelled ) {
-					setMissing( true );
-				}
+					apiFetch( {
+						path: `/wp/v2/media/${ id }?_fields=source_url,title`,
+					} )
+						.then( ( media ) => {
+							if ( cancelled || ! media?.source_url ) {
+								return;
+							}
+
+							const about = {
+								url: media.source_url,
+								title: decode( media.title?.rendered || '' ),
+							};
+
+							known.set( id, about );
+							setFetched( about );
+						} )
+						.catch( ( second ) => {
+							if ( ! saysGone( second ) ) {
+								return;
+							}
+
+							gone.add( id );
+
+							if ( ! cancelled ) {
+								setMissing( true );
+							}
+						} );
+				}, ASK_AGAIN );
 			} );
 
 		return () => {
