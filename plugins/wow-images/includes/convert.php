@@ -255,13 +255,28 @@ function attachment( int $id, bool $force = false, ?array $meta = null, ?array $
 }
 
 /**
+ * How much older than its source a copy may be and still count as current.
+ *
+ * The comparison exists to catch a picture rewritten after its copies were
+ * made — cropping in the media editor writes the crops again under the same
+ * names, and the copy of the picture as it used to be would otherwise be
+ * served for ever. What it also caught was the crop itself: sizes and copies
+ * are written in one pass, and three pictures cropped this week ended up in
+ * the queue with their AVIF exactly one second older than the file it had
+ * just been made from. The copies were right; the clock disagreed.
+ *
+ * Five seconds, because the thing being guarded against — somebody opening
+ * the editor and cropping — is minutes of work away from the last
+ * conversion, never five seconds.
+ */
+const GRACE = 5;
+
+/**
  * Whether a copy that was made earlier still stands.
  *
  * A copy recorded as rejected needs no file and is always settled. A copy
  * recorded as made has to still be on disk, and has to be no older than the
- * picture it came from: cropping in the media editor rewrites the crops under
- * the same names, and the copy of the picture as it used to be would
- * otherwise be served for ever.
+ * picture it came from, give or take the few seconds a rebuild takes.
  *
  * @param array  $record Note read from the metadata.
  * @param string $name   Source file name.
@@ -274,7 +289,7 @@ function done( array $record, string $name, string $format, string $path, string
 		return true;
 	}
 
-	return file_exists( $target ) && filemtime( $target ) >= filemtime( $path );
+	return file_exists( $target ) && filemtime( $target ) + GRACE >= filemtime( $path );
 }
 
 /**
