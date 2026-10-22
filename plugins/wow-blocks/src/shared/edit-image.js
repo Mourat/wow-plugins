@@ -235,22 +235,26 @@ function openCropTool( id ) {
 		}
 
 		/*
-		 * Open already, or something is selected: either way, hands off.
+		 * Open already, or a crop already chosen: either way, hands off.
 		 *
 		 * Pressing this button a second time closes the tool and a third
 		 * opens it again, and opening it is not the harmless act it looks.
 		 * Core rebuilds the selection from the number fields beside the
-		 * picture — and those fields are never written while a selection is
-		 * dragged, only reset to zero. A reopened selection therefore keeps
-		 * its size and moves to the top left corner, so what gets cropped is
-		 * the left of the picture when the right was chosen.
+		 * picture, which is fine now that they are kept honest, but there
+		 * is nothing to gain by disturbing a selection somebody has drawn.
 		 *
 		 * This press is meant to save the person the first one, not to race
 		 * them for it. If they got there first, there is nothing to do.
+		 *
+		 * A chosen crop, not merely a selection on record: core writes one
+		 * covering the whole picture the moment the preview loads, which is
+		 * also the moment this button becomes pressable. Reading that as
+		 * "they have already chosen something" is how the press came to be
+		 * skipped every time.
 		 */
 		if (
 			'true' === crop.getAttribute( 'aria-expanded' ) ||
-			document.getElementById( `imgedit-selection-${ id }` )?.value
+			hasCrop( id )
 		) {
 			return;
 		}
