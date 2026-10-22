@@ -136,13 +136,18 @@ function addQuickSave( id, nonce, frame ) {
  *
  * Two questions, asked the way core asks them itself.
  *
- * Is there a crop to apply? Core's own crop() reads the hidden field
- * #imgedit-selection-<id> and gives up when it is empty, so that field is
- * the answer. Not the state of the Apply Crop button beside it: the class
- * core dims is on the div wrapping that button, and a div has no disabled
- * property to read — asking it returns undefined, which reads as "yes, go
- * ahead", which is how this button came to be live from the moment the
- * editor opened.
+ * Is there a crop worth applying? Not simply "is there a selection": core
+ * opens the crop tool by selecting the whole picture when nothing is
+ * selected yet, so a selection exists half a second after the editor opens
+ * and before anybody has drawn anything. A selection covering the entire
+ * image is a crop that would change nothing, which is the same as none.
+ * What is read is the width and height of the selection against the size
+ * of the image, both of which core keeps at full scale, with a couple of
+ * pixels of slack for the rounding between the two.
+ *
+ * (Nor is it the state of the Apply Crop button beside it: the class core
+ * dims is on the div wrapping that button, and a div has no disabled
+ * property — asking one returns undefined, which reads as "go ahead".)
  *
  * Is there anything else worth saving — a rotation, a resize? Core's Save
  * Edits button is a button, it is disabled until there is, and it can be
@@ -150,7 +155,7 @@ function addQuickSave( id, nonce, frame ) {
  *
  * Read rather than listened to, because the selection changes inside core's
  * own drag handling, which announces nothing. Four times a second is far
- * below noticing and costs two lookups.
+ * below noticing and costs a handful of lookups.
  *
  * @param {number} id     Attachment id.
  * @param {Object} button The button to dim.
@@ -170,13 +175,47 @@ function follow( id, button ) {
 			return;
 		}
 
-		const selection = document.getElementById(
-			`imgedit-selection-${ id }`
-		);
 		const save = panel.querySelector( 'button.imgedit-submit-btn' );
 
-		button.disabled = ! selection?.value && ( ! save || save.disabled );
+		button.disabled = ! hasCrop( id ) && ( ! save || save.disabled );
 	}, 250 );
+}
+
+/**
+ * Whether a crop has been chosen that would change anything.
+ *
+ * @param {number} id Attachment id.
+ * @return {boolean} true when the selection is a real crop.
+ */
+function hasCrop( id ) {
+	const number = ( of ) => {
+		const value = parseInt( document.getElementById( of )?.value, 10 );
+
+		return Number.isNaN( value ) ? 0 : value;
+	};
+
+	if ( ! document.getElementById( `imgedit-selection-${ id }` )?.value ) {
+		return false;
+	}
+
+	const width = number( `imgedit-sel-width-${ id }` );
+	const height = number( `imgedit-sel-height-${ id }` );
+
+	if ( width < 1 || height < 1 ) {
+		return false;
+	}
+
+	// The size of the picture itself, as core holds it.
+	const whole = window.imageEdit?.hold || {};
+	const slack = 2;
+
+	const everything =
+		number( `imgedit-start-x-${ id }` ) <= 0 &&
+		number( `imgedit-start-y-${ id }` ) <= 0 &&
+		width + slack >= ( whole.w || 0 ) &&
+		height + slack >= ( whole.h || 0 );
+
+	return ! everything;
 }
 
 /**
