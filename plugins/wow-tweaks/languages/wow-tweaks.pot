@@ -1,0 +1,104 @@
+# Copyright (C) 2026 Wow-arts
+# This file is distributed under the same license as the WOW Tweaks plugin.
+msgid ""
+msgstr ""
+"Project-Id-Version: WOW Tweaks 0.1.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wow-tweaks\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-10-22T23:27:22+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: wow-tweaks\n"
+
+#. Plugin Name of the plugin
+#: wow-tweaks.php
+msgid "WOW Tweaks"
+msgstr ""
+
+#. Description of the plugin
+#: wow-tweaks.php
+msgid "Small adjustments to how WordPress behaves on this site — the kind that would otherwise live as half-remembered lines in wp-config.php."
+msgstr ""
+
+#. Author of the plugin
+#: wow-tweaks.php
+msgid "Wow-arts"
+msgstr ""
+
+#: includes/admin.php:52
+#: includes/admin.php:53
+#: includes/admin.php:119
+msgid "Site tweaks"
+msgstr ""
+
+#: includes/admin.php:74
+msgid "Settings"
+msgstr ""
+
+#. translators: 1: number of revisions, 2: number of posts, 3: size freed.
+#: includes/admin.php:100
+#, php-format
+msgid "%1$d old revisions of %2$d pages were deleted, freeing %3$s."
+msgstr ""
+
+#: includes/admin.php:124
+msgid "Revisions"
+msgstr ""
+
+#: includes/admin.php:128
+msgid "Versions kept per page"
+msgstr ""
+
+#: includes/admin.php:133
+msgid "all"
+msgstr ""
+
+#: includes/admin.php:136
+msgid "Leave empty to keep every version, as WordPress does by default. Zero switches versions off altogether."
+msgstr ""
+
+#: includes/admin.php:140
+msgid "On a gallery site a version is not a few paragraphs of text: it is the whole arrangement of every picture on the page, written out again each time anything is nudged. They also name the pictures under the names those pictures had at the time, so old versions go on referring to files that have since been renamed or converted."
+msgstr ""
+
+#. translators: 1: number of revisions, 2: number of pages, 3: size.
+#: includes/admin.php:149
+#, php-format
+msgid "Saving this page now would delete %1$d old versions across %2$d pages and free %3$s. This cannot be undone."
+msgstr ""
+
+#: includes/varnish.php:140
+msgid "No cache"
+msgstr ""
+
+#: includes/varnish.php:141
+msgid "nothing in front of this site answers like one"
+msgstr ""
+
+#: includes/varnish.php:176
+msgid "answered by the site, not by a cache"
+msgstr ""
+
+#: includes/varnish.php:201
+msgid "Empty the cache"
+msgstr ""
+
+#: includes/varnish.php:203
+msgid "Asks the cache in front of the site to let the next visitor through to a fresh page."
+msgstr ""
+
+#: includes/varnish.php:214
+msgid "You are not allowed to do that."
+msgstr ""
+
+#: includes/varnish.php:256
+msgid "The cache was emptied."
+msgstr ""
+
+#: includes/varnish.php:257
+msgid "The cache was not emptied."
+msgstr ""
