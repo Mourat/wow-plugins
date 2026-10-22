@@ -34,6 +34,7 @@ import {
 	resizeCells,
 	videoToCell,
 } from '../shared/cells';
+import Film from '../shared/film';
 import posterFrom, { posterName } from '../shared/video-poster';
 import useAttachment from '../shared/attachment-url';
 import CopyName from '../shared/copy-name';
@@ -497,16 +498,7 @@ function Cell( {
 			) }
 
 			{ 'video' === cell.kind && cell.url && (
-				// silent decorative loop standing in for a photograph.
-				<video
-					className="wow-cell__video"
-					src={ cell.url }
-					poster={ cell.posterUrl || undefined }
-					muted
-					loop
-					autoPlay
-					playsInline
-				/>
+				<Film url={ cell.url } poster={ cell.posterUrl } />
 			) }
 
 			{ ! filled && (

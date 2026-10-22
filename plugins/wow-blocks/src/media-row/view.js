@@ -1,3 +1,5 @@
+import softLoop from '../shared/soft-loop';
+
 /**
  * Playing the short films in a row, and only while they are being looked at.
  *
@@ -34,9 +36,6 @@ const NEAR = 200;
 /** How much of a cell has to be on screen before it plays. */
 const ENOUGH = 0.25;
 
-/** How long one end of the loop takes to become the other, in seconds. */
-const FADE = 0.4;
-
 /**
  * Puts a second copy of a film behind the first.
  *
@@ -57,19 +56,7 @@ function twin( film ) {
 	other.removeAttribute( 'poster' );
 	stage.appendChild( other );
 
-	const pair = [ film, other ];
-
-	pair.forEach( ( one ) => {
-		// The looping is ours now, and a looping element never ends.
-		one.loop = false;
-		one.muted = true;
-		one.playsInline = true;
-		one.style.transition = `opacity ${ FADE }s linear`;
-	} );
-
-	other.style.opacity = '0';
-
-	return pair;
+	return [ film, other ];
 }
 
 /**
@@ -81,11 +68,7 @@ function twin( film ) {
 function reel( film ) {
 	const source = film.dataset.wowVideo;
 	const pair = twin( film );
-
-	let front = 0;
-	let crossing = false;
-	let rolling = false;
-	let frame = 0;
+	const loop = softLoop( pair );
 
 	const fetchFilm = () => {
 		if ( ! source || pair[ 0 ].src ) {
@@ -98,65 +81,13 @@ function reel( film ) {
 		} );
 	};
 
-	const cross = () => {
-		const going = pair[ front ];
-		const coming = pair[ 1 - front ];
-
-		crossing = true;
-		front = 1 - front;
-
-		coming.currentTime = 0;
-		// A refusal to play is an answer, not a fault: a browser may be
-		// saving power, and the poster is still there.
-		coming.play().catch( () => {} );
-		coming.style.opacity = '1';
-		going.style.opacity = '0';
-
-		window.setTimeout( () => {
-			going.pause();
-			going.currentTime = 0;
-			crossing = false;
-		}, FADE * 1000 );
-	};
-
-	const watch = () => {
-		if ( ! rolling ) {
-			return;
-		}
-
-		const now = pair[ front ];
-		const whole = now.duration || 0;
-
-		if ( ! crossing && whole ) {
-			// Never more than a third of the film, so that a very short clip
-			// is not crossing over its whole length.
-			const fade = Math.min( FADE, whole / 3 );
-
-			if ( whole - now.currentTime <= fade ) {
-				cross();
-			}
-		}
-
-		frame = window.requestAnimationFrame( watch );
-	};
-
 	return {
 		fetch: fetchFilm,
 		play: () => {
-			if ( rolling ) {
-				return;
-			}
-
 			fetchFilm();
-			rolling = true;
-			pair[ front ].play().catch( () => {} );
-			frame = window.requestAnimationFrame( watch );
+			loop.play();
 		},
-		stop: () => {
-			rolling = false;
-			window.cancelAnimationFrame( frame );
-			pair.forEach( ( one ) => one.pause() );
-		},
+		stop: loop.stop,
 	};
 }
 

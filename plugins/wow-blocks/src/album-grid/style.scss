@@ -65,6 +65,30 @@
 	height: 100%;
 	margin: 0;
 	object-fit: cover;
+
+	/*
+	 * A little nearer under the pointer. The tile crops what overflows, so
+	 * the cover grows inside its square while the title and the count,
+	 * which are not part of the picture, stay exactly where they were.
+	 */
+	transition: transform 400ms ease-out;
+}
+
+.wow-album-tile:hover .wow-album-tile__image,
+.wow-album-tile:focus-visible .wow-album-tile__image {
+	transform: scale(1.05);
+}
+
+@media (prefers-reduced-motion: reduce) {
+
+	.wow-album-tile__image {
+		transition: none;
+	}
+
+	.wow-album-tile:hover .wow-album-tile__image,
+	.wow-album-tile:focus-visible .wow-album-tile__image {
+		transform: none;
+	}
 }
 
 .wow-album-tile__image--empty {
