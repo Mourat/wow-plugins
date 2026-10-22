@@ -47,10 +47,28 @@
  * stays under 4 lands on the bar's two sides exactly. A join with no bar
  * grows nowhere and stays the single line it is.
  *
- * Nothing is read but the picture already on screen, at the size it is on
- * screen, so none of this touches the scaling between what is displayed and
- * what is stored — which is where the bodies are buried in this editor.
+ * Nothing is read but the picture, at the size it is shown on screen, so
+ * none of this touches the scaling between what is displayed and what is
+ * stored — which is where the bodies are buried in this editor.
+ *
+ * It is read from the photograph itself rather than from the preview the
+ * editor draws, though, and that distinction cost an evening. The preview
+ * is made by the server: the picture is shrunk and sent back as a JPEG, and
+ * a JPEG softens exactly what is being looked for. On one picture here the
+ * join measured 0.51 of the height in the photograph and 0.43 in the
+ * preview of it — across a bar of 0.45, so the magnet simply never moved,
+ * while the join was plain to see on screen. Lowering the bar is no answer:
+ * in the same previews a roof of tiles reaches 0.43 and a doorway 0.47, so
+ * there is no bar that lets that join in and keeps those out.
+ *
+ * The photograph is loaded alongside and drawn to the same size as the
+ * preview, so every column found is a column of the preview and nothing
+ * downstream has to know. When it cannot be had — not loaded yet, or the
+ * editor has turned or cropped the picture since, which the shape gives
+ * away — the preview is read as before.
  */
+
+import { knownUrl } from './attachment-url';
 
 /**
  * How near the frame has to be to a join before it is pulled.
@@ -138,27 +156,40 @@ const seen = new Map();
 /**
  * Where two pictures were joined.
  *
- * @param {HTMLImageElement} image The preview, as displayed.
+ * @param {HTMLImageElement}      image  The preview, as displayed.
+ * @param {HTMLImageElement|null} source The picture to read in its place,
+ *                                       drawn to the preview's size.
  * @return {Array<{left: number, right: number}>} The joins, each as the two
  *         sides of its bar, in the picture's displayed pixels. A join with no
  *         bar has both sides in the same place.
  */
-function seams( image ) {
+function seams( image, source ) {
 	const width = image.clientWidth;
 	const height = image.clientHeight;
-	const key = `${ image.src }|${ width }x${ height }`;
+	const paint = source || image;
+	const key = `${ image.src }|${ width }x${ height }|${ paint.src }`;
 
 	if ( seen.has( key ) ) {
 		return seen.get( key );
 	}
 
-	const found = [];
-
-	seen.set( key, found );
-
-	if ( width < 3 || height < 1 ) {
-		return found;
+	/*
+	 * A picture still on its way measures as having no joins at all, and
+	 * that answer must not be remembered.
+	 *
+	 * The first question comes while the preview is still arriving: the
+	 * crop tool opens itself, takes the whole picture as its selection, and
+	 * the release of the mouse that opened it arrives here a moment later.
+	 * Drawing a picture that has not loaded on to a canvas draws nothing,
+	 * nothing has joins, and that was the answer kept — so the picture had
+	 * no magnet for as long as the editor stayed open, however many times
+	 * it was asked again.
+	 */
+	if ( ! paint.complete || ! paint.naturalWidth || width < 3 || height < 1 ) {
+		return [];
 	}
+
+	const found = [];
 
 	const canvas = document.createElement( 'canvas' );
 
@@ -171,7 +202,7 @@ function seams( image ) {
 		return found;
 	}
 
-	paper.drawImage( image, 0, 0, width, height );
+	paper.drawImage( paint, 0, 0, width, height );
 
 	let pixels;
 
@@ -561,6 +592,15 @@ function seams( image ) {
 			found.splice( i, 1 );
 		}
 	}
+	/*
+	 * Only an answer worth keeping is kept. Finding nothing costs one
+	 * reading of a canvas to find again, which is nothing beside a magnet
+	 * that has quietly given up on a picture.
+	 */
+	if ( found.length ) {
+		seen.set( key, found );
+	}
+
 	return found;
 }
 
@@ -642,6 +682,40 @@ function pull( edge, bars, reach, inward ) {
 export default function snapToSeams( id ) {
 	const api = window.imageEdit;
 
+	/*
+	 * The photograph itself, fetched as the editor opens so that it is
+	 * there by the time anybody has dragged anything. The browser has it
+	 * already — the block on the canvas is drawing it — so this usually
+	 * costs nothing at all.
+	 */
+	const photograph = new window.Image();
+	const url = knownUrl( id );
+
+	if ( url ) {
+		photograph.src = url;
+	}
+
+	/**
+	 * The photograph, when it is the same picture the preview is showing.
+	 *
+	 * Turn the picture in the editor, or apply a crop without saving, and
+	 * the preview stops being a smaller copy of the photograph. The shape
+	 * says so, and then the preview is what there is to read.
+	 *
+	 * @param {HTMLImageElement} image The preview.
+	 * @return {HTMLImageElement|null} The photograph, or nothing.
+	 */
+	const sharper = ( image ) => {
+		if ( ! photograph.complete || ! photograph.naturalWidth ) {
+			return null;
+		}
+
+		const shape = photograph.naturalWidth / photograph.naturalHeight;
+		const shown = image.clientWidth / image.clientHeight;
+
+		return Math.abs( shape - shown ) < 0.01 ? photograph : null;
+	};
+
 	const stop = () => {
 		document.removeEventListener( 'mouseup', onLetGo );
 		document.removeEventListener( 'touchend', onLetGo );
@@ -682,7 +756,7 @@ export default function snapToSeams( id ) {
 				return;
 			}
 
-			const bars = magnet ? seams( image ) : [];
+			const bars = magnet ? seams( image, sharper( image ) ) : [];
 			const reach = Math.max(
 				REACH_LEAST,
 				Math.round( image.clientWidth * REACH_SHARE )
