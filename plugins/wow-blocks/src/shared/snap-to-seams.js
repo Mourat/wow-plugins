@@ -6,23 +6,29 @@
  * to land exactly on that join. By hand it means nudging a pixel at a time
  * and still being a pixel out.
  *
- * What makes a join findable is that it runs the whole height of the
- * picture. So for each column: in how many of its rows is there a sharp
- * step from the pixel on the left to the pixel on the right? A join answers
- * with most of them; the texture of a stone wall, which is full of sharp
- * steps, answers with scattered rows and never a column.
+ * What makes a join findable is that it is straight and runs the whole
+ * height of the picture. So for each column: in how many of its rows is
+ * there a sharp step from the pixel on the left to the pixel on the right,
+ * and is that step the sharpest anywhere near — that is, does the edge sit
+ * in this column in that row, rather than a pixel or two over?
  *
- * Measured on four of these pictures before the bar was chosen:
+ * Both halves of the question are needed, and the second was learnt the
+ * hard way. Counting sharp steps alone, a roof of curved tiles, a row of
+ * tree trunks, the dark side of a doorway all answer like a join: each is a
+ * near-vertical line running the height of the picture. What they are not
+ * is straight. A tile's ridge wanders a few pixels as it goes down, so its
+ * rows vote for a dozen neighbouring columns and no column holds a majority;
+ * a join wanders nowhere, and every row votes for the same one.
  *
- *     a photograph of windows          0.30 of the height at its best column
- *     a photograph of a rubble wall    0.25
- *     two photographs joined           0.55  <- the join
- *     two photographs with a bar       0.97  <- the bar's edges
+ * Over the hundred and twenty pictures in this library, counting steps alone
+ * answered for thirty-eight of them. Requiring the step to be in that exact
+ * column answers for seven — and the seven are the joins. The ones that fell
+ * away fell a long way: their best column dropped to between 0.15 and 0.44
+ * of the height, while every real join stayed between 0.50 and 0.99.
  *
- * Hence 0.45: comfortably above anything a single photograph produced, and
- * comfortably below both joins. An earlier attempt measured how much edge a
- * column held rather than how much of its height, and could not tell a join
- * from a wall at all — the wall won.
+ * Hence 0.45. An earlier attempt measured how much edge a column held rather
+ * than how much of its height, and could not tell a join from a wall at all
+ * — the wall won.
  *
  * Nothing is read but the picture already on screen, at the size it is on
  * screen, so none of this touches the scaling between what is displayed and
@@ -57,6 +63,15 @@ const APART = 8;
 
 /** A step from one pixel to the next worth calling sharp. */
 const STEP = 24;
+
+/**
+ * How far an edge may wander and still count as the same column, in px.
+ *
+ * Three is wide enough that the blur of shrinking a picture for the editor
+ * does not disqualify a true join, and narrow enough that anything with a
+ * hand-drawn look to it — a tile, a branch, a crack in a wall — falls out.
+ */
+const SWAY = 3;
 
 /** How much of the height a join has to run down. */
 const BAR = 0.45;
@@ -118,18 +133,51 @@ function seams( image ) {
 			0.0722 * pixels[ at + 2 ];
 	}
 
-	// For each column, the share of its height that steps sharply.
+	// How sharply the picture steps across every pixel in it.
+	const edge = new Float32Array( width * height );
+
+	for ( let y = 0; y < height; y++ ) {
+		const row = y * width;
+
+		for ( let x = 1; x < width - 1; x++ ) {
+			edge[ row + x ] = Math.abs(
+				light[ row + x + 1 ] - light[ row + x - 1 ]
+			);
+		}
+	}
+
+	/*
+	 * For each column, the share of its height that steps sharply here and
+	 * nowhere nearer. A row whose sharpest step is a pixel to the side is a
+	 * row where the line is a pixel to the side, and it votes for that column
+	 * instead — which is how a wandering line comes to have no column at all.
+	 */
 	const share = new Float32Array( width );
 
 	for ( let x = 1; x < width - 1; x++ ) {
+		const first = Math.max( 1, x - SWAY );
+		const last = Math.min( width - 2, x + SWAY );
 		let rows = 0;
 
 		for ( let y = 0; y < height; y++ ) {
 			const row = y * width;
+			const here = edge[ row + x ];
 
-			if (
-				Math.abs( light[ row + x + 1 ] - light[ row + x - 1 ] ) > STEP
-			) {
+			if ( here <= STEP ) {
+				continue;
+			}
+
+			let straight = true;
+
+			for ( let at = first; at <= last; at++ ) {
+				if ( at !== x && edge[ row + at ] > here ) {
+					straight = false;
+
+					break;
+				}
+			}
+
+			if ( straight ) {
 				rows++;
 			}
 		}
@@ -137,8 +185,18 @@ function seams( image ) {
 		share[ x ] = rows / height;
 	}
 
+	/*
+	 * Nothing is looked for along the borders. A join between two
+	 * photographs is never at the very edge of the pair, while the edge
+	 * itself is often the darkest line in the picture — a tree, a shadow,
+	 * the corner of a building — and reads exactly like one. Left in, those
+	 * pull the frame a few pixels inside the picture on a side nobody
+	 * touched, quietly losing a strip of it.
+	 */
+	const border = Math.max( 8, Math.round( width * 0.02 ) );
+
 	// Peaks above the bar, and not two of them a few pixels apart.
-	for ( let x = 1; x < width - 1; x++ ) {
+	for ( let x = border; x < width - border; x++ ) {
 		if (
 			share[ x ] < BAR ||
 			share[ x ] < share[ x - 1 ] ||
@@ -265,8 +323,17 @@ export default function snapToSeams( id ) {
 			 * of a photograph is nothing; leaving a red line along its edge
 			 * is the thing being fixed.
 			 */
-			const x1 = pull( was.x1, lines, reach, 1 );
-			const x2 = pull( was.x2, lines, reach, -1 );
+			/*
+			 * An edge already against the side of the picture is where it
+			 * was put on purpose — all the way — and is left alone. Pulling
+			 * it inwards would be the magnet taking something nobody asked
+			 * it to take, on a side nobody was holding.
+			 */
+			const x1 = was.x1 <= 0 ? was.x1 : pull( was.x1, lines, reach, 1 );
+			const x2 =
+				was.x2 >= image.clientWidth
+					? was.x2
+					: pull( was.x2, lines, reach, -1 );
 
 			if ( ( x1 === was.x1 && x2 === was.x2 ) || x2 - x1 < 3 ) {
 				return;
