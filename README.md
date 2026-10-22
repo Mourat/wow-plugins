@@ -61,9 +61,23 @@ switch — nobody has to press anything.
 ## Working on a plugin
 
 The copy that runs on a site is the copy in that site's `wp-content/plugins`.
-This repository is where the released one lives. The two are the same files;
-keeping them so is a matter of copying one way before a release and letting
-the updater copy the other way after it.
+This repository is where the released one lives. The two are the same files:
+code comes back from the site before a release, and the updater carries it
+out to every site afterwards.
+
+    bin/sync.sh ~/projects/ArleaMH/wp-content/plugins
+    bin/sync.sh ~/projects/ArleaMH/wp-content/plugins wow-blocks
+
+Code travels that way; versions do not. A site that has not taken the last
+release yet is still carrying an older number, and a plain copy brings that
+number back with it — after which the next release goes out below one already
+published, every site finds it no newer than what it has, and the work sits
+in a release nobody can see. `bin/sync.sh` therefore keeps whatever version
+this repository has committed, and says when it did. A version raised on the
+site on purpose — higher than the one here — is left alone.
+
+It also mentions any `wow-` plugin the site has and this repository does not,
+without copying it: adding a plugin is a decision, not a side effect.
 
 `wow-blocks` is the only one with a build step:
 
