@@ -99,6 +99,12 @@ const FLAT = 4;
 /** The widest a bar may be, as a share of the picture. */
 const BAND = 0.06;
 
+/** How much the picture must stray just outside a bar for it to be one. */
+const RESTLESS = 12;
+
+/** How far outside a bar to look, stepping over the blur at its edge, in px. */
+const SKIP = 2;
+
 /** Columns remembered per picture, so a drag does not measure it again. */
 const seen = new Map();
 
@@ -244,10 +250,6 @@ function seams( image ) {
 		tops.push( x );
 	}
 
-	if ( ! tops.length ) {
-		return found;
-	}
-
 	// How far each column strays from its own average, down the height.
 	const flat = new Float32Array( width );
 
@@ -268,7 +270,7 @@ function seams( image ) {
 		flat[ x ] = strays / height;
 	}
 
-	const widest = Math.max( 2, Math.round( width * BAND ) );
+	const bounded = Math.max( 2, Math.round( width * BAND ) );
 
 	for ( const top of tops ) {
 		/*
@@ -297,25 +299,82 @@ function seams( image ) {
 		 * even light. Then the join is the single line that was found.
 		 */
 		const bar =
-			flat[ first ] < FLAT && to - from < widest
+			flat[ first ] < FLAT && to - from < bounded
 				? { left: from, right: to + 1 }
 				: { left: top, right: top };
 
-		const last = found[ found.length - 1 ];
+		keep( found, bar );
+	}
 
-		// Both sides of one bar were found, and both grew into it.
-		if (
-			undefined !== last &&
-			last.left === bar.left &&
-			last.right === bar.right
-		) {
+	/*
+	 * And bars nothing stepped onto.
+	 *
+	 * A bar is only found by its edges when its edges can be seen, and one
+	 * here is a blue strip against a blue sea: on that side there is no step
+	 * worth the name, and on the other the sea itself is busy enough to hide
+	 * one. The bar is still a bar, though — flat down its whole height, which
+	 * is what is looked for here instead.
+	 *
+	 * Flatness alone is not enough to go on. Across this library fifty-two
+	 * runs of columns are flat down their height, and fifty-one of them are
+	 * rendered walls and clear skies. What tells the one from the fifty-one
+	 * is what lies just outside it: a bar has a photograph on both sides and
+	 * photographs are restless, while a flat patch of wall has more wall. Two
+	 * pixels out from each end, the bar's neighbours stray by 38 and 43; not
+	 * one of the fifty-one manages 12 on both sides.
+	 */
+	const widest = Math.max( 2, Math.round( width * BAND ) );
+
+	for ( let x = border; x < width - border; x++ ) {
+		if ( flat[ x ] >= FLAT ) {
 			continue;
 		}
 
-		found.push( bar );
+		const from = x;
+
+		while ( x < width - border && flat[ x ] < FLAT ) {
+			x++;
+		}
+
+		const to = x - 1;
+		const outside = Math.min(
+			flat[ Math.max( 0, from - 1 - SKIP ) ],
+			flat[ Math.min( width - 1, to + 1 + SKIP ) ]
+		);
+
+		if ( to - from + 1 < 2 || to - from >= widest || outside < RESTLESS ) {
+			continue;
+		}
+
+		keep( found, { left: from, right: to + 1 } );
 	}
 
+	found.sort( ( one, other ) => one.left - other.left );
+
 	return found;
+}
+
+/**
+ * Adds a join to the list, unless it is one already there.
+ *
+ * The same bar can be arrived at twice — once from each of its sides, or
+ * once by its edges and once by its flatness — and two joins in the same
+ * place would only make the nearer of them win by a pixel.
+ *
+ * @param {Array<{left: number, right: number}>} found Joins so far.
+ * @param {{left: number, right: number}}        bar   One more.
+ */
+function keep( found, bar ) {
+	for ( const already of found ) {
+		if ( already.left <= bar.right && bar.left <= already.right ) {
+			already.left = Math.min( already.left, bar.left );
+			already.right = Math.max( already.right, bar.right );
+
+			return;
+		}
+	}
+
+	found.push( bar );
 }
 
 /**
