@@ -32,6 +32,8 @@ import {
 	resizeCells,
 } from '../shared/cells';
 import useAttachment from '../shared/attachment-url';
+import CopyName from '../shared/copy-name';
+import fillColor from '../shared/fill-color';
 import useAttachmentDeleted, {
 	clearIfDeleted,
 } from '../shared/attachment-deleted';
@@ -106,6 +108,21 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 	// Every write starts from the attributes as they are now rather than from
 	// this render: the caller may be a callback several uploads old, holding
 	// an array of cells from before any of them had finished.
+	/*
+	 * Pressing "Fill" asks the pictures on either side what colour to be,
+	 * rather than putting down a grey to be corrected by hand. One neighbour
+	 * at the edge of a row, halfway between two in the middle; nothing to
+	 * take from leaves the old grey, which is at least honest about it.
+	 */
+	const fillCell = async ( index ) => {
+		const found = await fillColor( cells, columns, index );
+
+		updateCell( index, {
+			kind: 'color',
+			color: found || '#cccccc',
+		} );
+	};
+
 	const updateCell = ( index, patch ) => {
 		const current = read();
 
@@ -240,6 +257,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 						onChange={ ( patch ) =>
 							updateCell( activeIndex, patch )
 						}
+						onFill={ () => fillCell( activeIndex ) }
 					/>
 				</PanelBody>
 			</InspectorControls>
@@ -254,6 +272,7 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 							isActive={ index === activeIndex }
 							onSelect={ () => setActiveIndex( index ) }
 							onChange={ ( patch ) => updateCell( index, patch ) }
+							onFill={ () => fillCell( index ) }
 							onMedia={ ( patch, offset ) =>
 								placeMedia( index, patch, offset )
 							}
@@ -276,9 +295,19 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
  * @param {Function} props.onChange Changes the cell fields.
  * @param {Function} props.onMedia  Places an image from a drop, which may
  *                                  land in a cell further along the row.
+ * @param {Function} props.onFill   Turns the cell into a fill, coloured from
+ *                                  the pictures beside it.
  * @return {Element} The cell markup.
  */
-function Cell( { cell, column, isActive, onSelect, onChange, onMedia } ) {
+function Cell( {
+	cell,
+	column,
+	isActive,
+	onSelect,
+	onChange,
+	onMedia,
+	onFill,
+} ) {
 	/*
 	 * Only an image cell has an attachment to lose. A cell switched over to
 	 * a colour keeps the id of whatever picture it used to hold, so that
@@ -289,7 +318,7 @@ function Cell( { cell, column, isActive, onSelect, onChange, onMedia } ) {
 	 * outright the moment anything acted on it.
 	 */
 	const watching = 'image' === cell.kind ? cell.id || 0 : 0;
-	const { url, missing } = useAttachment( watching, cell.url || '' );
+	const { url, title, missing } = useAttachment( watching, cell.url || '' );
 
 	useAttachmentDeleted( watching, () => onChange( emptyCell() ) );
 
@@ -328,6 +357,10 @@ function Cell( { cell, column, isActive, onSelect, onChange, onMedia } ) {
 			) }
 
 			{ 'image' === cell.kind && url && ! missing && (
+				<CopyName name={ title } />
+			) }
+
+			{ 'image' === cell.kind && url && ! missing && (
 				<img
 					className="wow-cell__image"
 					src={ url }
@@ -359,13 +392,7 @@ function Cell( { cell, column, isActive, onSelect, onChange, onMedia } ) {
 							) }
 						/>
 					</MediaUploadCheck>
-					<Button
-						variant="secondary"
-						size="small"
-						onClick={ () =>
-							onChange( { kind: 'color', color: '#cccccc' } )
-						}
-					>
+					<Button variant="secondary" size="small" onClick={ onFill }>
 						{ __( 'Fill', 'wow-blocks' ) }
 					</Button>
 				</div>
@@ -387,9 +414,11 @@ function Cell( { cell, column, isActive, onSelect, onChange, onMedia } ) {
  * @param {Object}   props.cell     Cell data.
  * @param {Array}    props.palette  Theme palette.
  * @param {Function} props.onChange Changes the cell fields.
+ * @param {Function} props.onFill   Turns the cell into a fill, coloured from
+ *                                  the pictures beside it.
  * @return {Element} The settings markup.
  */
-function CellControls( { cell, palette, onChange } ) {
+function CellControls( { cell, palette, onChange, onFill } ) {
 	// As in Cell: a colour cell's leftover id is not an image it is showing.
 	const { url, missing } = useAttachment(
 		'image' === cell.kind ? cell.id || 0 : 0,
@@ -417,7 +446,7 @@ function CellControls( { cell, palette, onChange } ) {
 							'color' === cell.kind ? 'primary' : 'secondary'
 						}
 						size="small"
-						onClick={ () => onChange( { kind: 'color' } ) }
+						onClick={ onFill }
 					>
 						{ __( 'Fill', 'wow-blocks' ) }
 					</Button>

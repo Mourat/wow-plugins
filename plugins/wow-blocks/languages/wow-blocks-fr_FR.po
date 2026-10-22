@@ -441,3 +441,45 @@ msgstr "Coller à un bord"
 #: src/shared/framing-picker.js:121
 msgid "Puts that side of the picture against the same side of the cell, so nothing is cut off there."
 msgstr "Place ce bord de l’image contre le même bord de la cellule, pour que rien n’y soit coupé."
+
+#: includes/duplicate.php:132
+msgid "That picture is not in this library."
+msgstr "Cette image ne se trouve pas dans cette médiathèque."
+
+#: includes/duplicate.php:146
+msgid "The picture is in the library but its file is missing."
+msgstr "L’image est dans la médiathèque mais son fichier est introuvable."
+
+#: includes/duplicate.php:163
+msgid "The picture could not be copied."
+msgstr "L’image n’a pas pu être copiée."
+
+#: build/media-band/index.js:1
+#: build/media-row/index.js:2
+#: src/shared/edit-image.js:76
+msgid "Edit image"
+msgstr "Modifier l’image"
+
+#: build/media-band/index.js:1
+#: build/media-row/index.js:2
+#: src/media-band/edit.js:289
+#: src/media-row/edit.js:444
+msgid "This image is no longer in the media library. Choose another one."
+msgstr "Cette image n’est plus dans la médiathèque. Choisissez-en une autre."
+
+#: build/media-row/index.js:1
+#: src/shared/copy-name.js:93
+msgid "Copied"
+msgstr "Copié"
+
+#: build/media-row/index.js:1
+#: src/shared/copy-name.js:94
+msgid "The name could not be copied"
+msgstr "Le nom n’a pas pu être copié"
+
+#. translators: %s: the name of a picture.
+#: build/media-row/index.js:2
+#: src/shared/copy-name.js:107
+#, js-format
+msgid "Copy the name: %s"
+msgstr "Copier le nom : %s"

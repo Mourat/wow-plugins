@@ -1,0 +1,39 @@
+/**
+ * Editor only: the button that copies a picture's name.
+ *
+ * Out of the way until the cell is pointed at or something in it is focused,
+ * because it sits on top of the picture and the picture is the point. Focus
+ * counts as well as hover: a button that can only be reached with a mouse is
+ * one that cannot be reached at all by some people.
+ */
+
+.wow-cell .wow-copy-name {
+	position: absolute;
+	right: 4px;
+	bottom: 4px;
+	z-index: 1;
+	min-width: 0;
+	padding: 2px;
+	border-radius: 2px;
+	background: rgb(255 255 255 / 88%);
+	box-shadow: 0 0 0 1px rgb(0 0 0 / 12%);
+	opacity: 0;
+	transition: opacity 120ms ease-in-out;
+}
+
+.wow-cell:hover .wow-copy-name,
+.wow-cell:focus-within .wow-copy-name {
+	opacity: 1;
+}
+
+/* Still reachable where hover means nothing at all. */
+@media (hover: none) {
+
+	.wow-cell .wow-copy-name {
+		opacity: 1;
+	}
+}
+
+.wow-cell .wow-copy-name svg {
+	display: block;
+}
