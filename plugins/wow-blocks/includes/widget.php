@@ -56,9 +56,14 @@ function read(): array {
 		 * Counted by id rather than added up from the albums' own tallies.
 		 * A photograph placed in two albums is one photograph, and the
 		 * tallies, summed, said sixteen hundred and eighty-six where the
-		 * library holds fifteen hundred and ninety-eight.
+		 * library holds fifteen hundred and ninety-eight — the owner
+		 * reuses photographs in the narrow strips between the rows.
+		 *
+		 * Without the strips, which is how an album counts its own: a
+		 * strip divides the gallery rather than showing work, and the
+		 * figure above the bars has to mean what the bars mean.
 		 */
-		foreach ( image_ids( $album->ID, true ) as $id ) {
+		foreach ( image_ids( $album->ID, false ) as $id ) {
 			$unique[ $id ] = true;
 		}
 	}
