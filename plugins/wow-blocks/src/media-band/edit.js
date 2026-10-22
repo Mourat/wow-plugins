@@ -293,57 +293,59 @@ export default function Edit( { attributes, setAttributes, clientId } ) {
 								</Notice>
 							) }
 
-							<MediaUploadCheck>
-								<MediaUpload
-									allowedTypes={ [ 'image' ] }
-									value={ image?.id }
-									onSelect={ selectImage }
-									// A deletion can go unheard — the modal is
-									// core's, not ours. Closing it is the
-									// second chance to ask.
-									onClose={ () =>
-										clearIfDeleted(
-											image?.id || 0,
-											clearImage
-										)
-									}
-									render={ ( { open } ) => (
-										<>
-											<Button
-												variant="secondary"
-												onClick={ open }
-											>
-												{ showsImage
-													? __(
-															'Replace image',
-															'wow-blocks'
-														)
-													: __(
-															'Choose image',
-															'wow-blocks'
-														) }
-											</Button>
+							<div className="wow-image-actions">
+								<MediaUploadCheck>
+									<MediaUpload
+										allowedTypes={ [ 'image' ] }
+										value={ image?.id }
+										onSelect={ selectImage }
+										// A deletion can go unheard — the modal is
+										// core's, not ours. Closing it is the
+										// second chance to ask.
+										onClose={ () =>
+											clearIfDeleted(
+												image?.id || 0,
+												clearImage
+											)
+										}
+										render={ ( { open } ) => (
+											<>
+												<Button
+													variant="secondary"
+													onClick={ open }
+												>
+													{ showsImage
+														? __(
+																'Replace image',
+																'wow-blocks'
+															)
+														: __(
+																'Choose image',
+																'wow-blocks'
+															) }
+												</Button>
 
-											{ showsImage && (
-												<EditImageButton
-													id={ image?.id }
-													open={ open }
-												/>
-											) }
-										</>
-									) }
-								/>
-							</MediaUploadCheck>
+												{ showsImage && (
+													<EditImageButton
+														id={ image?.id }
+														open={ open }
+													/>
+												) }
+											</>
+										) }
+									/>
+								</MediaUploadCheck>
 
-							{ hasImage && (
-								<Button
-									variant="link"
-									isDestructive
-									onClick={ clearImage }
-								>
-									{ __( 'Remove image', 'wow-blocks' ) }
-								</Button>
-							) }
+								{ hasImage && (
+									<Button
+										variant="link"
+										isDestructive
+										onClick={ clearImage }
+									>
+										{ __( 'Remove image', 'wow-blocks' ) }
+									</Button>
+								) }
+							</div>
 
 							<RangeControl
 								__nextHasNoMarginBottom

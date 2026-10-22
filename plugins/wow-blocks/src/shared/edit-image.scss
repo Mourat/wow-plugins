@@ -1,7 +1,24 @@
 /**
- * The button sits beside "Replace image" when the inspector is wide enough
- * for both, and under it when it is not.
+ * The row of buttons about the image: replace it, edit it, take it away.
+ *
+ * A flex row that wraps, rather than three inline buttons in a stream. The
+ * inspector is a narrow column and the labels are as long as the language
+ * makes them — "Edit image" fits beside "Replace image" in English and does
+ * not in French. Left to flow inline they wrapped raggedly, a button landing
+ * level with a link. Wrapping is not the fault; wrapping untidily is.
  */
+
+.wow-image-actions {
+	display: flex;
+	flex-wrap: wrap;
+	gap: 8px;
+	align-items: center;
+}
+
+/* The gap does the spacing now. */
+.wow-image-actions .wow-edit-image {
+	margin-inline-start: 0;
+}
 
 .wow-edit-image {
 	margin-inline-start: 8px;

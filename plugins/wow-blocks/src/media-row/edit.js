@@ -472,50 +472,50 @@ function CellControls( { cell, palette, onChange, onFill } ) {
 						</Notice>
 					) }
 
-					<MediaUploadCheck>
-						<MediaUpload
-							allowedTypes={ [ 'image' ] }
-							value={ cell.id }
-							onSelect={ ( media ) =>
-								onChange( mediaToCell( media ) )
-							}
-							// A deletion can go unheard — the modal is core's,
-							// not ours. Closing it is the second chance to ask.
-							onClose={ () =>
-								clearIfDeleted( cell.id || 0, () =>
-									onChange( emptyCell() )
-								)
-							}
-							render={ ( { open } ) => (
-								<>
-									<Button
-										variant="secondary"
-										onClick={ open }
-									>
-										{ cell.url && ! missing
-											? __(
-													'Replace image',
-													'wow-blocks'
-												)
-											: __(
-													'Choose image',
-													'wow-blocks'
-												) }
-									</Button>
+					<div className="wow-image-actions">
+						<MediaUploadCheck>
+							<MediaUpload
+								allowedTypes={ [ 'image' ] }
+								value={ cell.id }
+								onSelect={ ( media ) =>
+									onChange( mediaToCell( media ) )
+								}
+								// A deletion can go unheard — the modal is core's,
+								// not ours. Closing it is the second chance to ask.
+								onClose={ () =>
+									clearIfDeleted( cell.id || 0, () =>
+										onChange( emptyCell() )
+									)
+								}
+								render={ ( { open } ) => (
+									<>
+										<Button
+											variant="secondary"
+											onClick={ open }
+										>
+											{ cell.url && ! missing
+												? __(
+														'Replace image',
+														'wow-blocks'
+													)
+												: __(
+														'Choose image',
+														'wow-blocks'
+													) }
+										</Button>
 
-									{ ! missing && (
-										<EditImageButton
-											id={ cell.id }
-											open={ open }
-										/>
-									) }
-								</>
-							) }
-						/>
-					</MediaUploadCheck>
+										{ ! missing && (
+											<EditImageButton
+												id={ cell.id }
+												open={ open }
+											/>
+										) }
+									</>
+								) }
+							/>
+						</MediaUploadCheck>
 
-					{ url && ! missing && (
-						<>
+						{ url && ! missing && (
 							<Button
 								variant="link"
 								isDestructive
@@ -523,6 +523,11 @@ function CellControls( { cell, palette, onChange, onFill } ) {
 							>
 								{ __( 'Remove image', 'wow-blocks' ) }
 							</Button>
+						) }
+					</div>
+
+					{ url && ! missing && (
+						<>
 							<FramingPicker
 								__nextHasNoMarginBottom
 								anchors
