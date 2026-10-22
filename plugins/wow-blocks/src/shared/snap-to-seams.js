@@ -512,24 +512,6 @@ function seams( image ) {
 	}
 
 	found.sort( ( one, other ) => one.left - other.left );
-
-	/*
-	 * A last pass over them in order. The three ways of finding a join
-	 * arrive in their own order and each only compares against what is
-	 * there at the time, so the same join can be kept twice — a bar, and
-	 * the step onto it that was found before the bar existed.
-	 */
-	for ( let i = found.length - 1; 0 < i; i-- ) {
-		const near = found[ i - 1 ];
-		const far = found[ i ];
-
-		if ( far.left <= near.right + APART ) {
-			near.right = Math.max( near.right, far.right );
-
-			found.splice( i, 1 );
-		}
-	}
-
 	/*
 	 * A lone line beside a bar is thrown away. It is not a join of its own
 	 * but the far side of whatever the bar is standing against — where the
@@ -537,6 +519,11 @@ function seams( image ) {
 	 * proper, say. Left in, it is a second thing to snap to a few pixels
 	 * past the bar, and the frame goes to it instead: the magnet steps over
 	 * the border it was aiming at and lands inside the picture.
+	 *
+	 * Before the joining below rather than after it. Eight pixels is near
+	 * enough to be joined on to the bar, and a line swallowed that way
+	 * drags the bar's far edge out to itself — the same wrong answer by
+	 * another road, and the one that was actually happening.
 	 */
 	for ( let i = found.length - 1; 0 <= i; i-- ) {
 		const one = found[ i ];
@@ -558,6 +545,22 @@ function seams( image ) {
 		}
 	}
 
+	/*
+	 * A last pass over them in order. The three ways of finding a join
+	 * arrive in their own order and each only compares against what is
+	 * there at the time, so the same join can be kept twice — a bar, and
+	 * the step onto it that was found before the bar existed.
+	 */
+	for ( let i = found.length - 1; 0 < i; i-- ) {
+		const near = found[ i - 1 ];
+		const far = found[ i ];
+
+		if ( far.left <= near.right + APART ) {
+			near.right = Math.max( near.right, far.right );
+
+			found.splice( i, 1 );
+		}
+	}
 	return found;
 }
 
