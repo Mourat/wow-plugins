@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       WOW Dashboard
  * Description:       Visual adjustments to the WordPress admin — how it looks and moves, never what it does.
- * Version:           0.1.0
+ * Version:           0.1.1
  * Requires at least: 7.0
  * Requires PHP:      8.1
  * Author:            Wow-arts
@@ -17,7 +17,7 @@ namespace WOW\Dashboard;
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'WOW_DASHBOARD_VERSION', '0.1.0' );
+define( 'WOW_DASHBOARD_VERSION', '0.1.1' );
 define( 'WOW_DASHBOARD_FILE', __FILE__ );
 define( 'WOW_DASHBOARD_DIR', plugin_dir_path( __FILE__ ) );
 define( 'WOW_DASHBOARD_URL', plugin_dir_url( __FILE__ ) );

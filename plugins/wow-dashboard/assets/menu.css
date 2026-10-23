@@ -39,8 +39,16 @@
  * The one thing that says it is floating rather than simply wider. On the
  * background strip, which is the full height of the window, so the edge is
  * shaded all the way down and not only beside the icons.
+ *
+ * The strip is lifted too, and it has to be. Core leaves it at z-index 1,
+ * which is the same number core gives a list-table checkbox — and at equal
+ * weight the one further down the document wins, so the page's own controls
+ * came through the part of the strip the items do not cover. Raised only
+ * while open: folded or unfolded, the strip is beside the page rather than
+ * over it, and there is nothing to be in front of.
  */
 .folded.wow-menu-peek #adminmenuback {
+	z-index: 9989;
 	box-shadow: 0 0 16px rgba( 0, 0, 0, 0.45 );
 }
 
