@@ -225,16 +225,5 @@ function draw(): void {
 		<?php endif; ?>
 	</p>
 
-	<?php if ( $tally['quiet'] > 0 ) : ?>
-		<p class="wow-blocks-note">
-			<?php
-			printf(
-				/* translators: %s: number of pages. */
-				esc_html( _n( '%s page has no description for search engines.', '%s pages have no description for search engines.', $tally['quiet'], 'wow-blocks' ) ),
-				esc_html( number_format_i18n( $tally['quiet'] ) )
-			);
-			?>
-		</p>
-	<?php endif; ?>
 	<?php
 }

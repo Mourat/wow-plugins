@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-10-22T23:27:22+00:00\n"
+"POT-Creation-Date: 2026-10-23T00:47:49+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: wow-tweaks\n"
@@ -71,34 +71,109 @@ msgstr ""
 msgid "Saving this page now would delete %1$d old versions across %2$d pages and free %3$s. This cannot be undone."
 msgstr ""
 
-#: includes/varnish.php:140
-msgid "No cache"
+#: includes/seo.php:94
+msgid "Open to search engines"
 msgstr ""
 
-#: includes/varnish.php:141
-msgid "nothing in front of this site answers like one"
+#: includes/seo.php:95
+msgid "Reading is discouraged in Settings → Reading, so the site asks not to be listed at all."
 msgstr ""
 
-#: includes/varnish.php:176
-msgid "answered by the site, not by a cache"
+#: includes/seo.php:100
+msgid "The site says what it is"
 msgstr ""
 
-#: includes/varnish.php:201
-msgid "Empty the cache"
+#: includes/seo.php:101
+msgid "The tagline is empty, so the one line describing the business is missing from the title of every page."
 msgstr ""
 
-#: includes/varnish.php:203
-msgid "Asks the cache in front of the site to let the next visitor through to a fresh page."
+#: includes/seo.php:106
+msgid "A sentence under the title in search results"
+msgstr ""
+
+#: includes/seo.php:107
+msgid "No description is written into the pages, so a search engine prints whatever words it finds first."
+msgstr ""
+
+#: includes/seo.php:112
+msgid "A picture when a link is shared"
+msgstr ""
+
+#: includes/seo.php:113
+msgid "No Open Graph tags, so a link sent on WhatsApp or posted on Facebook arrives as a bare address."
+msgstr ""
+
+#: includes/seo.php:118
+msgid "Addresses made of words"
+msgstr ""
+
+#: includes/seo.php:119
+msgid "Permalinks are the plain kind, so every page is a number rather than its name."
+msgstr ""
+
+#: includes/seo.php:127
+msgid "A map of the site for the crawlers"
+msgstr ""
+
+#: includes/seo.php:128
+msgid "The sitemap is switched off, so new albums are found only by following links."
+msgstr ""
+
+#: includes/seo.php:133
+msgid "Served over a secure connection"
+msgstr ""
+
+#: includes/seo.php:134
+msgid "The site address is http, which browsers mark as not secure and search engines rank below https."
+msgstr ""
+
+#: includes/seo.php:150
+msgid "Found and shared"
+msgstr ""
+
+#: includes/seo.php:183
+msgid "in place"
+msgstr ""
+
+#: includes/varnish.php:198
+#: includes/varnish.php:209
+msgid "The page"
+msgstr ""
+
+#: includes/varnish.php:199
+msgid "says nothing about its age, so there is no cache in front of it to empty"
+msgstr ""
+
+#. translators: 1: seconds before, 2: seconds after.
+#: includes/varnish.php:212
+#, php-format
+msgid "was %1$s old, is now %2$s"
+msgstr ""
+
+#: includes/varnish.php:213
+msgid "of unknown age"
 msgstr ""
 
 #: includes/varnish.php:214
+msgid "fresh"
+msgstr ""
+
+#: includes/varnish.php:235
+msgid "Empty the cache"
+msgstr ""
+
+#: includes/varnish.php:237
+msgid "Asks the cache in front of the site to let the next visitor through to a fresh page."
+msgstr ""
+
+#: includes/varnish.php:248
 msgid "You are not allowed to do that."
 msgstr ""
 
-#: includes/varnish.php:256
+#: includes/varnish.php:290
 msgid "The cache was emptied."
 msgstr ""
 
-#: includes/varnish.php:257
+#: includes/varnish.php:291
 msgid "The cache was not emptied."
 msgstr ""

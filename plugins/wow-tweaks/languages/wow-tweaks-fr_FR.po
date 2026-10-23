@@ -1,17 +1,15 @@
-# Copyright (C) 2026 Wow-arts
-# This file is distributed under the same license as the WOW Tweaks plugin.
 msgid ""
 msgstr ""
 "Project-Id-Version: WOW Tweaks 0.1.0\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wow-tweaks\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
-"Language: fr_FR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2026-10-22T23:27:22+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Language: fr_FR\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: wow-tweaks\n"
 
@@ -72,34 +70,109 @@ msgstr "Sur un site de galeries, une version n’est pas quelques paragraphes de
 msgid "Saving this page now would delete %1$d old versions across %2$d pages and free %3$s. This cannot be undone."
 msgstr "Enregistrer cette page supprimerait %1$d anciennes versions réparties sur %2$d pages et libérerait %3$s. Cette action est irréversible."
 
-#: includes/varnish.php:140
-msgid "No cache"
-msgstr "Pas de cache"
-
-#: includes/varnish.php:141
-msgid "nothing in front of this site answers like one"
-msgstr "rien devant ce site ne répond comme tel"
-
-#: includes/varnish.php:176
-msgid "answered by the site, not by a cache"
-msgstr "réponse du site, pas d’un cache"
-
-#: includes/varnish.php:201
+#: includes/varnish.php:235
 msgid "Empty the cache"
 msgstr "Vider le cache"
 
-#: includes/varnish.php:203
+#: includes/varnish.php:237
 msgid "Asks the cache in front of the site to let the next visitor through to a fresh page."
 msgstr "Demande au cache placé devant le site de laisser le prochain visiteur accéder à une page fraîche."
 
-#: includes/varnish.php:214
+#: includes/varnish.php:248
 msgid "You are not allowed to do that."
 msgstr "Vous n’avez pas le droit de faire cela."
 
-#: includes/varnish.php:256
+#: includes/varnish.php:290
 msgid "The cache was emptied."
 msgstr "Le cache a été vidé."
 
-#: includes/varnish.php:257
+#: includes/varnish.php:291
 msgid "The cache was not emptied."
 msgstr "Le cache n’a pas été vidé."
+
+#: includes/seo.php:94
+msgid "Open to search engines"
+msgstr "Ouvert aux moteurs de recherche"
+
+#: includes/seo.php:95
+msgid "Reading is discouraged in Settings → Reading, so the site asks not to be listed at all."
+msgstr "La lecture est découragée dans Réglages → Lecture : le site demande à ne pas être référencé du tout."
+
+#: includes/seo.php:100
+msgid "The site says what it is"
+msgstr "Le site dit ce qu’il est"
+
+#: includes/seo.php:101
+msgid "The tagline is empty, so the one line describing the business is missing from the title of every page."
+msgstr "Le slogan est vide : la phrase qui décrit l’entreprise manque dans le titre de chaque page."
+
+#: includes/seo.php:106
+msgid "A sentence under the title in search results"
+msgstr "Une phrase sous le titre dans les résultats"
+
+#: includes/seo.php:107
+msgid "No description is written into the pages, so a search engine prints whatever words it finds first."
+msgstr "Aucune description n’est inscrite dans les pages : le moteur affiche les premiers mots qu’il trouve."
+
+#: includes/seo.php:112
+msgid "A picture when a link is shared"
+msgstr "Une image quand un lien est partagé"
+
+#: includes/seo.php:113
+msgid "No Open Graph tags, so a link sent on WhatsApp or posted on Facebook arrives as a bare address."
+msgstr "Pas de balises Open Graph : un lien envoyé sur WhatsApp ou publié sur Facebook arrive en adresse nue."
+
+#: includes/seo.php:118
+msgid "Addresses made of words"
+msgstr "Des adresses faites de mots"
+
+#: includes/seo.php:119
+msgid "Permalinks are the plain kind, so every page is a number rather than its name."
+msgstr "Les permaliens sont du type simple : chaque page est un numéro plutôt que son nom."
+
+#: includes/seo.php:127
+msgid "A map of the site for the crawlers"
+msgstr "Un plan du site pour les robots"
+
+#: includes/seo.php:128
+msgid "The sitemap is switched off, so new albums are found only by following links."
+msgstr "Le plan du site est désactivé : les nouveaux albums ne sont trouvés qu’en suivant les liens."
+
+#: includes/seo.php:133
+msgid "Served over a secure connection"
+msgstr "Servi par une connexion sécurisée"
+
+#: includes/seo.php:134
+msgid "The site address is http, which browsers mark as not secure and search engines rank below https."
+msgstr "L’adresse du site est en http : les navigateurs la signalent comme non sécurisée et les moteurs la classent après https."
+
+#: includes/seo.php:150
+msgid "Found and shared"
+msgstr "Trouvé et partagé"
+
+#: includes/seo.php:183
+msgid "in place"
+msgstr "en place"
+
+#: includes/varnish.php:198
+#: includes/varnish.php:209
+msgid "The page"
+msgstr "La page"
+
+#: includes/varnish.php:199
+msgid "says nothing about its age, so there is no cache in front of it to empty"
+msgstr "ne dit rien de son âge : il n’y a donc pas de cache devant elle à vider"
+
+#. translators: 1: seconds before, 2: seconds after.
+#: includes/varnish.php:212
+#, php-format
+msgid "was %1$s old, is now %2$s"
+msgstr "avait %1$s, elle a maintenant %2$s"
+
+#: includes/varnish.php:213
+msgid "of unknown age"
+msgstr "un âge inconnu"
+
+#: includes/varnish.php:214
+msgid "fresh"
+msgstr "fraîche"

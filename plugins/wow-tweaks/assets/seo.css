@@ -1,0 +1,48 @@
+/**
+ * The dashboard widget: a tally and a list of plain verdicts.
+ */
+.wow-seo-score {
+	margin: 0 0 12px;
+}
+
+.wow-seo-score strong {
+	font-size: 22px;
+	line-height: 1.2;
+}
+
+.wow-seo-score span {
+	color: #50575e;
+	font-size: 12px;
+}
+
+.wow-seo-list {
+	margin: 0;
+}
+
+.wow-seo-list li {
+	display: flex;
+	gap: 8px;
+	margin: 0 0 8px;
+	font-size: 13px;
+}
+
+.wow-seo-list em {
+	display: block;
+	color: #50575e;
+	font-size: 12px;
+	font-style: normal;
+}
+
+.wow-seo-mark {
+	flex: 0 0 auto;
+	width: 16px;
+	text-align: center;
+}
+
+.wow-seo-list .is-good .wow-seo-mark {
+	color: #008a20;
+}
+
+.wow-seo-list .is-missing .wow-seo-mark {
+	color: #b32d2e;
+}
