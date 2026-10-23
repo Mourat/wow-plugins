@@ -1,0 +1,120 @@
+/*
+ * The folded admin menu, open for as long as the pointer is on it.
+ *
+ * Everything here is scoped to .folded.wow-menu-peek — the first class is
+ * WordPress's, the second is put on by menu.js after its pause. The work is
+ * undoing, rule by rule, what core's .folded block does: there is no way to
+ * unset a stylesheet, so each line restores the value the menu has when it
+ * is open for good. They are kept in the order core states them, so the two
+ * files can be read side by side.
+ *
+ * What is deliberately not restored is the margin on #wpcontent. That is
+ * what makes the menu float: the page keeps the 36px gutter it was laid out
+ * with, and the menu is simply painted over it.
+ */
+
+/*
+ * Lifted above the content. #adminmenuback is already fixed with a z-index,
+ * the wrap is not positioned at all until now, and without this the page
+ * would be drawn on top of the half of the menu that overhangs it.
+ */
+.folded #adminmenuwrap {
+	position: relative;
+	z-index: 9990;
+}
+
+/* Put back what the line above just overrode for a menu that follows the page. */
+.folded.sticky-menu #adminmenuwrap {
+	position: fixed;
+}
+
+.folded.wow-menu-peek #adminmenuback,
+.folded.wow-menu-peek #adminmenuwrap,
+.folded.wow-menu-peek #adminmenu,
+.folded.wow-menu-peek #adminmenu li.menu-top {
+	width: 160px;
+}
+
+/*
+ * The one thing that says it is floating rather than simply wider. On the
+ * background strip, which is the full height of the window, so the edge is
+ * shaded all the way down and not only beside the icons.
+ */
+.folded.wow-menu-peek #adminmenuback {
+	box-shadow: 0 0 16px rgba( 0, 0, 0, 0.45 );
+}
+
+/* The fly-outs follow the edge they hang off. */
+.folded.wow-menu-peek #adminmenu .wp-submenu.sub-open,
+.folded.wow-menu-peek #adminmenu .opensub .wp-submenu,
+.folded.wow-menu-peek #adminmenu a.menu-top:focus + .wp-submenu {
+	left: 160px;
+}
+
+/*
+ * The section you are in lists its pages inside the menu again instead of
+ * hanging them off the side. Folded, core parks that list at top: -1000em
+ * and shows it as a pop-up; these are the values from the open menu.
+ *
+ * The selectors repeat core's own list, and the block has to come after the
+ * one above: the current section matches both, and with identical weight the
+ * later rule is the one that lands. Getting it inline also settles the
+ * script side — core's hover handler reads the computed top and leaves a
+ * submenu alone when it is already visible, so the list stops being opened
+ * and nudged about as the pointer passes over it.
+ */
+.folded.wow-menu-peek #adminmenu .wp-has-current-submenu .wp-submenu,
+.folded.wow-menu-peek #adminmenu .wp-has-current-submenu .wp-submenu.sub-open,
+.folded.wow-menu-peek #adminmenu .wp-has-current-submenu.opensub .wp-submenu,
+.folded.wow-menu-peek #adminmenu a.wp-has-current-submenu:focus + .wp-submenu {
+	position: relative;
+	z-index: 3;
+	top: auto;
+	left: auto;
+	right: auto;
+	bottom: auto;
+	border: 0 none;
+	margin-top: 0;
+	box-shadow: none;
+	min-width: 0;
+}
+
+.folded.wow-menu-peek #adminmenu .wp-has-current-submenu li > a {
+	padding: 5px 12px;
+}
+
+/* The names, which folded are parked 999 pixels off the left of the screen. */
+.folded.wow-menu-peek #adminmenu .wp-menu-name {
+	position: static;
+	left: auto;
+}
+
+/*
+ * Folded, the head of a fly-out repeats the section name, because nothing
+ * else can. Open, the name is right there and the repeat is noise.
+ */
+.folded.wow-menu-peek #adminmenu .wp-submenu-head {
+	display: none;
+}
+
+/*
+ * The icon goes back to being a float beside the name. Folded it is taken
+ * out of the flow and laid over the item, which is the only way to centre it
+ * in 36 pixels.
+ */
+.folded.wow-menu-peek #adminmenu div.wp-menu-image {
+	position: static;
+	z-index: auto;
+	width: 36px;
+	height: 34px;
+}
+
+/* A name that wraps to two lines needs the room to do it. */
+.folded.wow-menu-peek #adminmenu a.menu-top {
+	height: auto;
+}
+
+/* The button at the foot can say what it does again. */
+.folded.wow-menu-peek #collapse-button .collapse-button-label {
+	display: block;
+}

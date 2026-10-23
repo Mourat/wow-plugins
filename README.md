@@ -9,6 +9,7 @@ themselves to the sites that run them.
 | `wow-back-to-top` | a button back to the top of the page |
 | `wow-blocks` | the row, the strip and the album grid |
 | `wow-contact-form` | a contact form that keeps what it is sent |
+| `wow-dashboard` | how the admin looks and moves |
 | `wow-guard` | the security plugin: guessing, two-step login, updates |
 | `wow-images` | what happens to a picture after it is uploaded |
 | `wow-mail` | sending mail, and finding out whether it went |
