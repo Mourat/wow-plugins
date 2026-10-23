@@ -23,6 +23,12 @@ const POST_TYPE = 'wow_message';
 /** Prefix for every meta key this plugin writes. */
 const META_PREFIX = '_wow_contact_';
 
+/** The status a message gets when something about it looks automated. */
+const SPAM = 'wow_spam';
+
+/** Where the reason for that is written down. */
+const WHY = '_wow_contact_spam_reason';
+
 /**
  * The meta key a field is stored under.
  *
@@ -81,6 +87,31 @@ function register(): void {
 		'delete_others_posts'    => 'manage_options',
 		'delete_published_posts' => 'manage_options',
 		'delete_private_posts'   => 'manage_options',
+	);
+
+	/*
+	 * Suspected spam is kept rather than thrown away.
+	 *
+	 * Every rule that decides a message is automated can be wrong, and the
+	 * two kinds of wrong are not worth the same: a spam message read and
+	 * deleted costs a few seconds, a real enquiry silently discarded costs
+	 * the job. So nothing is discarded. A message that trips a rule is
+	 * filed under a status of its own, which gives the list its own tab and
+	 * leaves the message one click from being put back.
+	 */
+	register_post_status(
+		SPAM,
+		array(
+			'label'                     => _x( 'Spam', 'message status', 'wow-contact-form' ),
+			'public'                    => false,
+			'internal'                  => false,
+			'protected'                 => true,
+			'exclude_from_search'       => true,
+			'show_in_admin_all_list'    => false,
+			'show_in_admin_status_list' => true,
+			/* translators: %s: number of messages. */
+			'label_count'               => _n_noop( 'Spam <span class="count">(%s)</span>', 'Spam <span class="count">(%s)</span>', 'wow-contact-form' ),
+		)
 	);
 
 	register_post_type(
@@ -177,11 +208,11 @@ function title( array $values ): string {
  * @param array<string,string> $values Cleaned values.
  * @return int|\WP_Error The new post ID, or the error that stopped it.
  */
-function store( array $values ) {
+function store( array $values, string $spam = '' ) {
 	$post_id = wp_insert_post(
 		array(
 			'post_type'    => POST_TYPE,
-			'post_status'  => 'publish',
+			'post_status'  => '' === $spam ? 'publish' : SPAM,
 			'post_author'  => 0,
 			'post_title'   => wp_slash( title( $values ) ),
 			'post_content' => wp_slash( $values['message'] ?? '' ),
@@ -199,6 +230,10 @@ function store( array $values ) {
 		}
 
 		update_post_meta( $post_id, meta_key( $field ), wp_slash( $values[ $field ] ?? '' ) );
+	}
+
+	if ( '' !== $spam ) {
+		update_post_meta( $post_id, WHY, wp_slash( $spam ) );
 	}
 
 	/**

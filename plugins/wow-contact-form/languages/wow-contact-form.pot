@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the WOW Contact Form plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: WOW Contact Form 0.1.0\n"
+"Project-Id-Version: WOW Contact Form 0.1.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/wow-contact-form\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-10-22T23:41:22+00:00\n"
+"POT-Creation-Date: 2026-10-23T02:18:22+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: wow-contact-form\n"
@@ -33,43 +33,68 @@ msgstr ""
 msgid "Thank you — your message has reached us. We will get back to you shortly."
 msgstr ""
 
-#: blocks/contact-form/render.php:116
+#: blocks/contact-form/render.php:130
+#: blocks/contact-form/render.php:146
 msgid "Leave this field empty"
 msgstr ""
 
-#: blocks/contact-form/render.php:141
+#: blocks/contact-form/render.php:171
 msgid "Send"
 msgstr ""
 
-#: includes/admin.php:27
-msgid "From"
+#: includes/admin.php:32
+msgid "Caught by"
 msgstr ""
 
-#: includes/admin.php:28
-msgid "Email"
-msgstr ""
-
-#: includes/admin.php:29
-#: includes/admin.php:104
-#: includes/storage.php:65
-#: includes/storage.php:152
-msgid "Message"
-msgstr ""
-
-#: includes/admin.php:30
+#: includes/admin.php:33
 msgid "Notification"
 msgstr ""
 
-#: includes/admin.php:31
+#: includes/admin.php:38
+msgid "From"
+msgstr ""
+
+#: includes/admin.php:39
+msgid "Email"
+msgstr ""
+
+#: includes/admin.php:40
+#: includes/admin.php:132
+#: includes/storage.php:71
+#: includes/storage.php:183
+msgid "Message"
+msgstr ""
+
+#: includes/admin.php:43
 msgid "Received"
 msgstr ""
 
-#: includes/admin.php:80
+#: includes/admin.php:108
 msgid "Sent"
 msgstr ""
 
-#: includes/admin.php:93
+#: includes/admin.php:121
 msgid "Not sent"
+msgstr ""
+
+#: includes/admin.php:209
+msgid "Not spam"
+msgstr ""
+
+#: includes/admin.php:210
+msgid "Spam"
+msgstr ""
+
+#: includes/admin.php:258
+msgid "There is no such message."
+msgstr ""
+
+#: includes/admin.php:262
+msgid "You are not allowed to do that."
+msgstr ""
+
+#: includes/admin.php:266
+msgid "There is no such status."
 msgstr ""
 
 #: includes/block.php:72
@@ -137,61 +162,86 @@ msgstr ""
 msgid "A short introduction and the contact form beneath it."
 msgstr ""
 
-#: includes/storage.php:61
+#: includes/security.php:123
+msgid "the hidden field was filled in"
+msgstr ""
+
+#: includes/security.php:127
+msgid "the field asking to be left empty was filled in"
+msgstr ""
+
+#: includes/storage.php:67
 msgctxt "post type general name"
 msgid "Messages"
 msgstr ""
 
-#: includes/storage.php:62
+#: includes/storage.php:68
 msgctxt "post type singular name"
 msgid "Message"
 msgstr ""
 
-#: includes/storage.php:63
+#: includes/storage.php:69
 msgctxt "admin menu"
 msgid "Messages"
 msgstr ""
 
-#: includes/storage.php:64
+#: includes/storage.php:70
 msgid "All Messages"
 msgstr ""
 
-#: includes/storage.php:66
+#: includes/storage.php:72
 msgid "View Message"
 msgstr ""
 
-#: includes/storage.php:67
+#: includes/storage.php:73
 msgid "Search Messages"
 msgstr ""
 
-#: includes/storage.php:68
+#: includes/storage.php:74
 msgid "No messages yet"
 msgstr ""
 
-#: includes/storage.php:69
+#: includes/storage.php:75
 msgid "No messages in the bin"
 msgstr ""
 
+#: includes/storage.php:105
+msgctxt "message status"
+msgid "Spam"
+msgstr ""
+
+#. translators: %s: number of messages.
+#: includes/storage.php:113
+#, php-format
+msgid "Spam <span class=\"count\">(%s)</span>"
+msgid_plural "Spam <span class=\"count\">(%s)</span>"
+msgstr[0] ""
+msgstr[1] ""
+
 #. translators: 1: sender's name, 2: company name.
-#: includes/storage.php:158
+#: includes/storage.php:189
 #, php-format
 msgctxt "message title"
 msgid "%1$s (%2$s)"
 msgstr ""
 
-#: includes/submission.php:119
+#: includes/submission.php:128
 msgid "You have just sent a message. Please give it a moment before sending another."
 msgstr ""
 
-#: includes/submission.php:139
+#: includes/submission.php:148
 msgid "This page had been open for a while and the form expired. Nothing was lost — please send it again."
 msgstr ""
 
-#: includes/submission.php:154
+#: includes/submission.php:163
 msgid "The message was not sent. Please look at the fields marked below."
 msgstr ""
 
-#: includes/submission.php:176
+#: includes/submission.php:171
+msgid "the site’s disallowed words"
+msgstr ""
+
+#: includes/submission.php:186
 msgid "Something went wrong on our side and the message was not saved. Please try again in a moment."
 msgstr ""
 

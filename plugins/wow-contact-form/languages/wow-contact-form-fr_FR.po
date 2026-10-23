@@ -33,42 +33,43 @@ msgstr ""
 msgid "Thank you — your message has reached us. We will get back to you shortly."
 msgstr "Merci — votre message nous est bien parvenu. Nous vous répondrons rapidement."
 
-#: blocks/contact-form/render.php:116
+#: blocks/contact-form/render.php:130
+#: blocks/contact-form/render.php:146
 msgid "Leave this field empty"
 msgstr "Laissez ce champ vide"
 
-#: blocks/contact-form/render.php:141
+#: blocks/contact-form/render.php:171
 msgid "Send"
 msgstr "Envoyer"
 
-#: includes/admin.php:27
+#: includes/admin.php:38
 msgid "From"
 msgstr "Expéditeur"
 
-#: includes/admin.php:28
+#: includes/admin.php:39
 msgid "Email"
 msgstr "E-mail"
 
-#: includes/admin.php:29
-#: includes/admin.php:104
-#: includes/storage.php:65
-#: includes/storage.php:152
+#: includes/admin.php:40
+#: includes/admin.php:132
+#: includes/storage.php:71
+#: includes/storage.php:183
 msgid "Message"
 msgstr "Message"
 
-#: includes/admin.php:30
+#: includes/admin.php:33
 msgid "Notification"
 msgstr "Notification"
 
-#: includes/admin.php:31
+#: includes/admin.php:43
 msgid "Received"
 msgstr "Reçu le"
 
-#: includes/admin.php:80
+#: includes/admin.php:108
 msgid "Sent"
 msgstr "Envoyée"
 
-#: includes/admin.php:93
+#: includes/admin.php:121
 msgid "Not sent"
 msgstr "Non envoyée"
 
@@ -137,61 +138,61 @@ msgstr "Page de contact"
 msgid "A short introduction and the contact form beneath it."
 msgstr "Une courte introduction et le formulaire de contact en dessous."
 
-#: includes/storage.php:61
+#: includes/storage.php:67
 msgctxt "post type general name"
 msgid "Messages"
 msgstr "Messages"
 
-#: includes/storage.php:62
+#: includes/storage.php:68
 msgctxt "post type singular name"
 msgid "Message"
 msgstr "Message"
 
-#: includes/storage.php:63
+#: includes/storage.php:69
 msgctxt "admin menu"
 msgid "Messages"
 msgstr "Messages"
 
-#: includes/storage.php:64
+#: includes/storage.php:70
 msgid "All Messages"
 msgstr "Tous les messages"
 
-#: includes/storage.php:66
+#: includes/storage.php:72
 msgid "View Message"
 msgstr "Voir le message"
 
-#: includes/storage.php:67
+#: includes/storage.php:73
 msgid "Search Messages"
 msgstr "Rechercher des messages"
 
-#: includes/storage.php:68
+#: includes/storage.php:74
 msgid "No messages yet"
 msgstr "Aucun message pour l’instant"
 
-#: includes/storage.php:69
+#: includes/storage.php:75
 msgid "No messages in the bin"
 msgstr "Aucun message dans la corbeille"
 
 #. translators: 1: sender's name, 2: company name.
-#: includes/storage.php:158
+#: includes/storage.php:189
 #, php-format
 msgctxt "message title"
 msgid "%1$s (%2$s)"
 msgstr "%1$s (%2$s)"
 
-#: includes/submission.php:119
+#: includes/submission.php:128
 msgid "You have just sent a message. Please give it a moment before sending another."
 msgstr "Vous venez d’envoyer un message. Patientez un instant avant d’en envoyer un autre."
 
-#: includes/submission.php:139
+#: includes/submission.php:148
 msgid "This page had been open for a while and the form expired. Nothing was lost — please send it again."
 msgstr "Cette page est restée ouverte trop longtemps et le formulaire a expiré. Rien n’est perdu — merci de l’envoyer à nouveau."
 
-#: includes/submission.php:154
+#: includes/submission.php:163
 msgid "The message was not sent. Please look at the fields marked below."
 msgstr "Le message n’a pas été envoyé. Merci de vérifier les champs signalés ci-dessous."
 
-#: includes/submission.php:176
+#: includes/submission.php:186
 msgid "Something went wrong on our side and the message was not saved. Please try again in a moment."
 msgstr "Un problème est survenu de notre côté et le message n’a pas été enregistré. Merci de réessayer dans un instant."
 
@@ -238,3 +239,52 @@ msgstr "Tous les messages"
 #: includes/widget.php:193
 msgid "Nobody has written yet."
 msgstr "Personne n’a encore écrit."
+
+#: includes/admin.php:32
+msgid "Caught by"
+msgstr "Détecté par"
+
+#: includes/admin.php:209
+msgid "Not spam"
+msgstr "Pas un spam"
+
+#: includes/admin.php:210
+msgid "Spam"
+msgstr "Spam"
+
+#: includes/admin.php:258
+msgid "There is no such message."
+msgstr "Ce message n’existe pas."
+
+#: includes/admin.php:262
+msgid "You are not allowed to do that."
+msgstr "Vous n’avez pas le droit de faire cela."
+
+#: includes/admin.php:266
+msgid "There is no such status."
+msgstr "Ce statut n’existe pas."
+
+#: includes/security.php:123
+msgid "the hidden field was filled in"
+msgstr "le champ caché a été rempli"
+
+#: includes/security.php:127
+msgid "the field asking to be left empty was filled in"
+msgstr "le champ à laisser vide a été rempli"
+
+#: includes/storage.php:105
+msgctxt "message status"
+msgid "Spam"
+msgstr "Spam"
+
+#. translators: %s: number of messages.
+#: includes/storage.php:113
+#, php-format
+msgid "Spam <span class=\"count\">(%s)</span>"
+msgid_plural "Spam <span class=\"count\">(%s)</span>"
+msgstr[0] "Spam <span class=\"count\">(%s)</span>"
+msgstr[1] "Spam <span class=\"count\">(%s)</span>"
+
+#: includes/submission.php:171
+msgid "the site’s disallowed words"
+msgstr "les mots interdits du site"

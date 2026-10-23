@@ -112,6 +112,36 @@ $wow_wrapper = get_block_wrapper_attributes(
 		 * tab order so a keyboard never lands in it by accident.
 		 */
 		?>
+		<?php
+		/*
+		 * And the one that is meant to be seen.
+		 *
+		 * Every class, and the asterisk, are the ones the loop above writes:
+		 * a field that looked different in the markup would be a field a
+		 * robot could learn to leave alone. The asterisk is the only part
+		 * that is a pretence — there is no required attribute, because that
+		 * would stop a person sending the form. It is there because a robot
+		 * filling in what looks mandatory is exactly what is being asked of
+		 * it.
+		 */
+		?>
+		<p class="wow-contact-form__field wow-contact-form__field--confirm">
+			<label class="wow-contact-form__label" for="<?php echo esc_attr( $wow_id . '-confirm' ); ?>">
+				<?php esc_html_e( 'Leave this field empty', 'wow-contact-form' ); ?>
+				<span class="wow-contact-form__required" aria-hidden="true">*</span>
+			</label>
+			<input
+				class="wow-contact-form__input"
+				type="text"
+				id="<?php echo esc_attr( $wow_id . '-confirm' ); ?>"
+				name="<?php echo esc_attr( Security\SEEN_TRAP ); ?>"
+				value=""
+				maxlength="100"
+				autocomplete="off"
+				spellcheck="false"
+			>
+		</p>
+
 		<div class="wow-contact-form__trap" aria-hidden="true">
 			<label for="<?php echo esc_attr( $wow_id . '-trap' ); ?>"><?php esc_html_e( 'Leave this field empty', 'wow-contact-form' ); ?></label>
 			<input

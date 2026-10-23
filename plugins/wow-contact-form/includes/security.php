@@ -16,6 +16,26 @@ defined( 'ABSPATH' ) || exit;
 /** Name of the field that only a robot fills in. */
 const HONEYPOT = 'wow_contact_website';
 
+/**
+ * Name of the trap a visitor can see.
+ *
+ * The invisible one is skipped by the robots that matter here. They drive
+ * a real browser, read what is on the screen and fill what they find
+ * there — so a field pushed off the edge of the page is a field they never
+ * meet, while a field standing in the form among the others is one they
+ * cannot miss.
+ *
+ * It costs a line of reading. The label says to leave it empty, which
+ * every person can do and a machine filling in forms by their shape will
+ * not. And because that is a guess about behaviour rather than a fact, a
+ * message caught by it is filed as spam and kept, never discarded.
+ *
+ * The name is deliberately nothing a browser recognises: anything like
+ * "website", "company" or "address" invites the browser's own autofill to
+ * put something there on the visitor's behalf.
+ */
+const SEEN_TRAP = 'wow_contact_confirm';
+
 /** Name of the field carrying the signed timestamp. */
 const STAMP = 'wow_contact_stamp';
 
@@ -90,6 +110,24 @@ function check_stamp( string $value ): bool {
  */
 function honeypot_filled( array $raw ): bool {
 	return '' !== trim( (string) ( $raw[ HONEYPOT ] ?? '' ) );
+}
+
+/**
+ * Whether either trap was filled, and which.
+ *
+ * @param array<string,mixed> $raw Raw request data.
+ * @return string Why it looks automated, or an empty string.
+ */
+function trap_filled( array $raw ): string {
+	if ( honeypot_filled( $raw ) ) {
+		return __( 'the hidden field was filled in', 'wow-contact-form' );
+	}
+
+	if ( '' !== trim( (string) ( $raw[ SEEN_TRAP ] ?? '' ) ) ) {
+		return __( 'the field asking to be left empty was filled in', 'wow-contact-form' );
+	}
+
+	return '';
 }
 
 /**

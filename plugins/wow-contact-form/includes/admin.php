@@ -22,14 +22,36 @@ defined( 'ABSPATH' ) || exit;
  * @return array<string,string> Columns to show.
  */
 function columns( array $columns ): array {
-	return array(
-		'cb'       => $columns['cb'] ?? '',
-		'title'    => __( 'From', 'wow-contact-form' ),
-		'email'    => __( 'Email', 'wow-contact-form' ),
-		'excerpt'  => __( 'Message', 'wow-contact-form' ),
-		'delivery' => __( 'Notification', 'wow-contact-form' ),
-		'date'     => __( 'Received', 'wow-contact-form' ),
+	/*
+	 * The spam tab answers a different question. Nothing there was emailed,
+	 * so a Notification column would read "—" down the whole page; what is
+	 * worth knowing is which rule caught each one, since that is what tells
+	 * a wrongly caught message from the rest at a glance.
+	 */
+	$last = showing_spam()
+		? array( 'reason' => __( 'Caught by', 'wow-contact-form' ) )
+		: array( 'delivery' => __( 'Notification', 'wow-contact-form' ) );
+
+	return array_merge(
+		array(
+			'cb'      => $columns['cb'] ?? '',
+			'title'   => __( 'From', 'wow-contact-form' ),
+			'email'   => __( 'Email', 'wow-contact-form' ),
+			'excerpt' => __( 'Message', 'wow-contact-form' ),
+		),
+		$last,
+		array( 'date' => __( 'Received', 'wow-contact-form' ) )
 	);
+}
+
+/**
+ * Whether the message list is showing the spam tab.
+ *
+ * @return bool true when it is.
+ */
+function showing_spam(): bool {
+	// phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Reading which tab of a list screen is open; it decides a column heading.
+	return isset( $_GET['post_status'] ) && Storage\SPAM === sanitize_key( wp_unslash( $_GET['post_status'] ) );
 }
 add_filter( 'manage_' . Storage\POST_TYPE . '_posts_columns', __NAMESPACE__ . '\\columns' );
 
@@ -52,6 +74,12 @@ function column( string $column, int $post_id ): void {
 
 	if ( 'excerpt' === $column ) {
 		echo esc_html( wp_trim_words( (string) get_post_field( 'post_content', $post_id ), 18 ) );
+
+		return;
+	}
+
+	if ( 'reason' === $column ) {
+		echo esc_html( (string) get_post_meta( $post_id, Storage\WHY, true ) );
 
 		return;
 	}
@@ -159,10 +187,107 @@ function render_meta_box( \WP_Post $post ): void {
  * @return array<string,string> Row actions without the inline editor.
  */
 function row_actions( array $actions, \WP_Post $post ): array {
-	if ( Storage\POST_TYPE === $post->post_type ) {
-		unset( $actions['inline hide-if-no-js'] );
+	if ( Storage\POST_TYPE !== $post->post_type ) {
+		return $actions;
 	}
 
-	return $actions;
+	unset( $actions['inline hide-if-no-js'] );
+
+	$spam = Storage\SPAM === $post->post_status;
+
+	/*
+	 * Put in front of the rest. On the spam tab this is the one thing worth
+	 * doing to a row, and a missed real enquiry should take one click to
+	 * rescue, not a hunt through a menu.
+	 */
+	return array_merge(
+		array(
+			'wow-mark' => sprintf(
+				'<a href="%1$s">%2$s</a>',
+				esc_url( mark_link( $post->ID, $spam ? 'publish' : Storage\SPAM ) ),
+				$spam
+					? esc_html__( 'Not spam', 'wow-contact-form' )
+					: esc_html__( 'Spam', 'wow-contact-form' )
+			),
+		),
+		$actions
+	);
 }
 add_filter( 'post_row_actions', __NAMESPACE__ . '\\row_actions', 10, 2 );
+
+/** The request that moves a message between the two statuses. */
+const MARK = 'wow_contact_mark';
+
+/**
+ * The address that marks one message, or unmarks it.
+ *
+ * @param int    $post_id The message.
+ * @param string $status  Status to move it to.
+ * @return string A nonced admin URL.
+ */
+function mark_link( int $post_id, string $status ): string {
+	return wp_nonce_url(
+		add_query_arg(
+			array(
+				'action' => MARK,
+				'post'   => $post_id,
+				'status' => $status,
+			),
+			admin_url( 'admin.php' )
+		),
+		MARK . '-' . $post_id
+	);
+}
+
+/**
+ * Moves one message to or from the spam tab.
+ *
+ * Hung on admin_action_ rather than admin_post_: the link is pressed from a
+ * list screen inside the admin, and this way the redirect can hand the
+ * visitor back to the very page and tab they were looking at.
+ */
+function mark(): void {
+	$post_id = isset( $_GET['post'] ) ? (int) $_GET['post'] : 0;
+
+	check_admin_referer( MARK . '-' . $post_id );
+
+	$post   = get_post( $post_id );
+	$status = isset( $_GET['status'] ) ? sanitize_key( wp_unslash( $_GET['status'] ) ) : '';
+
+	if ( ! $post instanceof \WP_Post || Storage\POST_TYPE !== $post->post_type ) {
+		wp_die( esc_html__( 'There is no such message.', 'wow-contact-form' ) );
+	}
+
+	if ( ! current_user_can( 'manage_options' ) ) {
+		wp_die( esc_html__( 'You are not allowed to do that.', 'wow-contact-form' ) );
+	}
+
+	if ( ! in_array( $status, array( 'publish', Storage\SPAM ), true ) ) {
+		wp_die( esc_html__( 'There is no such status.', 'wow-contact-form' ) );
+	}
+
+	wp_update_post(
+		array(
+			'ID'          => $post_id,
+			'post_status' => $status,
+		)
+	);
+
+	/*
+	 * The reason is left on the record even once it is back in the inbox. It
+	 * is the only trace of which rule was wrong, and that is worth more than
+	 * a tidy row of meta.
+	 */
+	wp_safe_redirect(
+		add_query_arg(
+			array(
+				'post_type'   => Storage\POST_TYPE,
+				'post_status' => Storage\SPAM === $status ? 'all' : Storage\SPAM,
+			),
+			admin_url( 'edit.php' )
+		)
+	);
+
+	exit;
+}
+add_action( 'admin_action_' . MARK, __NAMESPACE__ . '\\mark' );

@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       WOW Contact Form
  * Description:       A contact form block: the visitor's message is kept in the site's own database and sent on by email, with no third-party service involved.
- * Version:           0.1.1
+ * Version:           0.1.2
  * Requires at least: 7.0
  * Requires PHP:      8.1
  * Author:            Wow-arts
@@ -17,7 +17,7 @@ namespace WOW\ContactForm;
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'WOW_CONTACT_FORM_VERSION', '0.1.1' );
+define( 'WOW_CONTACT_FORM_VERSION', '0.1.2' );
 define( 'WOW_CONTACT_FORM_FILE', __FILE__ );
 define( 'WOW_CONTACT_FORM_DIR', plugin_dir_path( __FILE__ ) );
 define( 'WOW_CONTACT_FORM_URL', plugin_dir_url( __FILE__ ) );

@@ -108,7 +108,16 @@ function handle(): void {
 	 * Telling either apart from success is how a sender learns which rule to
 	 * work around next time.
 	 */
-	if ( Security\honeypot_filled( $raw ) ) {
+	$trap = Security\trap_filled( $raw );
+
+	if ( '' !== $trap ) {
+		/*
+		 * Filed as spam and answered as success. Telling a robot which rule
+		 * it tripped is telling it what to avoid next time; filing it means
+		 * that when the rule is wrong — a browser filling the visible trap
+		 * by itself, say — the message is still there to be found.
+		 */
+		Storage\store( Fields\clean( $raw ), $trap );
 		finish( $page );
 	}
 
@@ -159,6 +168,7 @@ function handle(): void {
 	}
 
 	if ( Security\disallowed( $values ) ) {
+		Storage\store( $values, __( 'the site’s disallowed words', 'wow-contact-form' ) );
 		finish( $page );
 	}
 
