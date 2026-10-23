@@ -1,0 +1,337 @@
+/*
+Theme Name:  Wow
+Template:    twentytwentyfive
+Author:      Wow-arts
+Description: Child theme of Twenty Twenty-Five for the Wow gallery site. Widens the content column to match the wow-blocks grid, adds a bare front page template and an album template with a cover strip and a floating album list.
+Version:     0.1.1
+Requires at least: 6.8
+Tested up to: 7.1
+Requires PHP: 7.4
+License:     GNU General Public License v2 or later
+License URI: http://www.gnu.org/licenses/gpl-2.0.html
+Update URI:  https://github.com/Mourat/wow-plugins
+Text Domain: wow-theme
+*/
+
+/**
+ * Полоска над галереей: обложка альбома и его название.
+ *
+ * Рамка двойная — белый border и кольцо outline вокруг него. Через один border
+ * так не сделать, а box-shadow дал бы мягкий край.
+ *
+ * Акцентный цвет объявлен один раз — в theme.json, в settings.custom.wowAccent.
+ * Ядро выводит оттуда --wp--custom--wow-accent и на фронт, и в редактор, так
+ * что на него ссылаются и стили, и разметка шапки с подвалом. Палитру темы под
+ * это занимать нельзя: палитра дочерней темы заменяет родительскую целиком, и
+ * base с contrast, на которых держится Twenty Twenty-Five, просто исчезают.
+ */
+
+:root {
+	--wow-album-header-ring: var(--wp--custom--wow-accent);
+}
+
+.wow-album-header__thumb img {
+	box-sizing: content-box;
+	width: 68px;
+	height: 68px;
+	border: 5px solid #fff;
+	border-radius: 2px;
+	outline: 5px solid var(--wow-album-header-ring);
+	aspect-ratio: 1;
+	object-fit: cover;
+}
+
+.wow-album-header__title {
+	margin: 0;
+	color: var(--wp--custom--wow-accent);
+	font-size: 1.5rem;
+	text-transform: lowercase;
+}
+
+/*
+ * Список альбомов сбоку — тем же акцентным цветом, что и заголовок.
+ *
+ * Два класса, а не один: свой цвет список задаёт в стилях блока
+ * (wow-blocks/src/album-list/style.scss), а стили блока ядро печатает позже
+ * таблицы темы. При равной специфичности выиграл бы блок.
+ */
+.wow-album-list.wp-block-wow-album-list {
+	color: var(--wp--custom--wow-accent);
+}
+
+/* На очень узком экране обложка и название встают друг под друга. */
+@media (max-width: 400px) {
+
+	.wow-album-header {
+		flex-direction: column;
+		align-items: flex-start;
+	}
+}
+
+/**
+ * Высоты шапки и подвала заданы через min-height на самих блоках.
+ *
+ * Высота висит на внутренней группе, а не на внешней. Внешняя — constrained,
+ * и её дети получают margin-inline: auto. Если сделать её флексом, эти
+ * авто-отступы отменят растягивание по поперечной оси: блок сожмётся
+ * по ширине текста и встанет по центру вместо своих 1264px.
+ */
+
+.wow-footer__bar {
+	display: flex;
+	align-items: center;
+}
+
+/**
+ * Липкий подвал: прижат к низу окна, когда контента мало.
+ *
+ * Это не position: sticky, а flex-колонка: обёртка сайта тянется минимум
+ * на высоту окна, а <main> забирает весь остаток. Растягиваем именно main,
+ * а не вешаем подвалу margin-block-start: auto, — иначе на длинных страницах
+ * пропал бы зазор между контентом и подвалом.
+ */
+
+.wp-site-blocks {
+	display: flex;
+	flex-direction: column;
+	box-sizing: border-box;
+	min-height: 100vh;
+
+	/* dvh не учитывает адресную строку мобильных браузеров. */
+	min-height: 100dvh;
+}
+
+.wp-site-blocks > main {
+	flex-grow: 1;
+}
+
+/* Админ-панель занимает сверху свои 32px, иначе на короткой странице появится прокрутка. */
+.admin-bar .wp-site-blocks {
+	min-height: calc(100vh - 32px);
+	min-height: calc(100dvh - 32px);
+}
+
+@media (max-width: 782px) {
+
+	.admin-bar .wp-site-blocks {
+		min-height: calc(100vh - 46px);
+		min-height: calc(100dvh - 46px);
+	}
+}
+
+/*
+ * Мега-меню «Réalisations».
+ *
+ * Семнадцать альбомов обычным выпадающим столбцом не помещаются на экран,
+ * поэтому подменю превращается в широкую панель с плитками во всю ширину
+ * шапки.
+ *
+ * Ядро кладёт панель в `position: absolute` относительно своего пункта меню
+ * (`.wp-block-navigation-item { position: relative }`), и шире этого пункта
+ * она стать не может. Поэтому пункту возвращается `position: static`, а
+ * точкой отсчёта становится сама шапка.
+ *
+ * Селекторы такие длинные не от любви к длинным селекторам: у правил ядра
+ * для `items-justified-right` пять классов, и перебить их можно только
+ * шестью. `!important` тут не нужен.
+ *
+ * Всё внутри @media (min-width: 600px): ниже этого порога ядро складывает
+ * меню в полноэкранную шторку, где подменю выводится обычным потоком, и
+ * мешать ему нечем.
+ */
+/*
+ * Мобильная шторка: простой список по центру, без обложек.
+ *
+ * Навигация объявлена с justifyContent: right, и в шторке ядро прижимает
+ * всё вправо через переменную --navigation-layout-justification-setting.
+ * Её проще перекрыть, чем переписывать раскладку: ядро само читает её и
+ * для пунктов, и для контейнеров. Объявлена она дважды — на <nav> и на
+ * внутреннем <ul>, у которого те же классы, — поэтому селектора два.
+ *
+ * Привязка к .is-menu-open, а не к ширине экрана: это ровно тот случай,
+ * когда меню развёрнуто в шторку, независимо от того, при какой ширине.
+ */
+.wow-header .wp-block-navigation__responsive-container.is-menu-open,
+.wow-header .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation.items-justified-right {
+	--navigation-layout-justification-setting: center;
+	--navigation-layout-justify: center;
+}
+
+.wow-header .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation-item__content {
+	text-align: center;
+}
+
+/*
+ * Две структуры для одного списка альбомов.
+ *
+ * На десктопе — подменю ядра (.wow-mega), превращённое ниже в широкую
+ * панель. В шторке — <details> из блока wow/album-links в режиме
+ * disclosure. Разделение не от хорошей жизни: подменю ядра внутри
+ * шторки *всегда* раскрыто — его isSubmenuOpen читает состояние самой
+ * шторки, и aria-expanded там не меняется, что бы ни делали стили.
+ * <details> сворачивается сам, без скриптов, и говорит скринридеру правду.
+ *
+ * Каждая структура видна ровно там, где нужна. У пункта ядра display:flex
+ * с четырьмя классами в шторке и с двумя на десктопе — правила ниже
+ * длиннее в обоих случаях.
+ */
+.wow-header .wp-block-navigation .wow-album-links--disclosure.wp-block-navigation-item {
+	display: none;
+}
+
+.wow-header .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation__responsive-container-content .wow-mega.wp-block-navigation-item {
+	display: none;
+}
+
+.wow-header .wp-block-navigation__responsive-container.is-menu-open .wp-block-navigation__responsive-container-content .wow-album-links--disclosure.wp-block-navigation-item {
+	align-self: stretch;
+	display: flex;
+}
+
+.wow-album-links__details {
+	width: 100%;
+}
+
+/* Свой шеврон вместо треугольника браузера. */
+.wow-album-links__summary {
+	cursor: pointer;
+	list-style: none;
+	text-align: center;
+}
+
+.wow-album-links__summary::-webkit-details-marker {
+	display: none;
+}
+
+.wow-album-links__summary::after {
+	border-bottom: 1.5px solid currentColor;
+	border-right: 1.5px solid currentColor;
+	content: "";
+	display: inline-block;
+	height: 0.4em;
+	margin-left: 0.5em;
+	transform: rotate(45deg);
+	transition: transform 0.15s ease;
+	vertical-align: 0.2em;
+	width: 0.4em;
+}
+
+.wow-album-links__details[open] > .wow-album-links__summary {
+	font-weight: 700;
+}
+
+.wow-album-links__details[open] > .wow-album-links__summary::after {
+	transform: rotate(225deg);
+	vertical-align: -0.1em;
+}
+
+/*
+ * Раскрытый список — отдельный блок: подложка цвета шапки, свои отступы,
+ * шрифт чуть мельче. Так видно, где кончаются альбомы и начинается Contact.
+ */
+.wow-album-links__list {
+	align-items: center;
+	background: color-mix(in srgb, var(--wp--custom--wow-accent) 7%, transparent);
+	border-radius: 4px;
+	display: flex;
+	flex-direction: column;
+	font-size: 0.92em;
+	gap: 0.9rem;
+	list-style: none;
+	margin: 0.6rem 0 0.25rem;
+	padding: 0.85rem 1rem 1rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+	.wow-album-links__summary::after {
+		transition: none;
+	}
+}
+
+@media (min-width: 600px) {
+
+	.wow-header {
+		position: relative;
+	}
+
+	/*
+	 * Между шапкой и пунктом меню ядро ставит `position: relative` ещё на
+	 * четырёх предков: на группу с constrained-раскладкой (через `:where()`,
+	 * из поддержки раскладок), на сам <nav>, на его responsive-container и
+	 * на responsive-dialog. Любой из них перехватил бы панель и зажал её до
+	 * ширины навигации — то есть до ширины трёх слов. Снимаются все четыре,
+	 * и только вне шторки: в открытой шторке (.is-menu-open) они нужны
+	 * ядру для кнопки закрытия.
+	 */
+	.wow-header > .wp-block-group-is-layout-constrained,
+	.wow-header .wp-block-navigation.wp-block-navigation,
+	.wow-header .wp-block-navigation .wp-block-navigation__responsive-container:not(.is-menu-open),
+	.wow-header .wp-block-navigation .wp-block-navigation__responsive-container:not(.is-menu-open) .wp-block-navigation__responsive-dialog,
+	.wow-header .wp-block-navigation .wow-mega.has-child {
+		position: static;
+	}
+
+	/*
+	 * Отступы по бокам держат плитки на той же линии, что и остальное
+	 * содержимое сайта: либо обычный отступ страницы, либо половина того,
+	 * что осталось от 1264 px, — смотря что больше.
+	 */
+	.wp-block-navigation.items-justified-right .wp-block-navigation__container .wow-mega.has-child > .wp-block-navigation__submenu-container {
+		/*
+		 * Панель белая — цвет шторки (overlayBackgroundColor: base) ядро
+		 * применяет и к подменю, — и на белой странице без нижней кромки
+		 * непонятно, где она кончается. Тень плюс тонкая линия внизу.
+		 * Сверху тёмная шапка, там край и так виден.
+		 */
+		border: 0;
+		border-bottom: 1px solid rgba(0, 0, 0, 0.14);
+		box-shadow: 0 18px 32px -12px rgba(0, 0, 0, 0.28);
+		box-sizing: border-box;
+		display: grid;
+		gap: 1.5rem 1.25rem;
+		grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+		left: 0;
+		padding-block: 1.75rem 2rem;
+		padding-inline: max(var(--wp--preset--spacing--50, 2rem), calc((100% - 1264px) / 2));
+		right: 0;
+		top: 100%;
+		width: auto;
+	}
+
+	/* Плитка занимает свою ячейку целиком, а не ужимается по содержимому. */
+	.wp-block-navigation .wow-mega .wp-block-navigation__submenu-container > .wp-block-navigation-item.wow-album-link {
+		display: block;
+	}
+
+	/* Картинка над названием. Отступы ядра в .5em 1em тут не нужны. */
+	.wp-block-navigation .has-child .wp-block-navigation__submenu-container > .wp-block-navigation-item > .wp-block-navigation-item__content.wow-album-link__content {
+		display: flex;
+		flex-direction: column;
+		gap: 0.55rem;
+		height: 100%;
+		padding: 0;
+	}
+
+	.wow-album-link__cover {
+		aspect-ratio: 4 / 3;
+		border-radius: 2px;
+		display: block;
+		height: auto;
+		object-fit: cover;
+		width: 100%;
+	}
+
+	.wow-album-link__content .wp-block-navigation-item__label {
+		font-size: 0.8rem;
+		line-height: 1.3;
+	}
+
+	.wow-album-link__content:hover .wow-album-link__cover,
+	.wow-album-link__content:focus-visible .wow-album-link__cover {
+		opacity: 0.75;
+	}
+
+	.wow-album-link.current-menu-item .wp-block-navigation-item__label {
+		font-weight: 700;
+	}
+}

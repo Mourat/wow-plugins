@@ -43,6 +43,7 @@ function headers( string $file ): array {
 	$top   = (string) file_get_contents( $file, false, null, 0, 8192 );
 	$wants = array(
 		'Plugin Name'       => 'name',
+		'Theme Name'        => 'name',
 		'Version'           => 'version',
 		'Requires at least' => 'requires',
 		'Requires PHP'      => 'requires_php',
@@ -52,10 +53,17 @@ function headers( string $file ): array {
 
 	$found = array();
 
+	/*
+	 * Two labels write the same field: a plugin says "Plugin Name" and a
+	 * theme says "Theme Name". So a label that is not there leaves what is
+	 * already found alone, or the second of the pair would wipe the first.
+	 */
 	foreach ( $wants as $label => $key ) {
-		$found[ $key ] = preg_match( '/^[ \t\/*#@]*' . preg_quote( $label, '/' ) . ':(.*)$/mi', $top, $m )
-			? trim( (string) $m[1] )
-			: '';
+		$found[ $key ] = $found[ $key ] ?? '';
+
+		if ( preg_match( '/^[ \t\/*#@]*' . preg_quote( $label, '/' ) . ':(.*)$/mi', $top, $m ) ) {
+			$found[ $key ] = trim( (string) $m[1] );
+		}
 	}
 
 	return $found;
@@ -66,6 +74,7 @@ $manifest = array(
 	'tag'        => $tag,
 	'made'       => gmdate( 'c' ),
 	'plugins'    => array(),
+	'themes'     => array(),
 );
 
 foreach ( glob( $root . '/plugins/*', GLOB_ONLYDIR ) ?: array() as $folder ) {
@@ -106,6 +115,50 @@ foreach ( glob( $root . '/plugins/*', GLOB_ONLYDIR ) ?: array() as $folder ) {
 	printf( "%-20s %-8s %7d bytes\n", $slug, $about['version'], (int) filesize( $zip ) );
 }
 
+/*
+ * And the themes, which WordPress updates by the same rule since 7.1: an
+ * `Update URI` in style.css and a filter named after its host. A theme has
+ * no main .php file to read headers from, so they are read from style.css,
+ * and its slug is the folder, as a stylesheet always is.
+ */
+foreach ( glob( $root . '/themes/*', GLOB_ONLYDIR ) ?: array() as $folder ) {
+	$slug  = basename( $folder );
+	$sheet = $folder . '/style.css';
+
+	if ( ! is_file( $sheet ) ) {
+		fwrite( STDERR, "skipping theme $slug: no style.css\n" );
+
+		continue;
+	}
+
+	$about = headers( $sheet );
+
+	if ( '' === $about['version'] ) {
+		fwrite( STDERR, "skipping theme $slug: no Version header\n" );
+
+		continue;
+	}
+
+	$zip = $dist . '/' . $slug . '.zip';
+
+	if ( ! is_file( $zip ) ) {
+		fwrite( STDERR, "skipping theme $slug: $zip was not built\n" );
+
+		continue;
+	}
+
+	$manifest['themes'][ $slug ] = array(
+		'name'         => $about['name'],
+		'version'      => $about['version'],
+		'requires'     => $about['requires'],
+		'requires_php' => $about['requires_php'],
+		'tested'       => $about['tested'],
+		'package'      => sprintf( 'https://github.com/%s/releases/download/%s/%s.zip', $repository, rawurlencode( $tag ), $slug ),
+	);
+
+	printf( "%-20s %-8s %7d bytes  (theme)\n", $slug, $about['version'], (int) filesize( $zip ) );
+}
+
 if ( array() === $manifest['plugins'] ) {
 	fwrite( STDERR, "nothing to release\n" );
 	exit( 1 );
@@ -113,4 +166,4 @@ if ( array() === $manifest['plugins'] ) {
 
 file_put_contents( $dist . '/plugins.json', json_encode( $manifest, JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES ) . "\n" );
 
-printf( "\n%d plugins, manifest written\n", count( $manifest['plugins'] ) );
+printf( "\n%d plugins, %d themes, manifest written\n", count( $manifest['plugins'] ), count( $manifest['themes'] ) );

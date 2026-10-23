@@ -1,0 +1,36 @@
+<!-- wp:template-part {"slug":"header"} /-->
+
+<!-- wp:group {"tagName":"main","style":{"spacing":{"margin":{"top":"var:preset|spacing|50"}}},"layout":{"type":"constrained"}} -->
+<main class="wp-block-group" style="margin-top:var(--wp--preset--spacing--50)">
+	<!-- wp:group {"align":"wide","className":"wow-album-header","style":{"spacing":{"blockGap":"20px","margin":{"bottom":"50px"}}},"layout":{"type":"flex","flexWrap":"nowrap","verticalAlignment":"center"}} -->
+	<div class="wp-block-group alignwide wow-album-header" style="margin-bottom:50px">
+		<!-- wp:post-featured-image {"sizeSlug":"thumbnail","width":"68px","height":"68px","scale":"cover","className":"wow-album-header__thumb"} /-->
+		<!-- wp:post-title {"level":1,"className":"wow-album-header__title"} /-->
+	</div>
+	<!-- /wp:group -->
+
+	<!-- wp:columns {"align":"wide","style":{"spacing":{"blockGap":{"left":"var:preset|spacing|50"}}}} -->
+	<div class="wp-block-columns alignwide">
+		<!-- wp:column {"width":"220px"} -->
+		<div class="wp-block-column" style="flex-basis:220px">
+			<!-- wp:wow/album-list /-->
+		</div>
+		<!-- /wp:column -->
+
+		<!-- wp:column -->
+		<div class="wp-block-column">
+			<!-- wp:group {"layout":{"type":"constrained","contentSize":"754px"}} -->
+			<div class="wp-block-group">
+				<!-- wp:wow/album-description {"fontSize":"small"} /-->
+			</div>
+			<!-- /wp:group -->
+
+			<!-- wp:post-content {"layout":{"type":"constrained","contentSize":"754px"}} /-->
+		</div>
+		<!-- /wp:column -->
+	</div>
+	<!-- /wp:columns -->
+</main>
+<!-- /wp:group -->
+
+<!-- wp:template-part {"slug":"footer"} /-->

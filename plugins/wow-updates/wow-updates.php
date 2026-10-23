@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       WOW Updates
  * Description:       Keeps the plugins written for this site up to date from the repository they live in.
- * Version:           0.1.0
+ * Version:           0.1.1
  * Requires at least: 6.5
  * Requires PHP:      8.1
  * Author:            Wow-arts
@@ -17,7 +17,7 @@ namespace WOW\Updates;
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'WOW_UPDATES_VERSION', '0.1.0' );
+define( 'WOW_UPDATES_VERSION', '0.1.1' );
 define( 'WOW_UPDATES_FILE', __FILE__ );
 define( 'WOW_UPDATES_DIR', plugin_dir_path( __FILE__ ) );
 define( 'WOW_UPDATES_URL', plugin_dir_url( __FILE__ ) );

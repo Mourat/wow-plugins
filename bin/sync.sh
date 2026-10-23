@@ -20,6 +20,7 @@
 # Usage:
 #   bin/sync.sh ~/projects/ArleaMH/wp-content/plugins
 #   bin/sync.sh ~/projects/ArleaMH/wp-content/plugins wow-blocks wow-guard
+#   bin/sync.sh ~/projects/ArleaMH/wp-content/themes wow-theme
 
 set -eu
 
@@ -39,25 +40,39 @@ if [ ! -d "$from" ]; then
 	exit 1
 fi
 
-# Named plugins, or every one this repository already knows about.
+# Which half of the repository this directory belongs to. A site keeps its
+# plugins and its themes in folders of those names, and so does this.
+case "$( basename "$from" )" in
+	themes) area="themes" ;;
+	*)      area="plugins" ;;
+esac
+
+# Named folders, or every one this repository already knows about.
 if [ "$#" -gt 0 ]; then
 	slugs=( "$@" )
 else
 	slugs=()
-	for folder in plugins/*/; do
+	for folder in "$area"/*/; do
+		[ -d "$folder" ] || continue
 		slugs+=( "$( basename "${folder%/}" )" )
 	done
 fi
 
+# A plugin writes its version inside a comment block, a theme writes it at
+# the start of a line in style.css; the star is therefore optional.
 version_in() {
-	sed -n 's/^[[:space:]]*\*[[:space:]]*Version:[[:space:]]*\([0-9][0-9.]*\)[[:space:]]*$/\1/p' | head -1
+	sed -n 's/^[[:space:]]*\*\{0,1\}[[:space:]]*Version:[[:space:]]*\([0-9][0-9.]*\)[[:space:]]*$/\1/p' | head -1
 }
 
 copied=0
 kept=0
 
 for slug in "${slugs[@]}"; do
-	main="plugins/$slug/$slug.php"
+	if [ "$area" = "themes" ]; then
+		main="themes/$slug/style.css"
+	else
+		main="plugins/$slug/$slug.php"
+	fi
 
 	if [ ! -d "$from/$slug" ]; then
 		printf '%-20s not on the site — skipped\n' "$slug"
@@ -69,7 +84,7 @@ for slug in "${slugs[@]}"; do
 
 	rsync -a --delete \
 		--exclude node_modules --exclude .git --exclude build/ \
-		"$from/$slug/" "plugins/$slug/"
+		"$from/$slug/" "$area/$slug/"
 
 	theirs="$( version_in < "$main" 2>/dev/null || true )"
 	note=""
@@ -80,7 +95,7 @@ for slug in "${slugs[@]}"; do
 		if [ "$lower" = "$theirs" ]; then
 			# The site is behind. Put the repository's version back, in the
 			# header and in the plugin's own constant alike.
-			sed -i "s/^\([[:space:]]*\*[[:space:]]*Version:[[:space:]]*\)$theirs[[:space:]]*$/\1$mine/" "$main"
+			sed -i "s/^\([[:space:]]*\*\{0,1\}[[:space:]]*Version:[[:space:]]*\)$theirs[[:space:]]*$/\1$mine/" "$main"
 			sed -i "s/\(define([[:space:]]*'[A-Z_]*_VERSION',[[:space:]]*'\)$theirs\('[[:space:]]*)\)/\1$mine\2/" "$main"
 			note="version kept at $mine (site had $theirs)"
 			kept=$(( kept + 1 ))
@@ -98,7 +113,7 @@ done
 for folder in "$from"/wow-*/; do
 	slug="$( basename "${folder%/}" )"
 
-	if [ ! -d "plugins/$slug" ]; then
+	if [ ! -d "$area/$slug" ]; then
 		printf '%-20s on the site but not in this repository\n' "$slug"
 	fi
 done

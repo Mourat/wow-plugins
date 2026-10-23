@@ -81,6 +81,34 @@ function plugins( bool $fresh = false ): array {
 }
 
 /**
+ * What the repository says it has in the way of themes.
+ *
+ * The same file and the same cache; only the section differs. WordPress
+ * has updated themes by the `Update URI` header since 7.1, exactly as it
+ * does plugins, so there is nothing to invent here.
+ *
+ * @param bool $fresh Ask again even if there is a recent answer.
+ * @return array<string,array<string,string>> Slug => what is known.
+ */
+function themes( bool $fresh = false ): array {
+	if ( ! $fresh ) {
+		$kept = get_transient( CACHE );
+
+		if ( is_array( $kept ) ) {
+			return isset( $kept['themes'] ) && is_array( $kept['themes'] ) ? $kept['themes'] : array();
+		}
+	}
+
+	plugins( true );
+
+	$kept = get_transient( CACHE );
+
+	return is_array( $kept ) && isset( $kept['themes'] ) && is_array( $kept['themes'] )
+		? $kept['themes']
+		: array();
+}
+
+/**
  * Makes sense of what came back, and refuses anything that does not.
  *
  * Every field is checked rather than trusted. The file is published by us,
@@ -132,9 +160,24 @@ function read( $answer ): array {
 /**
  * Forgets the answer, so the next question goes to the repository.
  */
+/**
+ * Asked again whenever WordPress is asked again.
+ *
+ * The answer here is kept for twelve hours, which is right for the
+ * background check that runs on its own and wrong for a person pressing
+ * "Check again" after a release. Pressed, WordPress throws away its own
+ * note and asks every plugin afresh — and every plugin but this one then
+ * says something new, because this one answered out of a note of its own
+ * that nobody had thrown away. An hour of that is confusing; twelve is a
+ * bug report.
+ *
+ * So the note goes when WordPress's does.
+ */
 function forget(): void {
 	delete_transient( CACHE );
 }
+add_action( 'delete_site_transient_update_plugins', __NAMESPACE__ . '\\forget' );
+add_action( 'delete_site_transient_update_themes', __NAMESPACE__ . '\\forget' );
 
 /**
  * When the repository was last asked, and what came of it.

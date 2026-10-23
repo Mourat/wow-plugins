@@ -87,3 +87,12 @@ without copying it: adding a plugin is a decision, not a side effect.
 
 `build/` is not committed — the workflow makes it — so a fresh checkout of
 that plugin does nothing until it has been built once.
+
+## The theme
+
+`themes/wow-theme` is released the same way the plugins are: a tag builds
+it, zips it and names it in the manifest, and WordPress updates it from the
+`Update URI` in its style.css through the same filter the plugins use. One
+repository, one release, one manifest — the name says plugins and holds the
+theme as well, which is a small untruth worth less than a second repository
+to keep in step.

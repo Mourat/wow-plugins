@@ -1,8 +1,8 @@
 name: Release
 
-# A tag is the whole trigger. Push v0.2.0 and every plugin in the repository
-# is built, zipped and attached to a release of that name; the file WordPress
-# reads goes with them.
+# A tag is the whole trigger. Push v0.2.0 and every plugin and theme in the
+# repository is built, zipped and attached to a release of that name; the
+# file WordPress reads goes with them.
 on:
   push:
     tags:
@@ -30,7 +30,8 @@ jobs:
       - name: Build
         run: |
           set -eu
-          for dir in plugins/*/; do
+          for dir in plugins/*/ themes/*/; do
+            [ -d "$dir" ] || continue
             if [ -f "$dir/package.json" ]; then
               echo "::group::$dir"
               ( cd "$dir" && npm ci && npm run build )
@@ -45,12 +46,15 @@ jobs:
         run: |
           set -eu
           mkdir -p dist
-          cd plugins
-          for dir in */; do
-            slug="${dir%/}"
-            zip -q -r "../dist/$slug.zip" "$slug" \
-              -x "$slug/node_modules/*" "$slug/.git/*" "$slug/.github/*"
-            echo "$slug.zip"
+          for where in plugins themes; do
+            [ -d "$where" ] || continue
+            ( cd "$where"
+              for dir in */; do
+                slug="${dir%/}"
+                zip -q -r "../dist/$slug.zip" "$slug" \
+                  -x "$slug/node_modules/*" "$slug/.git/*" "$slug/.github/*"
+                echo "$where/$slug.zip"
+              done )
           done
 
       - name: Manifest

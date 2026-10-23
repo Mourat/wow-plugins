@@ -52,10 +52,20 @@ echo
 
 changed=0
 
-for folder in plugins/*/; do
+# Plugins and the theme alike. A plugin keeps its version in its main .php
+# file, a theme in style.css; everything after that is the same work.
+for folder in plugins/*/ themes/*/; do
+	[ -d "$folder" ] || continue
+
+	area="${folder%%/*}"
 	slug="${folder%/}"
-	slug="${slug#plugins/}"
-	main="plugins/$slug/$slug.php"
+	slug="${slug#*/}"
+
+	if [ "$area" = "themes" ]; then
+		main="themes/$slug/style.css"
+	else
+		main="plugins/$slug/$slug.php"
+	fi
 
 	[ -f "$main" ] || continue
 
@@ -67,15 +77,15 @@ for folder in plugins/*/; do
 	# never been told of, and a plugin whose only change is a new file would
 	# otherwise go out at its old version.
 	touched="$( {
-		git diff --name-only "$tag" -- "plugins/$slug"
-		git ls-files --others --exclude-standard -- "plugins/$slug"
+		git diff --name-only "$tag" -- "$area/$slug"
+		git ls-files --others --exclude-standard -- "$area/$slug"
 	} | sort -u | wc -l | tr -d ' ' )"
 
 	if [ "$touched" = "0" ] && [ "$all" = "0" ]; then
 		continue
 	fi
 
-	now="$(sed -n 's/^[[:space:]]*\*[[:space:]]*Version:[[:space:]]*\([0-9][0-9.]*\)[[:space:]]*$/\1/p' "$main" | head -1)"
+	now="$(sed -n 's/^[[:space:]]*\*\{0,1\}[[:space:]]*Version:[[:space:]]*\([0-9][0-9.]*\)[[:space:]]*$/\1/p' "$main" | head -1)"
 
 	if [ -z "$now" ]; then
 		echo "$slug: no Version header" >&2
@@ -85,7 +95,7 @@ for folder in plugins/*/; do
 	# Already raised since the tag — running this twice before tagging must
 	# not carry the version two steps away from the work it stands for.
 	was="$(git show "$tag:$main" 2>/dev/null \
-		| sed -n 's/^[[:space:]]*\*[[:space:]]*Version:[[:space:]]*\([0-9][0-9.]*\)[[:space:]]*$/\1/p' \
+		| sed -n 's/^[[:space:]]*\*\{0,1\}[[:space:]]*Version:[[:space:]]*\([0-9][0-9.]*\)[[:space:]]*$/\1/p' \
 		| head -1)"
 
 	if [ -n "$was" ] && [ "$was" != "$now" ]; then
@@ -132,7 +142,7 @@ for folder in plugins/*/; do
 	[ "$apply" = "1" ] || continue
 
 	# The header WordPress reads...
-	sed -i "s/^\([[:space:]]*\*[[:space:]]*Version:[[:space:]]*\)$now[[:space:]]*$/\1$next/" "$main"
+	sed -i "s/^\([[:space:]]*\*\{0,1\}[[:space:]]*Version:[[:space:]]*\)$now[[:space:]]*$/\1$next/" "$main"
 	# ...and the constant the plugin reads about itself.
 	sed -i "s/\(define([[:space:]]*'[A-Z_]*_VERSION',[[:space:]]*'\)$now\('[[:space:]]*)\)/\1$next\2/" "$main"
 done

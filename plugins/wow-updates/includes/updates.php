@@ -89,6 +89,52 @@ function answer( $update, $plugin_data = array(), $plugin_file = '' ) {
 add_filter( 'update_plugins_github.com', __NAMESPACE__ . '\\answer', 10, 3 );
 
 /**
+ * The same, for a theme.
+ *
+ * WordPress asks about themes through a filter of its own, with the
+ * stylesheet folder in place of the plugin file and the headers read from
+ * style.css. The shape of the answer differs too: a theme wants `theme`
+ * rather than `slug`, and `new_version` rather than `version`.
+ *
+ * @param mixed  $update     What another listener has already decided.
+ * @param array  $theme_data Theme headers.
+ * @param string $stylesheet Theme folder.
+ * @return mixed
+ */
+function answer_theme( $update, $theme_data = array(), $stylesheet = '' ) {
+	if ( false !== $update ) {
+		return $update;
+	}
+
+	if ( ! is_array( $theme_data ) || ! ours( (string) ( $theme_data['UpdateURI'] ?? '' ) ) ) {
+		return $update;
+	}
+
+	$slug  = (string) $stylesheet;
+	$known = Manifest\themes()[ $slug ] ?? null;
+
+	if ( '' === $slug || ! is_array( $known ) ) {
+		return $update;
+	}
+
+	$answer = array(
+		'theme'       => $slug,
+		'new_version' => $known['version'],
+		'url'         => Manifest\REPO,
+		'package'     => $known['package'],
+	);
+
+	foreach ( array( 'requires', 'requires_php' ) as $field ) {
+		if ( '' !== $known[ $field ] ) {
+			$answer[ $field ] = $known[ $field ];
+		}
+	}
+
+	return $answer;
+}
+add_filter( 'update_themes_github.com', __NAMESPACE__ . '\\answer_theme', 10, 3 );
+
+/**
  * Throws away what we think we know when an update has just been installed.
  *
  * Without this the list keeps offering the version that was just put in
