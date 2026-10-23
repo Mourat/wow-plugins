@@ -71,13 +71,14 @@ function plugins( bool $fresh = false ): array {
 	set_transient(
 		CACHE,
 		array(
-			'plugins' => $found,
+			'plugins' => $found['plugins'] ?? array(),
+			'themes'  => $found['themes'] ?? array(),
 			'asked'   => time(),
 		),
-		array() === $found ? BAD_FOR : GOOD_FOR
+		empty( $found['plugins'] ) ? BAD_FOR : GOOD_FOR
 	);
 
-	return $found;
+	return $found['plugins'] ?? array();
 }
 
 /**
@@ -117,7 +118,7 @@ function themes( bool $fresh = false ): array {
  * about where that address may point.
  *
  * @param mixed $answer What wp_remote_get returned.
- * @return array<string,array<string,string>>
+ * @return array{plugins?: array<string,array<string,string>>, themes?: array<string,array<string,string>>}
  */
 function read( $answer ): array {
 	if ( is_wp_error( $answer ) || 200 !== (int) wp_remote_retrieve_response_code( $answer ) ) {
@@ -130,9 +131,27 @@ function read( $answer ): array {
 		return array();
 	}
 
+	return array(
+		'plugins' => section( $body['plugins'] ),
+		'themes'  => section( is_array( $body['themes'] ?? null ) ? $body['themes'] : array() ),
+	);
+}
+
+/**
+ * One section of the file, checked entry by entry.
+ *
+ * Plugins and themes are described alike and are read alike. Every field
+ * is checked rather than trusted: the file is published by us, but it
+ * arrives over the network and ends with WordPress downloading and
+ * unpacking whatever address it names.
+ *
+ * @param array $entries Slug => what the file says.
+ * @return array<string,array<string,string>>
+ */
+function section( array $entries ): array {
 	$found = array();
 
-	foreach ( $body['plugins'] as $slug => $about ) {
+	foreach ( $entries as $slug => $about ) {
 		$slug = sanitize_key( (string) $slug );
 
 		if ( '' === $slug || ! is_array( $about ) || empty( $about['version'] ) || empty( $about['package'] ) ) {

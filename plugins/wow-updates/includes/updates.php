@@ -117,8 +117,17 @@ function answer_theme( $update, $theme_data = array(), $stylesheet = '' ) {
 		return $update;
 	}
 
+	/*
+	 * Both names for the same number, and `version` is the one that
+	 * matters: core drops an answer without it before looking at anything
+	 * else — "we require at least a version" — and fills in `new_version`
+	 * from it a line later. Sent as new_version alone, this was thrown
+	 * away in silence, which is how a theme can carry every other part of
+	 * an update mechanism and still never update.
+	 */
 	$answer = array(
 		'theme'       => $slug,
+		'version'     => $known['version'],
 		'new_version' => $known['version'],
 		'url'         => Manifest\REPO,
 		'package'     => $known['package'],
