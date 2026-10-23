@@ -2,7 +2,7 @@
 /**
  * Plugin Name:       WOW Guard
  * Description:       The handful of things that actually keep a small WordPress site from being broken into: a limit on password guessing, no public list of who may log in, and the doors nobody uses kept shut.
- * Version:           0.1.0
+ * Version:           0.1.1
  * Requires at least: 7.0
  * Requires PHP:      8.1
  * Author:            Wow-arts
@@ -17,7 +17,7 @@ namespace WOW\Guard;
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'WOW_GUARD_VERSION', '0.1.0' );
+define( 'WOW_GUARD_VERSION', '0.1.1' );
 define( 'WOW_GUARD_FILE', __FILE__ );
 define( 'WOW_GUARD_DIR', plugin_dir_path( __FILE__ ) );
 define( 'WOW_GUARD_URL', plugin_dir_url( __FILE__ ) );

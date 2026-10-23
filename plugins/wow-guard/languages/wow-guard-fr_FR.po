@@ -1,5 +1,3 @@
-# Copyright (C) 2026 Wow-arts
-# This file is distributed under the same license as the WOW Guard plugin.
 msgid ""
 msgstr ""
 "Project-Id-Version: WOW Guard 0.1.0\n"
@@ -31,299 +29,295 @@ msgstr "Le petit nombre de choses qui empêchent réellement l’intrusion dans 
 msgid "Wow-arts"
 msgstr ""
 
-#: includes/admin.php:56
 #: includes/admin.php:57
-#: includes/admin.php:135
+#: includes/admin.php:58
+#: includes/admin.php:189
 msgid "Security"
 msgstr "Sécurité"
 
-#: includes/admin.php:75
+#: includes/admin.php:76
 msgid "Settings"
 msgstr "Réglages"
 
-#: includes/admin.php:88
+#: includes/admin.php:89
 msgid "You are not allowed to do that."
 msgstr "Vous n’avez pas l’autorisation de faire cela."
 
-#: includes/admin.php:138
+#: includes/admin.php:192
 msgid "Every lockout has been lifted and the record emptied."
 msgstr "Tous les blocages ont été levés et le relevé vidé."
 
-#: includes/admin.php:144
+#: includes/admin.php:198
 msgid "The login page is at:"
 msgstr "La page de connexion se trouve à :"
 
-#: includes/admin.php:147
+#: includes/admin.php:201
 msgid "Write it down somewhere that is not this site. If it is ever lost, put a line in wp-config.php: define( 'WOW_GUARD_LOGIN_SLUG', 'something' ); — or run wp wow-guard login-url --off."
 msgstr "Notez-la ailleurs que sur ce site. Si elle venait à être perdue, ajoutez une ligne dans wp-config.php : define( 'WOW_GUARD_LOGIN_SLUG', 'quelque-chose' ); — ou lancez wp wow-guard login-url --off."
 
-#: includes/admin.php:154
+#: includes/admin.php:208
 msgid "The address of the login page"
 msgstr "L’adresse de la page de connexion"
 
-#: includes/admin.php:158
+#: includes/admin.php:212
 msgid "Secret address"
 msgstr "Adresse secrète"
 
-#: includes/admin.php:164
+#: includes/admin.php:218
 msgid "leave empty for wp-login.php"
 msgstr "laisser vide pour wp-login.php"
 
-#: includes/admin.php:169
+#: includes/admin.php:223
 msgid "This is not security, and it is worth being clear about that: anybody who has decided to break into this site in particular will find the page. What it is good for is everything else — the machines that work through lists of addresses trying wp-login.php on each one. They stop finding anything, the server stops answering them, and the record of failed attempts stops being noise."
 msgstr "Ce n’est pas de la sécurité, et autant le dire clairement : quiconque a décidé de s’introduire dans ce site-ci trouvera la page. Ce que cela règle, c’est tout le reste — les machines qui parcourent des listes d’adresses en essayant wp-login.php sur chacune. Elles ne trouvent plus rien, le serveur cesse de leur répondre, et le relevé des échecs cesse d’être du bruit."
 
-#: includes/admin.php:170
+#: includes/admin.php:224
 msgid "Once this is set, wp-login.php answers \"not found\", and so does wp-admin for anybody who is not already logged in — otherwise WordPress would send them to the new address and give it away."
 msgstr "Une fois ceci réglé, wp-login.php répond « page introuvable », et wp-admin aussi pour qui n’est pas déjà connecté — sinon WordPress l’enverrait vers la nouvelle adresse et la révélerait."
 
-#: includes/admin.php:174
+#: includes/admin.php:228
 msgid "A line in wp-config.php is setting this and wins over the field above."
 msgstr "Une ligne dans wp-config.php impose cette valeur et l’emporte sur le champ ci-dessus."
 
-#: includes/admin.php:180
+#: includes/admin.php:234
 msgid "Password guessing"
 msgstr "Essais de mot de passe"
 
-#: includes/admin.php:184
+#: includes/admin.php:238
 msgid "Attempts allowed"
 msgstr "Essais autorisés"
 
-#: includes/admin.php:188
+#: includes/admin.php:242
 msgid "tries, then locked out for"
 msgstr "essais, puis blocage pendant"
 
-#: includes/admin.php:190
+#: includes/admin.php:244
 msgid "minutes. A count of failures is forgotten after"
 msgstr "minutes. Un décompte d’échecs est oublié au bout de"
 
-#: includes/admin.php:192
+#: includes/admin.php:246
 msgid "minutes."
 msgstr "minutes."
 
-#: includes/admin.php:194
+#: includes/admin.php:248
 msgid "This is the one thing here that stops an attack rather than making it quieter. It counts attempts wherever they come from, not only on the login form — XML-RPC authenticates through the same place, and that is the route a guarded login page normally gets walked around."
 msgstr "C’est la seule chose ici qui arrête une attaque au lieu de la rendre plus discrète. Les essais sont comptés d’où qu’ils viennent, pas seulement depuis le formulaire : XML-RPC s’authentifie au même endroit, et c’est par là qu’on contourne d’ordinaire une page de connexion protégée."
 
-#: includes/admin.php:199
+#: includes/admin.php:253
 msgid "The refusal message"
 msgstr "Le message de refus"
 
-#: includes/admin.php:202
+#: includes/admin.php:256
 msgid "Say the same thing whichever half was wrong"
 msgstr "Dire la même chose quelle que soit la moitié erronée"
 
-#: includes/admin.php:203
+#: includes/admin.php:257
 msgid "WordPress is helpful about it: an unknown name and a wrong password get different messages. To somebody working through a list of names that is the answer to the only question worth asking."
 msgstr "WordPress se montre serviable : un identifiant inconnu et un mot de passe erroné donnent des messages différents. Pour qui parcourt une liste d’identifiants, c’est la réponse à la seule question qui vaille."
 
-#: includes/admin.php:209
+#: includes/admin.php:263
 msgid "Visitors’ addresses"
 msgstr "Adresses des visiteurs"
 
-#: includes/admin.php:211
+#: includes/admin.php:265
 msgid "Something sits in front of this site — read the address from a header"
 msgstr "Quelque chose se trouve devant ce site — lire l’adresse dans un en-tête"
 
-#: includes/admin.php:216
+#: includes/admin.php:270
 msgid "Leave this off unless a proxy or a CDN really is in front of the site. Turned on without one, anybody can send whatever address they like and never be locked out; left off when there is one, every visitor looks like the proxy and the first mistyped password locks out the world."
 msgstr "À laisser décoché sauf si un proxy ou un CDN se trouve réellement devant le site. Coché sans proxy, n’importe qui peut annoncer l’adresse de son choix et ne jamais être bloqué ; décoché alors qu’il y en a un, tous les visiteurs ressemblent au proxy et le premier mot de passe mal tapé bloque la terre entière."
 
-#: includes/admin.php:219
+#: includes/admin.php:273
 msgid "This request appears to come from:"
 msgstr "Cette requête semble venir de :"
 
-#: includes/admin.php:220
+#: includes/admin.php:274
 msgid "nowhere — no address was given"
 msgstr "nulle part — aucune adresse n’a été fournie"
 
-#: includes/admin.php:227
+#: includes/admin.php:281
 msgid "Who may be named in public"
 msgstr "Qui peut être nommé en public"
 
-#: includes/admin.php:231
+#: includes/admin.php:285
 msgid "User names"
 msgstr "Identifiants"
 
-#: includes/admin.php:234
+#: includes/admin.php:288
 msgid "Do not let the site say who its users are"
 msgstr "Ne pas laisser le site dire qui sont ses comptes"
 
-#: includes/admin.php:235
+#: includes/admin.php:289
 msgid "Guessing a password needs two things, and WordPress gives one away: ask for /?author=1 and it answers with the name. With the name known, the guessing has only one thing left to find. This closes that, the same question asked of the REST API, and the author archive."
 msgstr "Deviner un mot de passe demande deux choses, et WordPress en livre une : demandez /?author=1 et il répond par l’identifiant. L’identifiant connu, il ne reste qu’une chose à trouver. Ceci ferme cette voie, la même question posée à l’API REST, et l’archive d’auteur."
 
-#: includes/admin.php:241
+#: includes/admin.php:295
 msgid "Doors this site does not use"
 msgstr "Les portes dont ce site ne se sert pas"
 
-#: includes/admin.php:245
+#: includes/admin.php:299
 msgid "Leave open"
 msgstr "Laisser ouvert"
 
-#: includes/admin.php:248
+#: includes/admin.php:302
 msgid "XML-RPC"
 msgstr "XML-RPC"
 
-#: includes/admin.php:249
+#: includes/admin.php:303
 msgid "For desktop blogging clients and the WordPress mobile app. Its system.multicall carries any number of password attempts in one request, which is why it is the usual way round a guarded login page."
 msgstr "Pour les logiciels de publication et l’application mobile WordPress. Son system.multicall transporte autant d’essais de mot de passe qu’on veut en une seule requête : c’est le contournement habituel d’une page de connexion protégée."
 
-#: includes/admin.php:251
+#: includes/admin.php:305
 msgid "Application passwords"
 msgstr "Mots de passe d’application"
 
-#: includes/admin.php:252
+#: includes/admin.php:306
 msgid "A second kind of credential, for programs talking to the site. Nothing here uses one."
 msgstr "Une seconde sorte d’identifiant, pour les programmes qui dialoguent avec le site. Rien ici n’en utilise."
 
-#: includes/admin.php:254
+#: includes/admin.php:308
 msgid "The theme and plugin file editor in the admin"
 msgstr "L’éditeur de fichiers de thèmes et d’extensions dans l’administration"
 
-#: includes/admin.php:255
+#: includes/admin.php:309
 msgid "Without it, somebody who gets hold of an administrator session still has to find a way to run code. With it, the admin has a text editor for exactly that and a Save button."
 msgstr "Sans lui, celui qui met la main sur une session d’administrateur doit encore trouver le moyen d’exécuter du code. Avec lui, l’administration offre un éditeur de texte fait pour cela et un bouton Enregistrer."
 
-#: includes/admin.php:257
+#: includes/admin.php:311
 msgid "Keep the WordPress and PHP versions to ourselves"
 msgstr "Garder pour nous les versions de WordPress et de PHP"
 
-#: includes/admin.php:258
+#: includes/admin.php:312
 msgid "Worth little against anybody paying attention, but it is what the indiscriminate scanners read, and they are most of the traffic."
 msgstr "Peu de chose face à quelqu’un d’attentif, mais c’est ce que lisent les scanners aveugles, et ils constituent l’essentiel du trafic."
 
-#: includes/admin.php:264
+#: includes/admin.php:318
 msgid "Keeping up to date"
 msgstr "Rester à jour"
 
-#: includes/admin.php:268
+#: includes/admin.php:327
 msgid "WordPress itself"
 msgstr "WordPress lui-même"
 
-#: includes/admin.php:271
+#: includes/admin.php:330
 msgid "Install security and maintenance releases by itself (recommended)"
 msgstr "Installer seul les versions de sécurité et de maintenance (recommandé)"
 
-#: includes/admin.php:272
+#: includes/admin.php:331
 msgid "Install everything by itself, new major versions included"
 msgstr "Tout installer seul, nouvelles versions majeures comprises"
 
-#: includes/admin.php:273
+#: includes/admin.php:332
 msgid "Install nothing by itself"
 msgstr "N’installer seul aucune mise à jour"
 
-#: includes/admin.php:275
+#: includes/admin.php:334
 msgid "Most sites that are broken into are running a version with a hole that was published and fixed months earlier. A security release only fixes; a new major version can change the editor this site is built on, which is better taken deliberately with somebody looking at the result."
 msgstr "La plupart des sites dans lesquels on s’introduit tournent sur une version dont la faille a été publiée et corrigée des mois plus tôt. Une version de sécurité ne fait que corriger ; une nouvelle version majeure peut modifier l’éditeur sur lequel ce site est bâti, ce qui vaut mieux être fait délibérément, en regardant le résultat."
 
-#: includes/admin.php:280
+#: includes/admin.php:339
 msgid "Themes and plugins"
 msgstr "Thèmes et extensions"
 
-#: includes/admin.php:283
+#: includes/admin.php:342
 msgid "Update themes by themselves"
 msgstr "Mettre à jour les thèmes tout seuls"
 
-#: includes/admin.php:284
+#: includes/admin.php:343
 msgid "Update plugins by themselves"
 msgstr "Mettre à jour les extensions toutes seules"
 
-#: includes/admin.php:285
-msgid "Only things with somewhere to update from are affected. The plugins and the theme written for this site have no such place and are untouched either way — but this site’s theme is a child of a WordPress one, and a child theme is no safer than the parent it stands on."
-msgstr "Seul ce qui dispose d’une source de mise à jour est concerné. Les extensions et le thème écrits pour ce site n’en ont pas et ne sont touchés ni dans un cas ni dans l’autre — mais le thème de ce site est l’enfant d’un thème WordPress, et un thème enfant n’est pas plus sûr que le parent sur lequel il repose."
-
-#: includes/admin.php:291
+#: includes/admin.php:350
 msgid "The rest"
 msgstr "Le reste"
 
-#: includes/admin.php:295
+#: includes/admin.php:354
 msgid "What the browser is told"
 msgstr "Ce qui est dit au navigateur"
 
-#: includes/admin.php:298
+#: includes/admin.php:357
 msgid "Send the usual protective headers"
 msgstr "Envoyer les en-têtes de protection habituels"
 
-#: includes/admin.php:299
+#: includes/admin.php:358
 msgid "nosniff, so a browser cannot decide a file is something other than what it was sent as; SAMEORIGIN, so another site cannot put this one in a frame and collect clicks meant for it; a referrer policy; and a refusal of camera, microphone and location to anything embedded in a page."
 msgstr "nosniff, pour qu’un navigateur ne décide pas qu’un fichier est autre chose que ce qui lui a été envoyé ; SAMEORIGIN, pour qu’un autre site ne puisse pas mettre celui-ci dans un cadre et récolter les clics qui lui étaient destinés ; une politique de référent ; et un refus de la caméra, du micro et de la position à tout ce qui est intégré dans une page."
 
-#: includes/admin.php:301
+#: includes/admin.php:360
 msgid "Insist on HTTPS for a year (HSTS)"
 msgstr "Imposer HTTPS pendant un an (HSTS)"
 
-#: includes/admin.php:302
+#: includes/admin.php:361
 msgid "Only sent over HTTPS. A browser remembers it for as long as it is told to, so a site that sends this and later loses its certificate becomes unreachable rather than insecure. Switch it on once the site is live and the certificate is settled."
 msgstr "Envoyé uniquement en HTTPS. Un navigateur s’en souvient aussi longtemps qu’on le lui dit : un site qui envoie ceci et perd ensuite son certificat devient inaccessible plutôt que vulnérable. À activer une fois le site en ligne et le certificat installé."
 
-#: includes/admin.php:308
+#: includes/admin.php:367
 msgid "The uploads folder"
 msgstr "Le dossier des téléversements"
 
-#: includes/admin.php:311
+#: includes/admin.php:370
 msgid "Do not let anything in it be executed"
 msgstr "N’y laisser rien s’exécuter"
 
-#: includes/admin.php:312
+#: includes/admin.php:371
 msgid "The uploads folder is the one place the outside world can put files. Everything that belongs there is a picture; if anything else ever lands there, this is the difference between a nuisance and a disaster."
 msgstr "Le dossier des téléversements est le seul endroit où le monde extérieur peut déposer des fichiers. Tout ce qui y a sa place est une image ; si autre chose devait y atterrir, c’est ceci qui fait la différence entre un désagrément et un désastre."
 
-#: includes/admin.php:317
+#: includes/admin.php:376
 msgid "The file is in place."
 msgstr "Le fichier est en place."
 
-#: includes/admin.php:319
+#: includes/admin.php:378
 msgid "There is already an .htaccess there that this plugin did not write, so it has been left alone."
 msgstr "Un fichier .htaccess que cette extension n’a pas écrit s’y trouve déjà ; il a été laissé tel quel."
 
-#: includes/admin.php:322
+#: includes/admin.php:381
 msgid "This is an Apache instruction. On nginx the same thing has to be said in the server configuration instead, and this setting will do nothing."
 msgstr "C’est une instruction Apache. Sous nginx, la même chose doit être dite dans la configuration du serveur, et ce réglage n’aura aucun effet."
 
-#: includes/admin.php:331
+#: includes/admin.php:390
 msgid "Recent failed attempts"
 msgstr "Échecs de connexion récents"
 
-#: includes/admin.php:337
+#: includes/admin.php:396
 msgid "Nobody has failed to log in lately."
 msgstr "Personne n’a échoué à se connecter ces derniers temps."
 
-#: includes/admin.php:340
+#: includes/admin.php:399
 msgid "When"
 msgstr "Quand"
 
-#: includes/admin.php:340
+#: includes/admin.php:399
 msgid "From"
 msgstr "Depuis"
 
-#: includes/admin.php:340
+#: includes/admin.php:399
 msgid "Name tried"
 msgstr "Identifiant essayé"
 
-#: includes/admin.php:340
+#: includes/admin.php:399
 msgid "What happened"
 msgstr "Ce qui s’est passé"
 
 #. translators: %s: a length of time.
-#: includes/admin.php:346
+#: includes/admin.php:405
 #, php-format
 msgid "%s ago"
 msgstr "il y a %s"
 
-#: includes/admin.php:349
+#: includes/admin.php:408
 msgid "locked out"
 msgstr "bloqué"
 
-#: includes/admin.php:349
+#: includes/admin.php:408
 msgid "wrong details"
 msgstr "informations erronées"
 
-#: includes/admin.php:356
+#: includes/admin.php:415
 msgid "The last fifty, kept for a week and no longer. An address is personal information, and a security plugin that quietly accumulates a year of them has solved one problem by making another."
 msgstr "Les cinquante derniers, conservés une semaine et pas davantage. Une adresse est une donnée personnelle, et une extension de sécurité qui en accumule discrètement une année a résolu un problème en en créant un autre."
 
-#: includes/admin.php:362
+#: includes/admin.php:421
 msgid "Lift every lockout and empty the record"
 msgstr "Lever tous les blocages et vider le relevé"
 
@@ -351,303 +345,400 @@ msgstr "ces informations ne sont pas les bonnes."
 msgid "Sorry, you are not allowed to do that."
 msgstr "Désolé, vous n’avez pas l’autorisation de faire cela."
 
-#: includes/two-factor-ui.php:65
-#: includes/two-factor.php:453
+#: includes/two-factor-ui.php:303
+#: includes/two-factor.php:514
 msgid "Two-step login"
 msgstr "Connexion en deux étapes"
 
-#: includes/two-factor-ui.php:69
+#: includes/two-factor-ui.php:307
 msgid "Status"
 msgstr "État"
 
-#: includes/two-factor-ui.php:72
+#: includes/two-factor-ui.php:310
 msgid "Off."
 msgstr "Désactivée."
 
-#: includes/two-factor-ui.php:72
+#: includes/two-factor-ui.php:310
 msgid "Knowing the password is enough to get into this account."
 msgstr "Connaître le mot de passe suffit pour entrer dans ce compte."
 
-#: includes/two-factor-ui.php:75
+#: includes/two-factor-ui.php:313
 msgid "On."
 msgstr "Activée."
 
-#: includes/two-factor-ui.php:78
+#: includes/two-factor-ui.php:316
 msgid "A code from an authenticator application is asked for after the password."
 msgstr "Un code issu d’une application d’authentification est demandé après le mot de passe."
 
-#: includes/two-factor-ui.php:79
+#: includes/two-factor-ui.php:317
 msgid "A code sent by email is asked for after the password."
 msgstr "Un code envoyé par courriel est demandé après le mot de passe."
 
-#: includes/two-factor-ui.php:97
+#: includes/two-factor-ui.php:335
 msgid "Recovery codes"
 msgstr "Codes de secours"
 
-#: includes/two-factor-ui.php:100
+#: includes/two-factor-ui.php:338
 msgid "Write these down now. They are not shown again."
 msgstr "Notez-les tout de suite. Ils ne seront plus affichés."
 
-#: includes/two-factor-ui.php:101
+#: includes/two-factor-ui.php:339
 msgid "Each one gets you in once, and they are the way back if the phone is lost or the mailbox unreachable. Keep them somewhere that is not this site."
 msgstr "Chacun vous fait entrer une fois, et ce sont eux qui vous ramènent si le téléphone est perdu ou la boîte aux lettres inaccessible. Conservez-les ailleurs que sur ce site."
 
-#: includes/two-factor-ui.php:114
+#: includes/two-factor-ui.php:549
 msgid "Switch it off"
 msgstr "La désactiver"
 
-#: includes/two-factor-ui.php:117
+#: includes/two-factor-ui.php:553
+#: includes/two-factor-ui.php:574
 msgid "Turn two-step login off"
 msgstr "Désactiver la connexion en deux étapes"
 
-#: includes/two-factor-ui.php:119
+#: includes/two-factor-ui.php:580
 msgid "Takes effect when the profile is saved."
 msgstr "Prend effet à l’enregistrement du profil."
 
-#: includes/two-factor-ui.php:121
+#: includes/two-factor-ui.php:584
 msgid "If you have lost both the application and the recovery codes, somebody with access to the server can run: wp wow-guard 2fa disable <your user name>"
 msgstr "Si vous avez perdu à la fois l’application et les codes de secours, quelqu’un ayant accès au serveur peut lancer : wp wow-guard 2fa disable <votre identifiant>"
 
-#: includes/two-factor-ui.php:150
+#: includes/two-factor-ui.php:394
 msgid "Turn it on"
 msgstr "L’activer"
 
-#: includes/two-factor-ui.php:154
+#: includes/two-factor-ui.php:402
 msgid "Use an authenticator application"
 msgstr "Utiliser une application d’authentification"
 
-#: includes/two-factor-ui.php:155
+#: includes/two-factor-ui.php:403
 msgid "Send me a code by email"
 msgstr "M’envoyer un code par courriel"
 
-#: includes/two-factor-ui.php:158
+#: includes/two-factor-ui.php:406
 msgid "The application is the stronger of the two: the secret never leaves your phone, so there is nothing to intercept. Email needs nothing installed, but the mailbox is usually also where a password reset would go — somebody holding it holds both halves. Either is a great deal better than neither."
 msgstr "L’application est la plus solide des deux : le secret ne quitte jamais votre téléphone, il n’y a donc rien à intercepter. Le courriel ne demande rien à installer, mais la boîte aux lettres est aussi, d’ordinaire, là où arriverait une réinitialisation de mot de passe : qui la détient détient les deux moitiés. L’une comme l’autre vaut infiniment mieux que rien."
 
-#: includes/two-factor-ui.php:179
+#: includes/two-factor-ui.php:426
 msgid "Scan this with your authenticator application:"
 msgstr "Scannez ceci avec votre application d’authentification :"
 
-#: includes/two-factor-ui.php:184
+#: includes/two-factor-ui.php:431
 msgid "Or type the secret in by hand:"
 msgstr "Ou saisissez le secret à la main :"
 
-#: includes/two-factor-ui.php:189
+#: includes/two-factor-ui.php:436
 msgid "Now enter the code it shows:"
 msgstr "Saisissez maintenant le code qu’elle affiche :"
 
-#: includes/two-factor-ui.php:195
-#: includes/two-factor-ui.php:225
+#: includes/two-factor-ui.php:442
+#: includes/two-factor-ui.php:477
 msgid "Turn two-step login on"
 msgstr "Activer la connexion en deux étapes"
 
-#: includes/two-factor-ui.php:197
-#: includes/two-factor-ui.php:227
+#: includes/two-factor-ui.php:444
+#: includes/two-factor-ui.php:480
 msgid "Cancel"
 msgstr "Annuler"
 
-#: includes/two-factor-ui.php:201
+#: includes/two-factor-ui.php:448
 msgid "Nothing is saved until that code is right. Scan it, close the page, and this account is exactly as it was."
 msgstr "Rien n’est enregistré tant que ce code n’est pas bon. Scannez, fermez la page, et ce compte est exactement comme il était."
 
-#. translators: %s: an email address.
-#: includes/two-factor-ui.php:217
-#, php-format
-msgid "A code will be sent to %s each time you log in."
-msgstr "Un code sera envoyé à %s à chaque connexion."
-
-#: includes/two-factor-ui.php:231
-msgid "Check that the site can actually send mail before relying on this — Settings → Mail has a test. A second factor that never arrives is a locked door."
-msgstr "Vérifiez que le site sait réellement envoyer du courrier avant de compter là-dessus — Réglages → Courrier propose un test. Un second facteur qui n’arrive jamais est une porte fermée à clé."
-
-#: includes/two-factor-ui.php:353
+#: includes/two-factor-ui.php:780
 msgid "That code was not right, so nothing was changed. Check that the phone's clock is correct and try again."
 msgstr "Ce code n’était pas le bon : rien n’a été modifié. Vérifiez que l’horloge du téléphone est à l’heure et réessayez."
 
 #. translators: %s: the name of the site.
-#: includes/two-factor.php:302
+#: includes/two-factor-ui.php:141
+#: includes/two-factor.php:309
 #, php-format
 msgid "Your code for %s"
 msgstr "Votre code pour %s"
 
-#: includes/two-factor.php:310
+#: includes/two-factor.php:317
 msgid "an unknown address"
 msgstr "une adresse inconnue"
 
-#: includes/two-factor.php:428
-#: includes/two-factor.php:547
+#: includes/two-factor.php:489
+#: includes/two-factor.php:628
 msgid "The code could not be sent. Use one of your recovery codes."
 msgstr "Le code n’a pas pu être envoyé. Utilisez l’un de vos codes de secours."
 
-#: includes/two-factor.php:467
+#: includes/two-factor.php:528
 msgid "A code has been sent to your email address."
 msgstr "Un code a été envoyé à votre adresse de courriel."
 
-#: includes/two-factor.php:468
+#: includes/two-factor.php:529
 msgid "Open your authenticator application and enter the code it shows."
 msgstr "Ouvrez votre application d’authentification et saisissez le code qu’elle affiche."
 
-#: includes/two-factor.php:473
+#: includes/two-factor.php:534
 msgid "Code"
 msgstr "Code"
 
-#: includes/two-factor.php:499
+#: includes/two-factor.php:579
 msgid "Continue"
 msgstr "Continuer"
 
-#: includes/two-factor.php:502
+#: includes/two-factor.php:582
 msgid "Send it again"
 msgstr "Le renvoyer"
 
-#: includes/two-factor.php:507
+#: includes/two-factor.php:587
 msgid "A recovery code works here too, dashes and all."
 msgstr "Un code de secours fonctionne ici aussi, tirets compris."
 
-#: includes/two-factor.php:511
+#: includes/two-factor.php:591
 msgid "← Start again"
 msgstr "← Recommencer"
 
-#: includes/two-factor.php:547
+#: includes/two-factor.php:628
 msgid "A new code is on its way."
 msgstr "Un nouveau code est en route."
 
-#: includes/two-factor.php:571
+#: includes/two-factor.php:654
 msgid "That code is not right."
 msgstr "Ce code n’est pas le bon."
 
+#: includes/two-factor-ui.php:566
 msgid "A code from your authenticator application, or one of the recovery codes:"
 msgstr "Un code de votre application d’authentification, ou l’un des codes de secours :"
 
+#. translators: %s: an email address.
+#: includes/two-factor-ui.php:464
+#, php-format
 msgid "A code has gone to %s. It is the same code that will be asked for after the password from now on."
 msgstr "Un code vient de partir vers %s. C’est le même code qui sera demandé après le mot de passe désormais."
 
+#: includes/two-factor-ui.php:791
 msgid "A code is on its way. It is good for fifteen minutes."
 msgstr "Un code est en route. Il est valable quinze minutes."
 
+#: includes/two-factor-ui.php:355
 msgid "A plain text file, saved straight from this page — it is not fetched from the site and cannot be asked for again."
 msgstr "Un fichier texte, enregistré directement depuis cette page — il n’est pas récupéré sur le site et ne pourra pas être redemandé."
 
+#. translators: %s: a user name.
+#: includes/two-factor-ui.php:256
+#, php-format
 msgid "Account: %s"
 msgstr "Compte : %s"
 
+#: includes/two-factor-ui.php:352
 msgid "Download them as a file"
 msgstr "Télécharger le fichier"
 
+#: includes/two-factor-ui.php:265
 msgid "Each code gets you in once, when the application or the mailbox is out of reach. Keep this file somewhere that is not this site."
 msgstr "Chaque code ouvre la porte une fois, quand l’application ou la boîte mail est hors d’atteinte. Gardez ce fichier ailleurs que sur ce site."
 
+#: includes/two-factor-ui.php:785
 msgid "Enter a current code first. Turning two-step login off asks for the same proof as turning it on."
 msgstr "Saisissez d’abord un code valable. Désactiver la connexion en deux étapes demande la même preuve que l’activer."
 
+#: includes/two-factor-ui.php:783
 msgid "Five wrong codes, so that one has been thrown away. Ask for another."
 msgstr "Cinq codes erronés : celui-ci a été jeté. Demandez-en un autre."
 
+#. translators: %s: a date.
+#: includes/two-factor-ui.php:261
+#, php-format
 msgid "Made on %s"
 msgstr "Créé le %s"
 
+#: includes/two-factor-ui.php:484
 msgid "Nothing is saved until that code comes back right. If it never arrives, this site cannot send mail and a code after the password would be a locked door — Settings → Mail has a test."
 msgstr "Rien n’est enregistré tant que ce code n’est pas juste. S’il n’arrive jamais, ce site ne sait pas envoyer de courrier et un code après le mot de passe serait une porte fermée — Réglages → Courrier propose un test."
 
+#: includes/two-factor-ui.php:471
 msgid "Now enter the code it carries:"
 msgstr "Saisissez maintenant le code qu’il contient :"
 
+#. translators: %s: the name of the site.
+#: includes/two-factor-ui.php:249
+#, php-format
 msgid "Recovery codes for two-step login on %s"
 msgstr "Codes de secours pour la connexion en deux étapes sur %s"
 
+#: includes/two-factor-ui.php:479
+#: includes/two-factor-ui.php:577
 msgid "Send another code"
 msgstr "Envoyer un autre code"
 
+#: includes/two-factor-ui.php:558
 msgid "Send me a code to confirm"
 msgstr "M’envoyer un code pour confirmer"
 
+#: includes/two-factor-ui.php:555
 msgid "Takes effect when the profile is saved. Switching somebody else's off is the way back in when a phone is lost; switching it on is theirs to do."
 msgstr "Prend effet à l’enregistrement du profil. Désactiver celle d’une autre personne est la porte de secours quand un téléphone est perdu ; l’activer n’appartient qu’à elle."
 
+#: includes/two-factor-ui.php:782
 msgid "That code has run out. Ask for another one."
 msgstr "Ce code a expiré. Demandez-en un autre."
 
+#: includes/two-factor-ui.php:781
 msgid "That code was not right, so nothing was changed. Look at the message again, or ask for another code."
 msgstr "Ce code n’était pas le bon : rien n’a été changé. Regardez le message à nouveau, ou demandez un autre code."
 
+#: includes/two-factor-ui.php:786
 msgid "That code was not right, so two-step login is still on."
 msgstr "Ce code n’était pas le bon : la connexion en deux étapes reste active."
 
+#: includes/two-factor-ui.php:784
 msgid "The code could not be sent, so nothing was changed — this site cannot send mail at the moment. Settings → Mail has a test."
 msgstr "Le code n’a pas pu être envoyé : rien n’a été changé, ce site ne sait pas envoyer de courrier pour le moment. Réglages → Courrier propose un test."
 
+#: includes/two-factor-ui.php:567
 msgid "The code just sent to you, or one of the recovery codes:"
 msgstr "Le code qui vient de vous être envoyé, ou l’un des codes de secours :"
 
+#: includes/two-factor-ui.php:560
 msgid "Turning it off asks for the same proof as turning it on."
 msgstr "La désactiver demande la même preuve que l’activer."
 
+#: includes/two-factor-ui.php:792
 msgid "Two-step login is off. The password is now the only thing between this account and whoever knows it."
 msgstr "La connexion en deux étapes est désactivée. Le mot de passe est désormais la seule chose entre ce compte et qui le connaît."
 
+#: includes/two-factor-ui.php:409
 msgid "Whichever you choose, a code comes first and nothing is switched on until it comes back right. That is the only way to know the application has the secret, or that mail from this site arrives at all."
 msgstr "Quel que soit votre choix, un code vient d’abord et rien n’est activé tant qu’il n’est pas juste. C’est la seule façon de savoir que l’application détient bien le secret, ou que le courrier de ce site arrive."
 
-msgid "Your code is %1$s\n\nType it on your profile page to turn two-step login off. It is good for %2$d minutes and can be used once.\n\nIf you did not ask for this, somebody is signed in as you: change your password and do not type this code anywhere."
-msgstr "Votre code est %1$s\n\nSaisissez-le sur votre page de profil pour désactiver la connexion en deux étapes. Il est valable %2$d minutes et ne sert qu’une fois.\n\nSi vous n’avez rien demandé, quelqu’un est connecté à votre place : changez votre mot de passe et ne saisissez ce code nulle part."
+#. translators: 1: the code, 2: how many minutes it lasts.
+#: includes/two-factor-ui.php:126
+#, php-format
+msgid ""
+"Your code is %1$s\n"
+"\n"
+"Type it on your profile page to turn two-step login off. It is good for %2$d minutes and can be used once.\n"
+"\n"
+"If you did not ask for this, somebody is signed in as you: change your password and do not type this code anywhere."
+msgstr ""
+"Votre code est %1$s\n"
+"\n"
+"Saisissez-le sur votre page de profil pour désactiver la connexion en deux étapes. Il est valable %2$d minutes et ne sert qu’une fois.\n"
+"\n"
+"Si vous n’avez rien demandé, quelqu’un est connecté à votre place : changez votre mot de passe et ne saisissez ce code nulle part."
 
-msgid "Your code is %1$s\n\nType it on your profile page to turn two-step login on. It is good for %2$d minutes and can be used once.\n\nThis is also the proof that codes sent here actually reach you. If it did not, do not turn it on."
-msgstr "Votre code est %1$s\n\nSaisissez-le sur votre page de profil pour activer la connexion en deux étapes. Il est valable %2$d minutes et ne sert qu’une fois.\n\nC’est aussi la preuve que les codes envoyés ici vous parviennent. S’il n’est pas arrivé, n’activez rien."
+#. translators: 1: the code, 2: how many minutes it lasts.
+#: includes/two-factor-ui.php:132
+#, php-format
+msgid ""
+"Your code is %1$s\n"
+"\n"
+"Type it on your profile page to turn two-step login on. It is good for %2$d minutes and can be used once.\n"
+"\n"
+"This is also the proof that codes sent here actually reach you. If it did not, do not turn it on."
+msgstr ""
+"Votre code est %1$s\n"
+"\n"
+"Saisissez-le sur votre page de profil pour activer la connexion en deux étapes. Il est valable %2$d minutes et ne sert qu’une fois.\n"
+"\n"
+"C’est aussi la preuve que les codes envoyés ici vous parviennent. S’il n’est pas arrivé, n’activez rien."
 
+#. translators: 1: a browser name, 2: the name of an operating system.
+#: includes/trusted.php:139
+#, php-format
 msgid "%1$s on %2$s"
 msgstr "%1$s sur %2$s"
 
+#. translators: 1: something like "Chrome on Windows", 2: a date.
+#: includes/two-factor-ui.php:513
+#, php-format
 msgid "%1$s — no code asked for until %2$s"
 msgstr "%1$s — aucun code demandé jusqu’au %2$s"
 
+#: includes/two-factor-ui.php:522
 msgid "Ask for a code everywhere again"
 msgstr "Redemander un code partout"
 
+#: includes/two-factor-ui.php:790
 msgid "Every remembered browser has been forgotten. A code is asked for at the next login on each of them."
 msgstr "Tous les navigateurs mémorisés ont été oubliés. Un code sera demandé à la prochaine connexion sur chacun d’eux."
 
+#: includes/two-factor-ui.php:524
 msgid "For when one of those machines is no longer yours, or no longer only yours. Takes effect when the profile is saved."
 msgstr "Pour le jour où l’une de ces machines n’est plus la vôtre, ou n’est plus seulement la vôtre. Prend effet à l’enregistrement du profil."
 
+#: includes/two-factor-ui.php:505
 msgid "None. A code is asked for at every login."
 msgstr "Aucun. Un code est demandé à chaque connexion."
 
+#: includes/two-factor-ui.php:502
 msgid "Remembered browsers"
 msgstr "Navigateurs mémorisés"
 
+#: includes/two-factor.php:555
 msgid "This browser only. Until then the password alone gets into this account from this machine, so leave it unticked on one you share."
 msgstr "Ce navigateur seulement. D’ici là, le mot de passe seul ouvre ce compte depuis cette machine : ne cochez pas sur un poste partagé."
 
+#: includes/trusted.php:128
 msgid "an unknown browser"
 msgstr "un navigateur inconnu"
 
+#. translators: %d: a number of days.
+#: includes/two-factor.php:548
+#, php-format
 msgid "Do not ask on this browser for %d day"
 msgid_plural "Do not ask on this browser for %d days"
 msgstr[0] "Ne plus demander sur ce navigateur pendant %d jour"
 msgstr[1] "Ne plus demander sur ce navigateur pendant %d jours"
 
+#. translators: %s: a length of time, such as "2 days".
+#: includes/admin.php:154
+#, php-format
 msgid "Nothing scheduled has run for %s."
 msgstr "Rien de planifié ne s’est exécuté depuis %s."
 
+#: includes/admin.php:144
 msgid "Nothing scheduled is overdue, so what is set below is being acted on."
 msgstr "Aucune tâche planifiée n’est en retard : ce qui est réglé ci-dessous est bien appliqué."
 
+#: includes/admin.php:143
 msgid "Running."
 msgstr "En marche."
 
+#: includes/admin.php:178
 msgid "That address is the one in Settings, and the server has to be able to open it from where it is standing. Inside a container it often cannot: the port the site is published on belongs to the machine outside."
 msgstr "Cette adresse est celle des Réglages, et le serveur doit pouvoir l’ouvrir depuis là où il se trouve. Dans un conteneur, souvent il ne le peut pas : le port sur lequel le site est publié appartient à la machine extérieure."
 
+#: includes/admin.php:322
 msgid "The scheduler"
 msgstr "Le planificateur"
 
+#: includes/admin.php:163
 msgid "The site can reach itself, so the fault is elsewhere — a visitor has to arrive for anything to run, and nothing has arrived. A real cron on the server is the cure for a site nobody visits."
 msgstr "Le site arrive à se joindre lui-même : la cause est ailleurs. Il faut qu’un visiteur arrive pour que quoi que ce soit s’exécute, et personne n’est venu. Un vrai cron sur le serveur est le remède pour un site que personne ne visite."
 
+#. translators: 1: a URL, 2: an error message.
+#: includes/admin.php:172
+#, php-format
 msgid "The site cannot reach itself at %1$s: %2$s"
 msgstr "Le site n’arrive pas à se joindre lui-même à %1$s : %2$s"
 
+#: includes/admin.php:157
 msgid "Until that is put right, nothing on this page installs itself, however it is set. WordPress runs what it has scheduled when somebody asks the site for a page, by quietly asking itself for one in turn."
 msgstr "Tant que ce n’est pas réparé, rien sur cette page ne s’installe tout seul, quels que soient les réglages. WordPress exécute ce qu’il a planifié quand quelqu’un demande une page au site, en se demandant discrètement une page à lui-même."
 
+#. translators: %d: an HTTP status code.
+#: includes/updates.php:104
+#, php-format
 msgid "it answered %d"
 msgstr "il a répondu %d"
+
+#: includes/admin.php:344
+msgid "Only things with somewhere to update from are affected. The plugins and the theme written for this site are released from their own repository and take their updates by themselves whatever is ticked here; this changes the rest — and note that this site’s theme is a child of a WordPress one, and a child theme is no safer than the parent it stands on."
+msgstr "Seules les extensions ayant une source de mise à jour sont concernées. Les extensions et le thème écrits pour ce site sont publiés depuis leur propre dépôt et se mettent à jour d’eux-mêmes quoi qu’il soit coché ici ; cette case concerne le reste — et rappelez-vous que le thème de ce site est l’enfant d’un thème WordPress, et qu’un thème enfant n’est pas plus sûr que le parent sur lequel il repose."
+
+#. translators: 1: the code, 2: how many minutes it lasts, 3: the address it was requested from.
+#: includes/two-factor.php:314
+#, php-format
+msgid ""
+"Your code is %1$s\n"
+"\n"
+"It is good for %2$d minutes and can be used once.\n"
+"\n"
+"Somebody entered the right password for your account from %3$s. If that was not you, your password is known to somebody else and should be changed."
+msgstr ""

@@ -341,7 +341,7 @@ function page(): void {
 						<?php
 						checkbox( $options, 'auto_themes', __( 'Update themes by themselves', 'wow-guard' ) );
 						checkbox( $options, 'auto_plugins', __( 'Update plugins by themselves', 'wow-guard' ) );
-						note( __( 'Only things with somewhere to update from are affected. The plugins and the theme written for this site have no such place and are untouched either way — but this site’s theme is a child of a WordPress one, and a child theme is no safer than the parent it stands on.', 'wow-guard' ) );
+						note( __( 'Only things with somewhere to update from are affected. The plugins and the theme written for this site are released from their own repository and take their updates by themselves whatever is ticked here; this changes the rest — and note that this site’s theme is a child of a WordPress one, and a child theme is no safer than the parent it stands on.', 'wow-guard' ) );
 						?>
 					</td>
 				</tr>
